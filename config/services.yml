@@ -1,0 +1,56 @@
+parameters:
+    tables.wiki.article: %core.table_prefix%wiki_article
+
+services:
+    tas2580.wiki.main:
+        class: tas2580\wiki\controller\main
+        arguments:
+            - @controller.helper
+            - @request
+            - @template
+            - @user
+            - @tas2580.wiki.edit
+            - @tas2580.wiki.diff
+            - @tas2580.wiki.view
+            - %core.root_path%
+            - %core.php_ext%
+    tas2580.wiki.listener:
+        class: tas2580\wiki\event\listener
+        arguments:
+            - @controller.helper
+            - @template
+            - @user
+        tags:
+            - { name: event.listener }
+    tas2580.wiki.edit:
+        class: tas2580\wiki\wiki\edit
+        arguments:
+            - @auth
+            - @dbal.conn
+            - @controller.helper
+            - @request
+            - @template
+            - @user
+            - %tables.wiki.article%
+            - %core.root_path%
+            - %core.php_ext%
+    tas2580.wiki.diff:
+        class: tas2580\wiki\wiki\diff
+        arguments:
+            - @auth
+            - @dbal.conn
+            - @controller.helper
+            - @template
+            - @user
+            - %tables.wiki.article%
+    tas2580.wiki.view:
+        class: tas2580\wiki\wiki\view
+        arguments:
+            - @auth
+            - @dbal.conn
+            - @controller.helper
+            - @template
+            - @user
+            - %tables.wiki.article%
+            - %core.root_path%
+            - %core.php_ext%

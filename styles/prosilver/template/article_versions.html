@@ -1,0 +1,22 @@
+<!-- INCLUDE overall_header.html -->
+<h2>{L_VERSIONS_OF_ARTICLE}{L_COLON} {ARTICLE_TITLE}</h2>
+<div class="panel bg1">
+	<div class="inner wiki">
+		<div class="content">
+			<p>{L_COMPARE_EXPLAIN}</p>
+			<form action="{U_ACTION}" method="post">
+				<p>
+			<!-- BEGIN version_list -->
+				<input type="radio" name="from" value="{version_list.ID}" /> 
+				<input type="radio" name="to" value="{version_list.ID}" />
+				<a href="{version_list.U_VERSION}">{version_list.ARTICLE_TITLE}</a> - 
+				({version_list.EDIT_TIME}) - 
+				{version_list.USER}<br />
+			<!-- END version_list -->
+				</p>
+			<input type="submit" value="{L_COMPARE}" class="button1" name="submit" />
+			</form>
+		</div>
+	</div>
+</div>
+<!-- INCLUDE overall_footer.html -->

@@ -1,0 +1,40 @@
+<!-- INCLUDE overall_header.html -->
+<h2>{ARTICLE_TITLE}<!-- IF VERSION --> - {L_VERSION} {VERSION}<!-- ENDIF --></h2>
+<div class="panel bg1">
+	<div class="inner wiki">
+		<div class="content">
+		<!-- IF S_EDIT or S_VERSIONS or U_TOPIC -->
+		<ul class="post-buttons">
+			<!-- IF S_EDIT -->
+			<li>
+				<a href="{U_EDIT}" title="{L_EDIT_WIKI}" class="button icon-button edit-icon"><span>{L_EDIT_WIKI}</span></a>
+			</li>
+			<!-- ENDIF -->
+			<!-- IF S_VERSIONS -->
+			<li>
+				<a href="{U_VERSIONS}" title="{L_VERSIONS_WIKI}" class="button icon-button version-icon"><span>{L_VERSIONS_WIKI}</span></a>
+			</li>
+			<!-- ENDIF -->
+			<!-- IF U_TOPIC -->
+			<li>
+				<a href="{U_TOPIC}" title="{L_VIEW_DISCUSION}" class="button icon-button topic-icon"><span>{L_VIEW_DISCUSION}</span></a>
+			</li>
+			<!-- ENDIF -->
+		</ul>
+		<!-- ENDIF -->
+		{ARTICLE_TEXT}
+		</div>
+	</div>
+</div>
+<!-- IF EDIT_REASON -->
+<div class="panel bg2">
+	<div class="inner wiki">
+		<strong>{L_REASON_EDIT}{L_COLON}</strong><br />
+		{EDIT_REASON}
+	</div>
+</div>
+<!-- ENDIF -->
+
+
+<p>{L_LAST_EDIT}{L_COLON} {LAST_EDIT}</p>
+<!-- INCLUDE overall_footer.html -->

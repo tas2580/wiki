@@ -1,0 +1,8 @@
+.icon-wiki	{ background-image: url("./images/icon_wiki.gif"); }
+div.wiki	{font-size:1.2em;}
+ins			{background-color:#66FF66;}
+del			{background-color:#FF6666;}
+
+.version-icon:hover:before {background-position: 0 -20px;}
+.topic-icon:before{background-position: -192px 0;}
+.topic-icon:hover:before{background-position: -192px -20px;}
