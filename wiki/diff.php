@@ -21,17 +21,18 @@ class diff
 	protected $template;
 	/* @var \phpbb\user */
 	protected $user;
-	/** @var string phpbb_root_path */
-	protected $phpbb_root_path;
+	/** @var string $article_table */
+	protected $article_table;
 
 	/**
 	* Constructor
 	*
 	* @param \phpbb\auth\auth			$auth				Auth object
-	* @param \phpbb\controller\helper	$helper				Controller helper object
-	* @param \phpbb\template\template	$template			Template object
-	* @param \phpbb\user				$user
-	* @param string						$phpbb_root_path
+	* @param  \phpbb\db\driver\driver		$db					Database object
+	* @param \phpbb\controller\helper		$helper				Controller helper object
+	* @param \phpbb\template\template	$template				Template object
+	* @param \phpbb\user				$user				User object
+	* @param string					$article_table
 	*/
 	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, $article_table)
 	{
@@ -40,7 +41,6 @@ class diff
 		$this->helper = $helper;
 		$this->template = $template;
 		$this->user = $user;
-		// Extension tables
 		$this->table_article = $article_table;
 	}
 
@@ -134,6 +134,7 @@ class diff
 				'USER'			=> get_username_string('full', $this->data['user_id'], $this->data['username'], $this->data['user_colour']),
 				'EDIT_TIME'		=> $this->user->format_date($this->data['article_last_edit']),
 				'U_VERSION'		=> $this->helper->route('tas2580_wiki_index', array('id' => $this->data['article_id'])),
+				'U_DELETE'		=> $this->helper->route('tas2580_wiki_index', array('action' => 'delete', 'id' => $this->data['article_id'])),
 			));
 		}
 		$this->db->sql_freeresult($result);

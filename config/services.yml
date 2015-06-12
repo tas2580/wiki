@@ -52,6 +52,7 @@ services:
             - @controller.helper
             - @template
             - @user
+            - @tas2580.wiki.edit
             - %tables.wiki.article%
             - %core.root_path%
             - %core.php_ext%

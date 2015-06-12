@@ -71,14 +71,20 @@ class main
 		$this->user->add_lang_ext('tas2580/wiki', 'common');
 
 		$this->template->assign_block_vars('navlinks', array(
-			'FORUM_NAME'	=> $this->user->lang['WIKI'],
+			'FORUM_NAME'		=> $this->user->lang['WIKI'],
 			'U_VIEW_FORUM'	=> $this->helper->route('tas2580_wiki_index', array()),
 		));
+
+		$this->template->assign_vars(array(
+			'WIKI_FOOTER'		=> $this->user->lang('WIKI_FOOTER', base64_decode('aHR0cHM6Ly90YXMyNTgwLm5ldA=='), base64_decode('dGFzMjU4MA==')),
+		));
+
 
 		include($this->phpbb_root_path . 'includes/functions_display.' . $this->php_ext);
 		include($this->phpbb_root_path . 'includes/functions_posting.' . $this->php_ext);
 
 		$action = $this->request->variable('action', '');
+		$id = $this->request->variable('id', 0);
 
 		if($action === 'edit')
 		{
@@ -94,7 +100,11 @@ class main
 			$to = $this->request->variable('to', 0);
 			return $this->diff->compare_versions($article, $from, $to);
 		}
-		$id = $this->request->variable('id', 0);
+		elseif($action === 'delete')
+		{
+			return $this->edit->delete($id);
+		}
+
 		return $this->view->view_article($article, $id);
 	}
 }

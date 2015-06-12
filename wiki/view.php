@@ -21,28 +21,39 @@ class view
 	protected $template;
 	/* @var \phpbb\user */
 	protected $user;
+	/* @var \tas2580\wiki\wiki\edit */
+	protected $edit;
 	/** @var string phpbb_root_path */
 	protected $phpbb_root_path;
+	/** @var string php_ext */
+	protected $php_ext;
+	/** @var string article_table */
+	protected $article_table;
+
 
 	/**
 	* Constructor
 	*
 	* @param \phpbb\auth\auth			$auth			Auth object
+	* @param  \phpbb\db\driver\driver		$db				Database object
 	* @param \phpbb\controller\helper		$helper			Controller helper object
 	* @param \phpbb\template\template	$template			Template object
-	* @param \phpbb\user				$user
+	* @param \phpbb\user				$user			User object
+	* @param \tas2580\wiki\wiki\edit		$edit				Wiki edit object
 	* @param string					$phpbb_root_path
+	* @param string					$php_ext
+	* @param string					$article_table
 	*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, $article_table, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, \tas2580\wiki\wiki\edit $edit, $article_table, $phpbb_root_path, $php_ext)
 	{
 		$this->auth = $auth;
 		$this->db = $db;
 		$this->helper = $helper;
 		$this->template = $template;
 		$this->user = $user;
+		$this->edit = $edit;
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->php_ext = $php_ext;
-		// Extension tables
 		$this->table_article = $article_table;
 	}
 
@@ -50,6 +61,7 @@ class view
 	 * View an article
 	 *
 	 * @param	string	$article	URL of the article
+	 * @param	int		$id		ID of the article
 	 * @return	object
 	 */
 	public function view_article($article, $id = 0)
@@ -76,7 +88,7 @@ class view
 		// If the article do not exist generate it
 		if (!$this->data)
 		{
-			return $this->edit_article($article);
+			return $this->edit ->edit_article($article);
 		}
 		else
 		{

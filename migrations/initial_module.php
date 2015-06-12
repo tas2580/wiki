@@ -48,6 +48,7 @@ class initial_module extends \phpbb\db\migration\migration
 			array('permission.add', array('u_wiki_edit', true, 'a_board')),
 			array('permission.add', array('u_wiki_versions', true, 'a_board')),
 			array('permission.add', array('u_wiki_edit_topic', true, 'a_board')),
+			array('permission.add', array('u_wiki_delete', true, 'a_board')),
 		);
 	}
 }

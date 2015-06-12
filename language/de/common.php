@@ -33,12 +33,13 @@ if (empty($lang) || !is_array($lang))
 //
 $lang = array_merge($lang, array(
 	'NO_ARTICLE'					=> 'Der gewünschte Artikel existiert nicht.<br />Du bist nicht berechtigt den Artikel anzulegen.',
-	'LAST_EDIT'					=> 'Zuletzt bearbeidet',
+	'LAST_EDIT'					=> 'Zuletzt bearbeitet',
 	'EDIT_WIKI'					=> 'Artikel bearbeiten',
 	'VERSIONS_WIKI'				=> 'Versionen anzeigen',
 	'WIKI'							=> 'Wiki',
 	'BACK_TO_ARTICLE'				=> 'Zurück zum Artikel',
-	'EDIT_ARTICLE_SUCCESS'			=> 'Der Artikel wurde erfolgreich bearbeidet',
+	'BACK_TO_WIKI'					=> 'Zurück zum Wiki',
+	'EDIT_ARTICLE_SUCCESS'			=> 'Der Artikel wurde erfolgreich bearbeitet',
 	'VERSIONS_OF_ARTICLE'			=> 'Versionsgeschichte',
 	'VERSION_COMPARE_HEADLINE'	=> 'Versionsunterschied von Version <a href="%3$s">%1$d</a> zu <a href="%4$s">%2$d</a>',
 	'COMPARE'					=> 'Vergleichen',
@@ -48,4 +49,7 @@ $lang = array_merge($lang, array(
 	'REASON_EDIT'					=> 'Änderungsgrund',
 	'VIEW_DISCUSION'				=> 'Diskussion',
 	'TOPIC_ID'						=> 'Diskusions Thema ID',
+	'CONFIRM_DELETE_VERSION'		=> 'Bist du sicher dass du die Version endgültig löschen möchtest?',
+	'DELETE_VERSION_SUCCESS'		=> 'Die Version wurde erfolgreich gelöscht',
+	'WIKI_FOOTER'					=> 'Wiki by <a href="%1$s">%2$s</a>'
 ));
