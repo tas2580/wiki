@@ -26,6 +26,7 @@ services:
         class: tas2580\wiki\wiki\edit
         arguments:
             - @auth
+            - @config
             - @dbal.conn
             - @controller.helper
             - @request

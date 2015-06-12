@@ -14,15 +14,15 @@
 <form id="postform" method="post" action="{U_ACTION}">
 <div class="panel" id="postingbox">
 	<div class="inner">
-	
+	<!-- IF ERROR --><p class="error">{ERROR}</p><!-- ENDIF -->
 	<fieldset class="fields1">
 		<dl style="clear: left;">
 			<dt><label for="title">{L_TITLE}</label></dt>
 			<dd><input type="text" name="title" id="title" size="45" tabindex="1" value="{TITLE}" class="inputbox autowidth" required /></dd>
 		</dl>
 		<!-- INCLUDE posting_buttons.html -->
-		
-		
+
+
 		<div id="smiley-box">
 		<!-- IF .smiley -->
 			<strong>{L_SMILIES}</strong><br />
@@ -34,11 +34,11 @@
 			<br /><a href="{U_MORE_SMILIES}" onclick="popup(this.href, 750, 350, '_phpbbsmilies'); return false;">{L_MORE_SMILIES}</a>
 		<!-- ENDIF -->
 		</div>
-		
+
 		<div id="message-box">
 			<textarea name="message" id="message" rows="15" cols="76" tabindex="2" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onfocus="initInsertions();" class="inputbox" required>{MESSAGE}</textarea>
 		</div>
-		
+
 		<dl style="clear: left;">
 			<dt><label for="edit_reason">{L_REASON_EDIT}</label></dt>
 			<dd><input type="text" name="edit_reason" id="edit_reason" size="100" tabindex="3" value="{EDIT_REASON}" class="inputbox autowidth" /></dd>
@@ -48,12 +48,12 @@
 			<dd><input type="number" name="topic_id" id="topic_id" size="3" min="0" tabindex="4" value="{TOPIC_ID}" class="inputbox autowidth" /></dd>
 		</dl>
 	</fieldset>
-		
-		
-		
-		
-			
-	
+
+
+
+
+
+
 	</div>
 </div>
 <div class="panel bg2">

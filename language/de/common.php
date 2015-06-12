@@ -32,7 +32,7 @@ if (empty($lang) || !is_array($lang))
 // ’ » “ ” …
 //
 $lang = array_merge($lang, array(
-    'NO_ARTICLE'						=> 'Der gewünschte Artikel existiert nicht.<br />Du bist nicht berechtigt den Artikel anzulegen.',
+	'NO_ARTICLE'					=> 'Der gewünschte Artikel existiert nicht.<br />Du bist nicht berechtigt den Artikel anzulegen.',
 	'LAST_EDIT'					=> 'Zuletzt bearbeidet',
 	'EDIT_WIKI'					=> 'Artikel bearbeiten',
 	'VERSIONS_WIKI'				=> 'Versionen anzeigen',
@@ -47,4 +47,5 @@ $lang = array_merge($lang, array(
 	'TITLE'						=> 'Titel',
 	'REASON_EDIT'					=> 'Änderungsgrund',
 	'VIEW_DISCUSION'				=> 'Diskussion',
+	'TOPIC_ID'						=> 'Diskusions Thema ID',
 ));

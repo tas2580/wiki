@@ -13,6 +13,8 @@ class edit
 
 	/* @var \phpbb\auth\auth */
 	protected $auth;
+	/* @var \phpbb\config\config */
+	protected $config;
 	/* @var \phpbb\db\driver\driver */
 	protected $db;
 	/* @var \phpbb\controller\helper */
@@ -27,15 +29,17 @@ class edit
 	/**
 	* Constructor
 	*
-	* @param \phpbb\auth\auth			$auth				Auth object
-	* @param \phpbb\controller\helper	$helper				Controller helper object
+	* @param \phpbb\auth\auth			$auth			Auth object
+	* @param \phpbb\config\config		$config
+	* @param \phpbb\controller\helper		$helper			Controller helper object
 	* @param \phpbb\template\template	$template			Template object
 	* @param \phpbb\user				$user
-	* @param string						$phpbb_root_path
+	* @param string					$phpbb_root_path
 	*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, $article_table, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, $article_table, $phpbb_root_path, $php_ext)
 	{
 		$this->auth = $auth;
+		$this->config = $config;
 		$this->db = $db;
 		$this->helper = $helper;
 		$this->request = $request;
@@ -63,15 +67,54 @@ class edit
 		{
 			trigger_error('NO_ARTICLE');
 		}
+		$this->user->add_lang('posting');
+
 		$preview = $this->request->is_set_post('preview');
 		$submit = $this->request->is_set_post('submit');
+		$error = array();
 
-		$title = $this->request->variable('title', '', true);
-		$message = $this->request->variable('message', '', true);
-		$edit_reason = $this->request->variable('edit_reason', '', true);
-		$topic_id = $this->request->variable('topic_id', '', true);
+		if($preview || $submit)
+		{
+			$title = $this->request->variable('title', '', true);
+			$message = $this->request->variable('message', '', true);
+			$edit_reason = $this->request->variable('edit_reason', '', true);
+			$topic_id = $this->request->variable('topic_id', '', true);
+
+			$message_length = utf8_strlen($message);
+
+			if (utf8_clean_string($title) === '')
+			{
+				$error[] = $this->user->lang['EMPTY_SUBJECT'];
+			}
+
+			if (utf8_clean_string($message) === '')
+			{
+				$error[] = $this->user->lang['TOO_FEW_CHARS'];
+			}
+
+			// Maximum message length check. 0 disables this check completely.
+			if((int) $this->config['max_post_chars'] > 0 && $message_length > (int) $this->config['max_post_chars'])
+			{
+				$error[] = $this->user->lang('CHARS_POST_CONTAINS', $message_length) . '<br />' . $this->user->lang('TOO_MANY_CHARS_LIMIT', (int) $this->config['max_post_chars']);
+			}
+
+			// Minimum message length check
+			if(!$message_length || $message_length < (int) $this->config['min_post_chars'])
+			{
+				$error[] = (!$message_length) ? $this->user->lang['TOO_FEW_CHARS'] : ($this->user->lang('CHARS_POST_CONTAINS', $message_length) . '<br />' . $this->user->lang('TOO_FEW_CHARS_LIMIT', (int) $this->config['min_post_chars']));
+			}
+		}
+
+		if(sizeof($error))
+		{
+			$this->template->assign_vars(array(
+				'ERROR'			=> implode('<br />', $error),
+				'TITLE'			=> $title,
+				'MESSAGE'		=> $message,
+			));
+		}
 		// Display the preview
-		if($preview)
+		elseif($preview)
 		{
 			$preview_text = $message;
 			$uid = $bitfield = $options = '';
@@ -110,14 +153,12 @@ class edit
 			$back_url = empty($article) ? $this->helper->route('tas2580_wiki_index', array()) : $this->helper->route('tas2580_wiki_article', array('article'	=> $article));
 			trigger_error($this->user->lang['EDIT_ARTICLE_SUCCESS'] . '<br /><br /><a href="' . $back_url . '">' . $this->user->lang['BACK_TO_ARTICLE'] . '</a>');
 		}
+		// Get the last version of the article to edit
 		else
 		{
-
-			// Get the last version of the article to edit
-			$this->user->add_lang('posting');
 			$sql = 'SELECT *
 				FROM ' . $this->table_article . '
-				WHERE article_url = "' . $this->db->sql_escape($article) . '"
+					WHERE article_url = "' . $this->db->sql_escape($article) . '"
 				ORDER BY article_last_edit DESC';
 			$result = $this->db->sql_query_limit($sql, 1);
 			$this->data = $this->db->sql_fetchrow($result);
@@ -136,7 +177,7 @@ class edit
 			if(!empty($article))
 			{
 				$this->template->assign_block_vars('navlinks', array(
-					'FORUM_NAME'	=> $this->data['article_title'],
+					'FORUM_NAME'		=> $this->data['article_title'],
 					'U_VIEW_FORUM'	=> $this->helper->route('tas2580_wiki_article', array('article'	=> $article)),
 				));
 			}
