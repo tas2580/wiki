@@ -77,7 +77,7 @@ class view
 		$this->data = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
 
-		if(!empty($article))
+		if (!empty($article))
 		{
 			$this->template->assign_block_vars('navlinks', array(
 				'FORUM_NAME'	=> $this->data['article_title'],
@@ -108,5 +108,4 @@ class view
 		}
 		return $this->helper->render('article_body.html', $this->data['article_title']);
 	}
-
 }

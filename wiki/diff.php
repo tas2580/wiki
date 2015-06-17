@@ -47,7 +47,7 @@ class diff
 
 	public function compare_versions($article, $from, $to)
 	{
-		if($from == 0 || $to == 0)
+		if ($from == 0 || $to == 0)
 		{
 			trigger_error('NO_VERSIONS_SELECTED');
 		}
@@ -62,7 +62,6 @@ class diff
 			WHERE article_id = ' . (int) $to;
 		$result = $this->db->sql_query($sql);
 		$to_row = $this->db->sql_fetchrow($result);
-
 
 		$from_article = generate_text_for_display($from_row['article_text'], $from_row['bbcode_uid'], $from_row['bbcode_bitfield'], 3, true);
 		$to_article = generate_text_for_display($to_row['article_text'], $to_row['bbcode_uid'], $to_row['bbcode_bitfield'], 3, true);
@@ -80,7 +79,7 @@ class diff
 
 	public function view_versions($article)
 	{
-		if(!$this->auth->acl_get('u_wiki_versions'))
+		if (!$this->auth->acl_get('u_wiki_versions'))
 		{
 			trigger_error('NOT_AUTHORISED');
 		}
@@ -97,7 +96,7 @@ class diff
 			'U_ACTION'			=> $this->helper->route('tas2580_wiki_index', array('article' => $article, 'action' => 'compare')),
 		));
 
-		if(!empty($article))
+		if (!empty($article))
 		{
 			$this->template->assign_block_vars('navlinks', array(
 				'FORUM_NAME'	=> $this->data['article_title'],
@@ -126,7 +125,7 @@ class diff
 			'ORDER_BY'	=> $sql_array['ORDER_BY'],
 		));
 		$result = $this->db->sql_query($sql);
-		while($this->data = $this->db->sql_fetchrow($result))
+		while ($this->data = $this->db->sql_fetchrow($result))
 		{
 			$this->template->assign_block_vars('version_list', array(
 				'ID'				=> $this->data['article_id'],
@@ -157,15 +156,23 @@ class diff
 			$mc = $diff_mask[$i];
 			if ($mc != $pmc)
 			{
-				switch($pmc)
+				switch ($pmc)
 				{
-					case -1: $result .= '</del>'; break;
-					case 1: $result .= '</ins>'; break;
+					case -1:
+						$result .= '</del>';
+						break;
+					case 1:
+						$result .= '</ins>';
+						break;
 				}
-				switch($mc)
+				switch ($mc)
 				{
-					case -1: $result .= '<del>'; break;
-					case 1: $result .= '<ins>'; break;
+					case -1:
+						$result .= '<del>';
+						break;
+					case 1:
+						$result .= '<ins>';
+						break;
 				}
 			}
 			$result .= $diffval[$i];
@@ -174,8 +181,12 @@ class diff
 		}
 		switch ($pmc)
 		{
-			case -1: $result .= '</del>'; break;
-			case 1: $result .= '</ins>'; break;
+			case -1:
+				$result .= '</del>';
+				break;
+			case 1:
+				$result .= '</ins>';
+				break;
 		}
 
 		return $result;
@@ -188,19 +199,19 @@ class diff
 		$n1 = count($from);
 		$n2 = count($to);
 
-		for($j = -1; $j < $n2; $j++)
+		for ($j = -1; $j < $n2; $j++)
 		{
 			$dm[-1][$j] = 0;
 		}
-		for($i = -1; $i < $n1; $i++)
+		for ($i = -1; $i < $n1; $i++)
 		{
 			$dm[$i][-1] = 0;
 		}
-		for($i = 0; $i < $n1; $i++)
+		for ($i = 0; $i < $n1; $i++)
 		{
 			for ($j = 0; $j < $n2; $j++)
 			{
-				if($from[$i] == $to[$j])
+				if ($from[$i] == $to[$j])
 				{
 					$ad = $dm[$i - 1][$j - 1];
 					$dm[$i][$j] = $ad + 1;
@@ -216,9 +227,9 @@ class diff
 
 		$i = $n1 - 1;
 		$j = $n2 - 1;
-		while(($i > -1) || ($j > -1))
+		while (($i > -1) || ($j > -1))
 		{
-			if($j > -1)
+			if ($j > -1)
 			{
 				if ($dm[$i][$j - 1] == $dm[$i][$j])
 				{
@@ -228,7 +239,7 @@ class diff
 					continue;
 				}
 			}
-			if($i > -1)
+			if ($i > -1)
 			{
 				if ($dm[$i - 1][$j] == $dm[$i][$j])
 				{

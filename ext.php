@@ -7,6 +7,7 @@
 *
 */
 namespace tas2580\wiki;
+
 /**
 * @ignore
 */

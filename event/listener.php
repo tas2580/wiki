@@ -7,10 +7,12 @@
 *
 */
 namespace tas2580\wiki\event;
+
 /**
 * @ignore
 */
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 /**
 * Event listener
 */
@@ -23,6 +25,7 @@ class listener implements EventSubscriberInterface
 			'core.permissions'						=> 'permissions',
 		);
 	}
+
 	/* @var \phpbb\controller\helper */
 	protected $helper;
 
@@ -31,7 +34,6 @@ class listener implements EventSubscriberInterface
 
 	/* @var \phpbb\user */
 	protected $user;
-
 
 	/**
 	* Constructor
@@ -47,10 +49,8 @@ class listener implements EventSubscriberInterface
 		$this->user = $user;
 	}
 
-
 	public function permissions($event)
 	{
-
 		$permissions = $event['permissions'];
 		$permissions += array(
 			'u_wiki_edit'		=> array(
@@ -71,11 +71,8 @@ class listener implements EventSubscriberInterface
 			),
 		);
 		$event['permissions'] = $permissions;
-
-
-		 $categories['wiki'] = 'ACL_CAT_WIKI';
-		 $event['categories'] = array_merge($event['categories'], $categories);
-
+		$categories['wiki'] = 'ACL_CAT_WIKI';
+		$event['categories'] = array_merge($event['categories'], $categories);
 	}
 
 	public function page_header($event)

@@ -65,16 +65,17 @@ class edit
 	 */
 	public function delete($id)
 	{
-		if(!$this->auth->acl_get('u_wiki_delete'))
+		if (!$this->auth->acl_get('u_wiki_delete'))
 		{
 			trigger_error('NOT_AUTHORISED');
 		}
 
-		if(confirm_box(true))
+		if (confirm_box(true))
 		{
 			$sql = 'DELETE FROM ' . $this->table_article . '
 				WHERE article_id = ' . (int) $id;
 			$this->db->sql_query($sql);
+			//return $helper->message('DELETE_VERSION_SUCCESS', array());
 			trigger_error($this->user->lang['DELETE_VERSION_SUCCESS'] . '<br /><br /><a href="' . $this->helper->route('tas2580_wiki_index', array())  . '">' . $this->user->lang['BACK_TO_WIKI'] . '</a>');
 		}
 		else
@@ -95,7 +96,7 @@ class edit
 	public function edit_article($article)
 	{
 		// If no auth to edit display error message
-		if(!$this->auth->acl_get('u_wiki_edit'))
+		if (!$this->auth->acl_get('u_wiki_edit'))
 		{
 			trigger_error('NO_ARTICLE');
 		}
@@ -105,7 +106,7 @@ class edit
 		$submit = $this->request->is_set_post('submit');
 		$error = array();
 
-		if($preview || $submit)
+		if ($preview || $submit)
 		{
 			$title = $this->request->variable('title', '', true);
 			$message = $this->request->variable('message', '', true);
@@ -125,19 +126,19 @@ class edit
 			}
 
 			// Maximum message length check. 0 disables this check completely.
-			if((int) $this->config['max_post_chars'] > 0 && $message_length > (int) $this->config['max_post_chars'])
+			if ((int) $this->config['max_post_chars'] > 0 && $message_length > (int) $this->config['max_post_chars'])
 			{
 				$error[] = $this->user->lang('CHARS_POST_CONTAINS', $message_length) . '<br />' . $this->user->lang('TOO_MANY_CHARS_LIMIT', (int) $this->config['max_post_chars']);
 			}
 
 			// Minimum message length check
-			if(!$message_length || $message_length < (int) $this->config['min_post_chars'])
+			if (!$message_length || $message_length < (int) $this->config['min_post_chars'])
 			{
 				$error[] = (!$message_length) ? $this->user->lang['TOO_FEW_CHARS'] : ($this->user->lang('CHARS_POST_CONTAINS', $message_length) . '<br />' . $this->user->lang('TOO_FEW_CHARS_LIMIT', (int) $this->config['min_post_chars']));
 			}
 		}
 
-		if(sizeof($error))
+		if (sizeof($error))
 		{
 			$this->template->assign_vars(array(
 				'ERROR'			=> implode('<br />', $error),
@@ -146,7 +147,7 @@ class edit
 			));
 		}
 		// Display the preview
-		elseif($preview)
+		else if ($preview)
 		{
 			$preview_text = $message;
 			$uid = $bitfield = $options = '';
@@ -163,7 +164,7 @@ class edit
 			));
 		}
 		// Submit the article to database
-		elseif($submit)
+		else if ($submit)
 		{
 			generate_text_for_storage($message, $uid, $bitfield, $options, true, true, true);
 			$sql_data = array(
@@ -206,7 +207,7 @@ class edit
 				'TOPIC_ID'					=> $this->data['article_topic_id'],
 			));
 
-			if(!empty($article))
+			if (!empty($article))
 			{
 				$this->template->assign_block_vars('navlinks', array(
 					'FORUM_NAME'		=> $this->data['article_title'],
@@ -216,5 +217,4 @@ class edit
 		}
 		return $this->helper->render('article_edit.html', $this->user->lang['EDIT_WIKI']);
 	}
-
 }

@@ -7,6 +7,7 @@
 *
 */
 namespace tas2580\wiki\controller;
+
 class main
 {
 	/* @var \phpbb\controller\helper */
@@ -67,7 +68,6 @@ class main
 	 */
 	public function article($article)
 	{
-
 		$this->user->add_lang_ext('tas2580/wiki', 'common');
 
 		$this->template->assign_block_vars('navlinks', array(
@@ -79,28 +79,27 @@ class main
 			'WIKI_FOOTER'		=> $this->user->lang('WIKI_FOOTER', base64_decode('aHR0cHM6Ly90YXMyNTgwLm5ldA=='), base64_decode('dGFzMjU4MA==')),
 		));
 
-
 		include($this->phpbb_root_path . 'includes/functions_display.' . $this->php_ext);
 		include($this->phpbb_root_path . 'includes/functions_posting.' . $this->php_ext);
 
 		$action = $this->request->variable('action', '');
 		$id = $this->request->variable('id', 0);
 
-		if($action === 'edit')
+		if ($action === 'edit')
 		{
 			return $this->edit->edit_article($article);
 		}
-		elseif($action === 'versions')
+		else if ($action === 'versions')
 		{
 			return $this->diff->view_versions($article);
 		}
-		elseif($action === 'compare')
+		else if ($action === 'compare')
 		{
 			$from = $this->request->variable('from', 0);
 			$to = $this->request->variable('to', 0);
 			return $this->diff->compare_versions($article, $from, $to);
 		}
-		elseif($action === 'delete')
+		else if ($action === 'delete')
 		{
 			return $this->edit->delete($id);
 		}
