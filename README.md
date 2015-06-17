@@ -1,5 +1,5 @@
-phpBB 3.1 - Wiki
-==========================
+<img src="https://tas2580.net/downloads/image-15.png" width="600" height="80" alt="phpBB 3.1 - Wiki" />
+
 This is an extension for the phpBB forums software. You need an instalation of phpBB 3.1.x to use this.
 
 DESCRIPTION
