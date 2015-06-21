@@ -31,4 +31,4 @@ LICENSE
 -------
 <a href="http://opensource.org/licenses/gpl-2.0.php">GNU General Public License v2</a>
 
-[![Build Status](https://travis-ci.org/tas2580/phpBB-3.1-Wiki.svg?branch=master)](https://travis-ci.org/tas2580/phpBB-3.1-Wiki)
+[![Build Status](https://travis-ci.org/tas2580/wiki.svg?branch=master)](https://travis-ci.org/tas2580/wiki)
