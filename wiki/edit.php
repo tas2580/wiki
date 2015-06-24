@@ -151,11 +151,15 @@ class edit
 		{
 			$preview_text = $message;
 			$uid = $bitfield = $options = '';
+			generate_smilies('inline', 0);
+			display_custom_bbcodes();
+			add_form_key('article');
 			$allowed_bbcode = $allowed_smilies = $allowed_urls = true;
 			generate_text_for_storage($preview_text, $uid, $bitfield, $options, true, true, true);
 			$preview_text = generate_text_for_display($preview_text, $uid, $bitfield, $options);
 			$this->template->assign_vars(array(
 				'S_PREVIEW'				=> true,
+				'S_BBCODE_ALLOWED'		=> 1,
 				'TITLE'					=> $title,
 				'PREVIEW_MESSAGE'			=> $preview_text,
 				'MESSAGE'				=> $message,
