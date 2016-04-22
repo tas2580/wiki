@@ -33,6 +33,7 @@ if (empty($lang) || !is_array($lang))
 // ’ » “ ” …
 //
 $lang = array_merge($lang, array(
+	'ACL_U_WIKI_VIEW'		=> 'Can view articles in the wiki',
 	'ACL_U_WIKI_EDIT'		=> 'Can edit and create articles in the wiki',
 	'ACL_U_WIKI_VERSIONS'	=> 'Can view versions of an article',
 	'ACL_U_WIKI_DELETE'	=> 'Can delete versions of an article',
