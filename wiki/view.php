@@ -77,10 +77,10 @@ class view
 		$this->data = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
 
-		if (!empty($article))
+		if (!empty($this->data['article_title']) && !empty($article))
 		{
 			$this->template->assign_block_vars('navlinks', array(
-				'FORUM_NAME'	=> $this->data['article_title'],
+				'FORUM_NAME'		=> $this->data['article_title'],
 				'U_VIEW_FORUM'	=> $this->helper->route('tas2580_wiki_article', array('article'	=> $article)),
 			));
 		}

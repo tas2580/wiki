@@ -214,7 +214,7 @@ class edit
 			if (!empty($article))
 			{
 				$this->template->assign_block_vars('navlinks', array(
-					'FORUM_NAME'		=> $this->data['article_title'],
+					'FORUM_NAME'		=> empty($this->data['article_title']) ? $this->user->lang('EDIT_WIKI') : $this->data['article_title'],
 					'U_VIEW_FORUM'	=> $this->helper->route('tas2580_wiki_article', array('article'	=> $article)),
 				));
 			}

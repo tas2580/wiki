@@ -42,8 +42,9 @@ class listener implements EventSubscriberInterface
 	* @param \phpbb\template			$template		Template object
 	* @param \phpbb\user				$user		User object
 	*/
-	public function __construct(\phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user)
 	{
+		$this->auth = $auth;
 		$this->helper = $helper;
 		$this->template = $template;
 		$this->user = $user;
@@ -53,6 +54,10 @@ class listener implements EventSubscriberInterface
 	{
 		$permissions = $event['permissions'];
 		$permissions += array(
+			'u_wiki_view'		=> array(
+				'lang'		=> 'ACL_U_WIKI_VIEW',
+				'cat'		=> 'wiki'
+			),
 			'u_wiki_edit'		=> array(
 				'lang'		=> 'ACL_U_WIKI_EDIT',
 				'cat'		=> 'wiki'
@@ -77,9 +82,12 @@ class listener implements EventSubscriberInterface
 
 	public function page_header($event)
 	{
-		$this->user->add_lang_ext('tas2580/wiki', 'common');
-		$this->template->assign_vars(array(
-			'U_WIKI'	=> $this->helper->route('tas2580_wiki_index', array()),
-		));
+		if ($this->auth->acl_get('u_wiki_view'))
+		{
+			$this->user->add_lang_ext('tas2580/wiki', 'common');
+			$this->template->assign_vars(array(
+				'U_WIKI'	=> $this->helper->route('tas2580_wiki_index', array()),
+			));
+		}
 	}
 }

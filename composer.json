@@ -3,7 +3,7 @@
 	"type": "phpbb-extension",
 	"description": "A simple wiki",
 	"homepage": "https://tas2580.net/downloads/phpbb-wiki/",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"keywords": ["phpbb", "extension", "wiki"],
 	"license": "GPL-2.0",
 	"authors": [{
@@ -22,6 +22,11 @@
 		"display-name": "tas2580 Wiki",
 		"soft-require": {
 			"phpbb/phpbb": ">=3.1.0-RC2,<3.2.*@dev"
+		},
+		"version-check": {
+			"host": "phpbb-versionscheck.cf",
+			"directory": "/tas2580/wiki/master",
+			"filename": "version-check.json"
 		}
 	}
 }

@@ -36,8 +36,9 @@ class main
 	* @param string					$phpbb_root_path
 	* @param string					$php_ext
 	*/
-	public function __construct(\phpbb\controller\helper $helper, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \tas2580\wiki\wiki\edit $edit, \tas2580\wiki\wiki\diff $diff, \tas2580\wiki\wiki\view $view, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\controller\helper $helper, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \tas2580\wiki\wiki\edit $edit, \tas2580\wiki\wiki\diff $diff, \tas2580\wiki\wiki\view $view, $phpbb_root_path, $php_ext)
 	{
+		$this->auth = $auth;
 		$this->helper = $helper;
 		$this->request = $request;
 		$this->template = $template;
@@ -69,6 +70,11 @@ class main
 	public function article($article)
 	{
 		$this->user->add_lang_ext('tas2580/wiki', 'common');
+
+		if (!$this->auth->acl_get('u_wiki_view'))
+		{
+			trigger_error('NOT_AUTHORISED');
+		}
 
 		$this->template->assign_block_vars('navlinks', array(
 			'FORUM_NAME'		=> $this->user->lang['WIKI'],

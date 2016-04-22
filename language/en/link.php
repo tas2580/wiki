@@ -6,13 +6,12 @@
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
-/**
-* DO NOT CHANGE
-*/
+
 if (!defined('IN_PHPBB'))
 {
 	exit;
 }
+
 if (empty($lang) || !is_array($lang))
 {
 	$lang = array();
@@ -33,10 +32,6 @@ if (empty($lang) || !is_array($lang))
 // ’ » “ ” …
 //
 $lang = array_merge($lang, array(
-	'ACL_U_WIKI_VIEW'		=> 'Can view articles in the wiki',
-	'ACL_U_WIKI_EDIT'		=> 'Can edit and create articles in the wiki',
-	'ACL_U_WIKI_VERSIONS'	=> 'Can view versions of an article',
-	'ACL_U_WIKI_DELETE'	=> 'Can delete versions of an article',
-	'ACL_U_WIKI_EDIT_TOPIC'	=> 'Can change the discussion topic for an article',
-	'ACL_CAT_WIKI'			=> 'Wiki',
+	'WIKI'					=> 'Wiki',
+
 ));

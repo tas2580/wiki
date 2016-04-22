@@ -1,7 +1,7 @@
 tas2580_wiki_index:
-    pattern: /wiki
+    pattern: /wiki/
     defaults: { _controller: tas2580.wiki.main:index }
-    
+
 tas2580_wiki_article:
     pattern: /wiki/{article}
     defaults: { _controller: tas2580.wiki.main:article }

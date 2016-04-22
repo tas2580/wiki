@@ -5,6 +5,7 @@ services:
     tas2580.wiki.main:
         class: tas2580\wiki\controller\main
         arguments:
+            - @auth
             - @controller.helper
             - @request
             - @template
@@ -17,6 +18,7 @@ services:
     tas2580.wiki.listener:
         class: tas2580\wiki\event\listener
         arguments:
+            - @auth
             - @controller.helper
             - @template
             - @user
