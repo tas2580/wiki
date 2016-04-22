@@ -101,7 +101,7 @@ class view
 				'U_EDIT'				=> $this->helper->route('tas2580_wiki_index', array('article' => $article, 'action'	=> 'edit')),
 				'S_VERSIONS'			=> $this->auth->acl_get('u_wiki_versions'),
 				'U_VERSIONS'			=> $this->helper->route('tas2580_wiki_index', array('article' => $article, 'action'	=> 'versions')),
-				'VERSION'				=> $id,
+				'ARTICLE_VERSION'		=> $id,
 				'EDIT_REASON'			=> ($id <> 0) ? $this->data['article_edit_reason'] : '',
 				'U_TOPIC'				=> ($this->data['article_topic_id'] <> 0) ? append_sid($this->phpbb_root_path . 'viewtopic.' . $this->php_ext, 't=' . $this->data['article_topic_id']) : '',
 			));
