@@ -178,7 +178,7 @@ class edit
 
 			foreach($sources_array as $source)
 			{
-				if(!filter_var($source, FILTER_VALIDATE_URL))
+				if(!empty($source) && !filter_var($source, FILTER_VALIDATE_URL))
 				{
 					$error[] = $this->user->lang['INVALID_SOURCE_URL'];
 				}
