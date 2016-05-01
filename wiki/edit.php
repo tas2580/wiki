@@ -272,9 +272,9 @@ class edit
 			{
 				$this->set_active_version($this->db->sql_nextid());
 			}
-
+			$msg = ($set_active <> 0) ? $this->user->lang['EDIT_ARTICLE_SUCCESS'] : $this->user->lang['EDIT_ARTICLE_SUCCESS_INACTIVE'];
 			$back_url = empty($article) ? $this->helper->route('tas2580_wiki_index', array()) : $this->helper->route('tas2580_wiki_article', array('article'	=> $article));
-			trigger_error($this->user->lang['EDIT_ARTICLE_SUCCESS'] . '<br /><br /><a href="' . $back_url . '">' . $this->user->lang['BACK_TO_ARTICLE'] . '</a>');
+			trigger_error($msg . '<br /><br /><a href="' . $back_url . '">' . $this->user->lang['BACK_TO_ARTICLE'] . '</a>');
 		}
 		// Get the last version of the article to edit
 		else
