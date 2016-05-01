@@ -1,7 +1,7 @@
 {
 	"stable": {
-		"0.1": {
-			"current": "0.1.2",
+		"0.2": {
+			"current": "0.2.0",
 			"download": "https://tas2580.net/downloads/phpbb-wiki/",
 			"announcement": "",
 			"eol": null,
