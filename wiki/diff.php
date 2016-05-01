@@ -11,15 +11,15 @@ namespace tas2580\wiki\wiki;
 class diff
 {
 
-	/* @var \phpbb\auth\auth */
+	/** @var \phpbb\auth\auth */
 	protected $auth;
-	/* @var \phpbb\db\driver\driver */
+	/** @var \phpbb\db\driver\driver */
 	protected $db;
-	/* @var \phpbb\controller\helper */
+	/** @var \phpbb\controller\helper */
 	protected $helper;
-	/* @var \phpbb\template\template */
+	/** @var \phpbb\template\template */
 	protected $template;
-	/* @var \phpbb\user */
+	/** @var \phpbb\user */
 	protected $user;
 	/** @var string $article_table */
 	protected $article_table;

@@ -10,15 +10,15 @@ namespace tas2580\wiki\controller;
 
 class main
 {
-	/* @var \phpbb\controller\helper */
+	/** @var \phpbb\controller\helper */
 	protected $helper;
-	/* @var \phpbb\request\request */
+	/** @var \phpbb\request\request */
 	protected $request;
-	/* @var \phpbb\template\template */
+	/** @var \phpbb\template\template */
 	protected $template;
-	/* @var \phpbb\user */
+	/** @var \phpbb\user */
 	protected $user;
-	/* @var \tas2580\wiki\wiki */
+	/** @var \tas2580\wiki\wiki */
 	protected $wiki;
 	/** @var string phpbb_root_path */
 	protected $phpbb_root_path;
