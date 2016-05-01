@@ -38,5 +38,6 @@ $lang = array_merge($lang, array(
 	'ACL_U_WIKI_VERSIONS'	=> 'Kann Versionen eines Artikels anschauen',
 	'ACL_U_WIKI_DELETE'	=> 'Kann Versionen eines Artikels löschen',
 	'ACL_U_WIKI_EDIT_TOPIC'	=> 'Kann das Diskussionsthema zu einem Artikel ändern',
+	'ACL_U_WIKI_SET_ACTIVE'	=> 'Kann die aktive Version eines Artikels ändern',
 	'ACL_CAT_WIKI'			=> 'Wiki',
 ));

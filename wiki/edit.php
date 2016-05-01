@@ -88,6 +88,34 @@ class edit
 	}
 
 	/**
+	 * Set a version of an article as active
+	 *
+	 * @param	string	$id	Id of the version to delete
+	 * @return	object
+	 */
+	public function active($id)
+	{
+		if (!$this->auth->acl_get('u_wiki_set_active'))
+		{
+			trigger_error('NOT_AUTHORISED');
+		}
+
+		if (confirm_box(true))
+		{
+			$article_url = $this->set_active_version($id);
+			$back_url = empty($article_url) ? $this->helper->route('tas2580_wiki_index', array()) : $this->helper->route('tas2580_wiki_article', array('article'	=> $article_url));
+			trigger_error($this->user->lang['ACTIVATE_VERSION_SUCCESS'] . '<br /><br /><a href="' . $back_url . '">' . $this->user->lang['BACK_TO_ARTICLE'] . '</a>');
+		}
+		else
+		{
+			$s_hidden_fields = build_hidden_fields(array(
+				'id'    => $id,
+			));
+			confirm_box(false, $this->user->lang['CONFIRM_ACTIVATE_VERSION'], $s_hidden_fields);
+		}
+	}
+
+	/**
 	 * Edit an article
 	 *
 	 * @param	string	$article	URL of the article
@@ -190,6 +218,7 @@ class edit
 		// Submit the article to database
 		else if ($submit)
 		{
+			$set_active = $this->auth->acl_get('u_wiki_set_active') ? $this->request->variable('set_active', 0) : 0;
 			generate_text_for_storage($message, $uid, $bitfield, $options, true, true, true);
 			$sql_data = array(
 				'article_title'			=> $title,
@@ -197,7 +226,7 @@ class edit
 				'article_text'			=> $message,
 				'bbcode_uid'			=> $uid,
 				'bbcode_bitfield'		=> $bitfield,
-				'article_approved'		=> 1,
+				'article_approved'		=> $set_active,
 				'article_user_id'			=> $this->user->data['user_id'],
 				'article_last_edit'		=> time(),
 				'article_edit_reason'		=> $edit_reason,
@@ -207,6 +236,11 @@ class edit
 			$sql = 'INSERT INTO ' . $this->table_article . '
 				' . $this->db->sql_build_array('INSERT', $sql_data);
 			$this->db->sql_query($sql);
+
+			if($this->auth->acl_get('u_wiki_set_active') && ($set_active <> 0))
+			{
+				$this->set_active_version($this->db->sql_nextid());
+			}
 
 			$back_url = empty($article) ? $this->helper->route('tas2580_wiki_index', array()) : $this->helper->route('tas2580_wiki_article', array('article'	=> $article));
 			trigger_error($this->user->lang['EDIT_ARTICLE_SUCCESS'] . '<br /><br /><a href="' . $back_url . '">' . $this->user->lang['BACK_TO_ARTICLE'] . '</a>');
@@ -231,6 +265,7 @@ class edit
 				'SOURCES'				=> $this->data['article_sources'],
 				'S_BBCODE_ALLOWED'		=> 1,
 				'TOPIC_ID'					=> $this->data['article_topic_id'],
+				'S_AUTH_ACTIVATE'			=> $this->auth->acl_get('u_wiki_set_active'),
 			));
 
 			if (!empty($article))
@@ -242,5 +277,40 @@ class edit
 			}
 		}
 		return $this->helper->render('article_edit.html', $this->user->lang['EDIT_WIKI']);
+	}
+
+	/**
+	 *
+	 * @param	int		$id		Version ID
+	 * @return	string			URL of the article
+	 */
+	private function set_active_version($id)
+	{
+		if (!$this->auth->acl_get('u_wiki_set_active'))
+		{
+			trigger_error('NOT_AUTHORISED');
+		}
+
+		// Get the URL of the article
+		$sql = 'SELECT article_url
+			FROM ' . $this->table_article . '
+				WHERE article_id = ' . (int) $id;
+		$result = $this->db->sql_query_limit($sql, 1);
+		$row = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
+
+		// Set all versions to not approved
+		$sql = 'UPDATE ' . $this->table_article . "
+			SET article_approved = 0
+			WHERE article_url = '" . $this->db->sql_escape($row['article_url']) . "'
+				AND article_id <> " . (int) $id;
+		$this->db->sql_query($sql);
+
+		// Set version to approved
+		$sql = 'UPDATE ' . $this->table_article . '
+			SET article_approved = 1
+			WHERE article_id = ' . (int) $id;
+		$this->db->sql_query($sql);
+		return $row['article_url'];
 	}
 }

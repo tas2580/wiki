@@ -3,6 +3,12 @@
 <div class="panel bg1">
 	<div class="inner wiki">
 		<div class="content">
+		<!-- IF S_NEW_VERSION -->
+			<p class="post-notice unapproved">
+				{L_ARTICLE_HAS_NEW} <a href="{U_NEW_VERSION}">{L_SET_ACTIVE}</a>
+			</p>
+		<!-- ENDIF -->
+
 		<!-- IF S_EDIT or S_VERSIONS or U_TOPIC -->
 		<ul class="post-buttons">
 			<!-- IF S_EDIT -->
@@ -26,6 +32,10 @@
 		</div>
 	</div>
 </div>
+
+<!-- IF U_SET_ACTIVE -->
+	<a href="{U_SET_ACTIVE}">{L_SET_ACTIVE}</a>
+<!-- ENDIF -->
 <!-- IF .article_sources -->
 	<h3>{L_SOURCES}</h3>
 	<div class="content">

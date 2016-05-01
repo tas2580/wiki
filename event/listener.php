@@ -74,6 +74,10 @@ class listener implements EventSubscriberInterface
 				'lang'		=> 'ACL_U_WIKI_EDIT_TOPIC',
 				'cat'		=> 'wiki'
 			),
+			'u_wiki_set_active'	=> array(
+				'lang'		=> 'ACL_U_WIKI_SET_ACTIVE',
+				'cat'		=> 'wiki'
+			),
 		);
 		$event['permissions'] = $permissions;
 		$categories['wiki'] = 'ACL_CAT_WIKI';

@@ -19,6 +19,14 @@ class update_0_2_0 extends \phpbb\db\migration\migration
 		);
 	}
 
+	public function update_data()
+	{
+		return array(
+			array('permission.add', array('u_wiki_set_active', true, 'm_')),
+
+		);
+	}
+
 	public function update_schema()
 	{
 		return array(

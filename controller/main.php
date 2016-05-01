@@ -109,6 +109,10 @@ class main
 		{
 			return $this->edit->delete($id);
 		}
+		else if ($action === 'active')
+		{
+			return $this->edit->active($id);
+		}
 
 		return $this->view->view_article($article, $id);
 	}

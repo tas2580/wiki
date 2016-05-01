@@ -55,4 +55,9 @@ $lang = array_merge($lang, array(
 	'SOURCES'					=> 'Quellen',
 	'SOURCES_EXPLAIN'				=> 'Gib URLs als Quellen für den Artikel an. Schreibe jede URL in eine eigene Zeile.',
 	'INVALID_SOURCE_URL'			=> 'Eine der Quellen ist keine gültige URL.',
+	'ACTIVATE_VERSION_SUCCESS'		=> 'Die Artikel Version wurde erfolgreich als aktiv gesetzt.',
+	'CONFIRM_ACTIVATE_VERSION'		=> 'Bist du sicher das du die ausgewählte Version als aktive Version für den Artikel setzen willst?',
+	'ARTICLE_HAS_NEW'				=> 'Zu dem Artikel ist eine neuere Version vorhanden.',
+	'SET_ACTIVE'					=> 'Setze aktiv',
+	'IS_ACTIVE'					=> 'Aktive Version',
 ));

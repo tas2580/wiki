@@ -94,6 +94,7 @@ class diff
 		$this->db->sql_freeresult($result);
 		$this->template->assign_vars(array(
 			'ARTICLE_TITLE'			=> $this->data['article_title'],
+			'S_SET_ACTIVE'			=> $this->auth->acl_get('u_wiki_set_active'),
 			'U_ACTION'			=> $this->helper->route('tas2580_wiki_index', array('article' => $article, 'action' => 'compare')),
 		));
 
@@ -106,7 +107,7 @@ class diff
 		}
 
 		$sql_array = array(
-			'SELECT'		=> 'a.article_id, a.article_title, a.article_last_edit, u.user_id, u.username, u.user_colour',
+			'SELECT'		=> 'a.article_id, a.article_title, a.article_last_edit,  a.article_approved, u.user_id, u.username, u.user_colour',
 			'FROM'		=> array($this->table_article => 'a'),
 			'LEFT_JOIN'	=> array(
 				array(
@@ -131,10 +132,12 @@ class diff
 			$this->template->assign_block_vars('version_list', array(
 				'ID'				=> $this->data['article_id'],
 				'ARTICLE_TITLE'		=> $this->data['article_title'],
+				'S_ACTIVE'			=> ($this->data['article_approved'] == 1) ? true : false,
 				'USER'			=> get_username_string('full', $this->data['user_id'], $this->data['username'], $this->data['user_colour']),
 				'EDIT_TIME'		=> $this->user->format_date($this->data['article_last_edit']),
 				'U_VERSION'		=> $this->helper->route('tas2580_wiki_index', array('id' => $this->data['article_id'])),
 				'U_DELETE'		=> $this->helper->route('tas2580_wiki_index', array('action' => 'delete', 'id' => $this->data['article_id'])),
+				'U_SET_ACTIVE'		=> $this->helper->route('tas2580_wiki_index', array('action' => 'active', 'id' => $this->data['article_id'])),
 			));
 		}
 		$this->db->sql_freeresult($result);

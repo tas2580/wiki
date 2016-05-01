@@ -66,9 +66,9 @@ class view
 	 */
 	public function view_article($article, $id = 0)
 	{
-		$where = ($id === 0) ? 'article_url = "' . $this->db->sql_escape($article) . '"' : 'article_id = ' . (int) $id;
+		$where = ($id === 0) ? "article_url = '" . $this->db->sql_escape($article) . "' AND article_approved = 1" : 'article_id = ' . (int) $id;
 		$sql_array = array(
-			'SELECT'		=> 'a.article_id, a.article_title, a.article_last_edit, a.article_sources, a.article_text, u.user_id, u.username, u.user_colour',
+			'SELECT'		=> 'a.*, u.user_id, u.username, u.user_colour',
 			'FROM'		=> array($this->table_article => 'a'),
 			'LEFT_JOIN'	=> array(
 				array(
@@ -91,6 +91,33 @@ class view
 		$result = $this->db->sql_query_limit($sql, 1);
 		$this->data = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
+
+		// Do we have a newer version?
+		if(($id === 0) && $this->auth->acl_get('u_wiki_set_active'))
+		{
+			$sql = 'SELECT article_id
+				FROM ' . $this->table_article . "
+				WHERE article_url = '" . $this->db->sql_escape($this->data['article_url']) . "'
+					AND article_id <> " . (int) $this->data['article_id'] . '
+					AND article_last_edit > ' . (int) $this->data['article_last_edit'] . '
+				ORDER BY article_last_edit DESC';
+			$result = $this->db->sql_query_limit($sql, 1);
+			$row = $this->db->sql_fetchrow($result);
+			$this->db->sql_freeresult($result);
+			if(!empty($row['article_id']))
+			{
+				$this->template->assign_vars(array(
+					'S_NEW_VERSION'		=> true,
+					'U_NEW_VERSION'		=> $this->helper->route('tas2580_wiki_index', array('id' => $row['article_id'])),
+				));
+			}
+		}
+		if(($id <> 0) && ($this->data['article_approved'] <> 1) && $this->auth->acl_get('u_wiki_set_active'))
+		{
+			$this->template->assign_vars(array(
+				'U_SET_ACTIVE'		=> $this->helper->route('tas2580_wiki_index', array('action' => 'active', 'id' => $id)),
+			));
+		}
 
 		if (!empty($this->data['article_title']) && !empty($article))
 		{

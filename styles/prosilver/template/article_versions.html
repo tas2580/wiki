@@ -10,8 +10,16 @@
 				<input type="radio" name="from" value="{version_list.ID}" />
 				<input type="radio" name="to" value="{version_list.ID}" />
 				<a href="{version_list.U_VERSION}">{version_list.ARTICLE_TITLE}</a> -
-				({version_list.EDIT_TIME}) -
-				{version_list.USER} - <a href="{version_list.U_DELETE}">[ {L_DELETE} ]</a><br />
+				({version_list.EDIT_TIME}) - {version_list.USER} -
+				<a href="{version_list.U_DELETE}">[ {L_DELETE} ]</a>
+				<!-- IF S_SET_ACTIVE -->
+				<!-- IF version_list.S_ACTIVE -->
+					 - <strong>{L_IS_ACTIVE}</strong>
+				<!-- ELSE -->
+					 - <a href="{version_list.U_SET_ACTIVE}">[ {L_SET_ACTIVE} ]</a>
+				<!-- ENDIF -->
+				<!-- ENDIF -->
+				<br />
 			<!-- END version_list -->
 				</p>
 			<input type="submit" value="{L_COMPARE}" class="button1" name="submit" />
