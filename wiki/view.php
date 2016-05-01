@@ -137,9 +137,12 @@ class view
 			$sources = explode("\n", $this->data['article_sources']);
 			foreach($sources as $source)
 			{
-				$this->template->assign_block_vars('article_sources', array(
-					'SOURCE'		=> $source,
-				));
+				if(!empty($source))
+				{
+					$this->template->assign_block_vars('article_sources', array(
+						'SOURCE'		=> $source,
+					));
+				}
 			}
 
 			$this->template->assign_vars(array(
