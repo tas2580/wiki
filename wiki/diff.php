@@ -51,13 +51,13 @@ class diff
 		{
 			trigger_error('NO_VERSIONS_SELECTED');
 		}
-		$sql = 'SELECT article_text, bbcode_uid, bbcode_bitfield
+		$sql = 'SELECT article_text, bbcode_uid, bbcode_bitfield, article_sources
 			FROM ' . $this->table_article . '
 			WHERE article_id = ' . (int) $from;
 		$result = $this->db->sql_query($sql);
 		$from_row = $this->db->sql_fetchrow($result);
 
-		$sql = 'SELECT article_text, bbcode_uid, bbcode_bitfield
+		$sql = 'SELECT article_text, bbcode_uid, bbcode_bitfield, article_sources
 			FROM ' . $this->table_article . '
 			WHERE article_id = ' . (int) $to;
 		$result = $this->db->sql_query($sql);
@@ -71,9 +71,10 @@ class diff
 		$this->template->assign_vars(array(
 			'HEADLINE'			=> sprintf($this->user->lang['VERSION_COMPARE_HEADLINE'], $from, $to, $u_from, $u_to),
 			'DIFF'				=> $this->diffline($to_article, $from_article),
+			'DIFF_SOURCE'			=> $this->diffline($to_row['article_sources'], $from_row['article_sources']),
 		));
 
-		return $this->helper->render('article_compare.html');
+		return $this->helper->render('article_compare.html', $this->user->lang['VERSIONS_OF_ARTICLE']);
 	}
 
 

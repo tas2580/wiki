@@ -1,59 +1,72 @@
 <!-- INCLUDE overall_header.html -->
 
 <!-- IF S_PREVIEW -->
-<div class="post bg2">
-	<div class="inner">
-	<div class="postbody">
-		<h3>{L_PREVIEW}{L_COLON} {TITLE}</h3>
-		<div class="content">{PREVIEW_MESSAGE}</div>
+	<div class="post bg2">
+		<div class="inner">
+			<div class="postbody">
+				<h3>{L_PREVIEW}{L_COLON} {TITLE}</h3>
+				<div class="content">{PREVIEW_MESSAGE}</div>
+			</div>
+		</div>
 	</div>
+	<!-- IF .article_sources -->
+	<div class="post bg1">
+		<div class="inner">
+			<div class="postbody">
+				<h3>{L_SOURCES}</h3><br>
+				<div class="content">
+					<ul>
+						<!-- BEGIN article_sources -->
+						<li><a href="{article_sources.SOURCE}">{article_sources.SOURCE}</a></li>
+						<!-- END article_sources -->
+					</ul>
+				</div>
+			</div>
+		</div>
 	</div>
-</div>
+	<!-- ENDIF -->
 <!-- ENDIF -->
 
 <form id="postform" method="post" action="{U_ACTION}">
 <div class="panel" id="postingbox">
 	<div class="inner">
-	<!-- IF ERROR --><p class="error">{ERROR}</p><!-- ENDIF -->
-	<fieldset class="fields1">
-		<dl style="clear: left;">
-			<dt><label for="title">{L_TITLE}</label></dt>
-			<dd><input type="text" name="title" id="title" size="45" tabindex="1" value="{TITLE}" class="inputbox autowidth" required /></dd>
-		</dl>
+		<h3>{L_EDIT_WIKI}</h3>
+		<!-- IF ERROR --><p class="error">{ERROR}</p><!-- ENDIF -->
+		<fieldset class="fields1">
+			<dl style="clear: left;">
+				<dt><label for="title">{L_TITLE}{L_COLON}</label></dt>
+				<dd><input type="text" name="title" id="title" size="45" tabindex="1" value="{TITLE}" class="inputbox autowidth" required /></dd>
+			</dl>
 		<!-- INCLUDE posting_buttons.html -->
 
+			<div id="smiley-box">
+			<!-- IF .smiley -->
+				<strong>{L_SMILIES}</strong><br />
+				<!-- BEGIN smiley -->
+					<a href="#" onclick="insert_text('{smiley.A_SMILEY_CODE}', true); return false;"><img src="{smiley.SMILEY_IMG}" width="{smiley.SMILEY_WIDTH}" height="{smiley.SMILEY_HEIGHT}" alt="{smiley.SMILEY_CODE}" title="{smiley.SMILEY_DESC}" /></a>
+				<!-- END smiley -->
+			<!-- ENDIF -->
+			<!-- IF S_SHOW_SMILEY_LINK -->
+				<br /><a href="{U_MORE_SMILIES}" onclick="popup(this.href, 750, 350, '_phpbbsmilies'); return false;">{L_MORE_SMILIES}</a>
+			<!-- ENDIF -->
+			</div>
 
-		<div id="smiley-box">
-		<!-- IF .smiley -->
-			<strong>{L_SMILIES}</strong><br />
-			<!-- BEGIN smiley -->
-				<a href="#" onclick="insert_text('{smiley.A_SMILEY_CODE}', true); return false;"><img src="{smiley.SMILEY_IMG}" width="{smiley.SMILEY_WIDTH}" height="{smiley.SMILEY_HEIGHT}" alt="{smiley.SMILEY_CODE}" title="{smiley.SMILEY_DESC}" /></a>
-			<!-- END smiley -->
-		<!-- ENDIF -->
-		<!-- IF S_SHOW_SMILEY_LINK -->
-			<br /><a href="{U_MORE_SMILIES}" onclick="popup(this.href, 750, 350, '_phpbbsmilies'); return false;">{L_MORE_SMILIES}</a>
-		<!-- ENDIF -->
-		</div>
-
-		<div id="message-box">
-			<textarea name="message" id="message" rows="15" cols="76" tabindex="2" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onfocus="initInsertions();" class="inputbox" required>{MESSAGE}</textarea>
-		</div>
-
-		<dl style="clear: left;">
-			<dt><label for="edit_reason">{L_REASON_EDIT}</label></dt>
-			<dd><input type="text" name="edit_reason" id="edit_reason" size="100" tabindex="3" value="{EDIT_REASON}" class="inputbox autowidth" /></dd>
-		</dl>
-		<dl style="clear: left;">
-			<dt><label for="topic_id">{L_TOPIC_ID}</label></dt>
-			<dd><input type="number" name="topic_id" id="topic_id" size="3" min="0" tabindex="4" value="{TOPIC_ID}" class="inputbox autowidth" /></dd>
-		</dl>
-	</fieldset>
-
-
-
-
-
-
+			<div id="message-box">
+				<textarea name="message" id="message" rows="15" cols="76" tabindex="2" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onfocus="initInsertions();" class="inputbox" required>{MESSAGE}</textarea>
+			</div>
+			<dl style="clear: left;">
+				<dt><label for="sources">{L_SOURCES}{L_COLON}</label><br>{L_SOURCES_EXPLAIN}</dt>
+				<dd><textarea name="sources" id="sources" rows="5" cols="76" tabindex="3"  class="inputbox">{SOURCES}</textarea></dd>
+			</dl>
+			<dl style="clear: left;">
+				<dt><label for="edit_reason">{L_REASON_EDIT}{L_COLON}</label></dt>
+				<dd><input type="text" name="edit_reason" id="edit_reason" size="100" tabindex="4" value="{EDIT_REASON}" class="inputbox autowidth"></dd>
+			</dl>
+			<dl style="clear: left;">
+				<dt><label for="topic_id">{L_TOPIC_ID}{L_COLON}</label></dt>
+				<dd><input type="number" name="topic_id" id="topic_id" size="3" min="0" tabindex="5" value="{TOPIC_ID}" class="inputbox autowidth"></dd>
+			</dl>
+		</fieldset>
 	</div>
 </div>
 <div class="panel bg2">

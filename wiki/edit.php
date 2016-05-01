@@ -112,8 +112,18 @@ class edit
 			$message = $this->request->variable('message', '', true);
 			$edit_reason = $this->request->variable('edit_reason', '', true);
 			$topic_id = $this->request->variable('topic_id', '', true);
+			$sources = $this->request->variable('sources', '', true);
+			$sources_array = explode("\n", $sources);
 
 			$message_length = utf8_strlen($message);
+
+			foreach($sources_array as $source)
+			{
+				if(!filter_var($source, FILTER_VALIDATE_URL))
+				{
+					$error[] = $this->user->lang['INVALID_SOURCE_URL'];
+				}
+			}
 
 			if (utf8_clean_string($title) === '')
 			{
@@ -144,6 +154,7 @@ class edit
 				'ERROR'			=> implode('<br />', $error),
 				'TITLE'			=> $title,
 				'MESSAGE'		=> $message,
+				'SOURCES'		=> $sources,
 			));
 		}
 		// Display the preview
@@ -157,6 +168,14 @@ class edit
 			$allowed_bbcode = $allowed_smilies = $allowed_urls = true;
 			generate_text_for_storage($preview_text, $uid, $bitfield, $options, true, true, true);
 			$preview_text = generate_text_for_display($preview_text, $uid, $bitfield, $options);
+
+			foreach($sources_array as $source)
+			{
+				$this->template->assign_block_vars('article_sources', array(
+					'SOURCE'		=> $source,
+				));
+			}
+
 			$this->template->assign_vars(array(
 				'S_PREVIEW'				=> true,
 				'S_BBCODE_ALLOWED'		=> 1,
@@ -165,6 +184,7 @@ class edit
 				'MESSAGE'				=> $message,
 				'EDIT_REASON'				=> $edit_reason,
 				'TOPIC_ID'					=> $topic_id,
+				'SOURCES'				=> $sources,
 			));
 		}
 		// Submit the article to database
@@ -182,6 +202,7 @@ class edit
 				'article_last_edit'		=> time(),
 				'article_edit_reason'		=> $edit_reason,
 				'article_topic_id'			=> (int) $topic_id,
+				'article_sources'		=> $sources,
 			);
 			$sql = 'INSERT INTO ' . $this->table_article . '
 				' . $this->db->sql_build_array('INSERT', $sql_data);
@@ -207,6 +228,7 @@ class edit
 			$this->template->assign_vars(array(
 				'TITLE'					=> $this->data['article_title'],
 				'MESSAGE'				=> $message['text'],
+				'SOURCES'				=> $this->data['article_sources'],
 				'S_BBCODE_ALLOWED'		=> 1,
 				'TOPIC_ID'					=> $this->data['article_topic_id'],
 			));

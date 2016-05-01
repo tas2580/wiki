@@ -11,17 +11,17 @@ namespace tas2580\wiki\wiki;
 class view
 {
 
-	/* @var \phpbb\auth\auth */
+	/** @var \phpbb\auth\auth */
 	protected $auth;
-	/* @var \phpbb\db\driver\driver */
+	/** @var \phpbb\db\driver\driver */
 	protected $db;
-	/* @var \phpbb\controller\helper */
+	/** @var \phpbb\controller\helper */
 	protected $helper;
-	/* @var \phpbb\template\template */
+	/** @var \phpbb\template\template */
 	protected $template;
-	/* @var \phpbb\user */
+	/** @var \phpbb\user */
 	protected $user;
-	/* @var \tas2580\wiki\wiki\edit */
+	/** @var \tas2580\wiki\wiki\edit */
 	protected $edit;
 	/** @var string phpbb_root_path */
 	protected $phpbb_root_path;
@@ -66,13 +66,28 @@ class view
 	 */
 	public function view_article($article, $id = 0)
 	{
-
 		$where = ($id === 0) ? 'article_url = "' . $this->db->sql_escape($article) . '"' : 'article_id = ' . (int) $id;
+		$sql_array = array(
+			'SELECT'		=> 'a.article_id, a.article_title, a.article_last_edit, a.article_sources, a.article_text, u.user_id, u.username, u.user_colour',
+			'FROM'		=> array($this->table_article => 'a'),
+			'LEFT_JOIN'	=> array(
+				array(
+					'FROM'	=> array(USERS_TABLE => 'u'),
+					'ON'		=> 'u.user_id = a.article_user_id'
+				)
+			),
+			'WHERE'		=> $where,
+			'ORDER_BY'	=> 'a.article_last_edit DESC',
+		);
 
-		$sql = 'SELECT *
-			FROM ' . $this->table_article . '
-			WHERE ' . $where . '
-			ORDER BY article_last_edit DESC';
+		$sql = $this->db->sql_build_query('SELECT', array(
+			'SELECT'		=> $sql_array['SELECT'],
+			'FROM'		=> $sql_array['FROM'],
+			'LEFT_JOIN'	=> $sql_array['LEFT_JOIN'],
+			'WHERE'		=> $sql_array['WHERE'],
+			'ORDER_BY'	=> $sql_array['ORDER_BY'],
+		));
+
 		$result = $this->db->sql_query_limit($sql, 1);
 		$this->data = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
@@ -92,11 +107,20 @@ class view
 		}
 		else
 		{
+			$sources = explode("\n", $this->data['article_sources']);
+			foreach($sources as $source)
+			{
+				$this->template->assign_block_vars('article_sources', array(
+					'SOURCE'		=> $source,
+				));
+			}
+
 			$this->template->assign_vars(array(
 				'S_BBCODE_ALLOWED'	=> 1,
 				'ARTICLE_TITLE'			=> $this->data['article_title'],
 				'ARTICLE_TEXT'			=> generate_text_for_display($this->data['article_text'], $this->data['bbcode_uid'], $this->data['bbcode_bitfield'], 3, true),
 				'LAST_EDIT'			=> $this->user->format_date($this->data['article_last_edit']),
+				'ARTICLE_USER'		=> get_username_string('full', $this->data['user_id'], $this->data['username'], $this->data['user_colour']),
 				'S_EDIT'				=> $this->auth->acl_get('u_wiki_edit'),
 				'U_EDIT'				=> $this->helper->route('tas2580_wiki_index', array('article' => $article, 'action'	=> 'edit')),
 				'S_VERSIONS'			=> $this->auth->acl_get('u_wiki_versions'),

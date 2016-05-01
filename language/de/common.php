@@ -51,5 +51,8 @@ $lang = array_merge($lang, array(
 	'TOPIC_ID'						=> 'Diskusions Thema ID',
 	'CONFIRM_DELETE_VERSION'		=> 'Bist du sicher dass du die Version endgültig löschen möchtest?',
 	'DELETE_VERSION_SUCCESS'		=> 'Die Version wurde erfolgreich gelöscht',
-	'WIKI_FOOTER'					=> 'Wiki by <a href="%1$s">%2$s</a>'
+	'WIKI_FOOTER'					=> 'Wiki by <a href="%1$s">%2$s</a>',
+	'SOURCES'					=> 'Quellen',
+	'SOURCES_EXPLAIN'				=> 'Gib URLs als Quellen für den Artikel an. Schreibe jede URL in eine eigene Zeile.',
+	'INVALID_SOURCE_URL'			=> 'Eine der Quellen ist keine gültige URL.',
 ));

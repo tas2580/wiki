@@ -26,6 +26,17 @@
 		</div>
 	</div>
 </div>
+<!-- IF .article_sources -->
+	<h3>{L_SOURCES}</h3>
+	<div class="content">
+		<ul>
+			<!-- BEGIN article_sources -->
+			<li><a href="{article_sources.SOURCE}">{article_sources.SOURCE}</a></li>
+			<!-- END article_sources -->
+		</ul>
+	</div>
+<!-- ENDIF -->
+
 <!-- IF EDIT_REASON -->
 <div class="panel bg2">
 	<div class="inner wiki">
@@ -35,6 +46,5 @@
 </div>
 <!-- ENDIF -->
 
-
-<p>{L_LAST_EDIT}{L_COLON} {LAST_EDIT}</p>
+<p>{L_LAST_EDIT}{L_COLON} {LAST_EDIT} {L_FROM} {ARTICLE_USER}</p>
 <!-- INCLUDE overall_footer.html -->
