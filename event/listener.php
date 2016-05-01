@@ -23,11 +23,18 @@ class listener implements EventSubscriberInterface
 		return array(
 			'core.page_header'						=> 'page_header',
 			'core.permissions'						=> 'permissions',
+			'core.user_setup'						=> 'user_setup',
 		);
 	}
 
+	/** @var \phpbb\auth\auth */
+	protected $auth;
+
 	/** @var \phpbb\controller\helper */
 	protected $helper;
+
+	/** @var \phpbb\notification\manager */
+	protected $notification_manager;
 
 	/** @var \phpbb\template\template */
 	protected $template;
@@ -42,10 +49,11 @@ class listener implements EventSubscriberInterface
 	* @param \phpbb\template			$template		Template object
 	* @param \phpbb\user				$user		User object
 	*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\controller\helper $helper, \phpbb\notification\manager $notification_manager, \phpbb\template\template $template, \phpbb\user $user)
 	{
 		$this->auth = $auth;
 		$this->helper = $helper;
+		$this->notification_manager = $notification_manager;
 		$this->template = $template;
 		$this->user = $user;
 	}
@@ -88,6 +96,24 @@ class listener implements EventSubscriberInterface
 		$event['categories'] = array_merge($event['categories'], $categories);
 	}
 
+	public function notification_add($event)
+	{
+		if (!$this->config['email_enable'])
+		{
+			return;
+		}
+		$notifications_data = array(
+			array(
+				'item_type'	=> 'tas2580.wiki.notification.type.articke_edit',
+				'method'		=> 'notification.method.email',
+			),
+		);
+		foreach ($notifications_data as $subscription)
+		{
+			$this->notification_manager->add_subscription($subscription['item_type'], 0, $subscription['method'], $event['user_id']);
+		}
+	}
+
 	public function page_header($event)
 	{
 		if ($this->auth->acl_get('u_wiki_view'))
@@ -98,4 +124,15 @@ class listener implements EventSubscriberInterface
 			));
 		}
 	}
+
+	public function user_setup($event)
+	{
+		$lang_ary = $event['lang_set_ext'];
+		$lang_ary[] = array(
+			'ext_name'	=> 'tas2580/wiki',
+			'lang_set'		=> 'link',
+		);
+		$event['lang_set_ext'] = $lang_ary;
+	}
+
 }

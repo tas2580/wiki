@@ -19,6 +19,8 @@ class edit
 	protected $db;
 	/** @var \phpbb\controller\helper */
 	protected $helper;
+	/** @var \phpbb\notification\manager */
+	protected $notification_manager;
 	/** @var \phpbb\template\template */
 	protected $template;
 	/** @var \phpbb\user */
@@ -43,12 +45,13 @@ class edit
 	* @param string					$php_ext
 	* @param string					$article_table
 	*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, $article_table, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\notification\manager $notification_manager, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, $article_table, $phpbb_root_path, $php_ext)
 	{
 		$this->auth = $auth;
 		$this->config = $config;
 		$this->db = $db;
 		$this->helper = $helper;
+		$this->notification_manager = $notification_manager;
 		$this->request = $request;
 		$this->template = $template;
 		$this->user = $user;
@@ -267,10 +270,21 @@ class edit
 			$sql = 'INSERT INTO ' . $this->table_article . '
 				' . $this->db->sql_build_array('INSERT', $sql_data);
 			$this->db->sql_query($sql);
+			$article_id = $this->db->sql_nextid();
 
 			if($this->auth->acl_get('u_wiki_set_active') && ($set_active <> 0))
 			{
-				$this->set_active_version($this->db->sql_nextid());
+				$this->set_active_version($article_id);
+			}
+			else
+			{
+				$notify_data = array(
+					'article_id'		=> $article_id,
+					'article_title'	=> $title,
+					'article_url'		=> $article,
+					'user_id'		=> $this->user->data['user_id'],
+				);
+				$this->notification_manager->add_notifications('tas2580.wiki.notification.type.articke_edit', $notify_data);
 			}
 			$msg = ($set_active <> 0) ? $this->user->lang['EDIT_ARTICLE_SUCCESS'] : $this->user->lang['EDIT_ARTICLE_SUCCESS_INACTIVE'];
 			$back_url = empty($article) ? $this->helper->route('tas2580_wiki_index', array()) : $this->helper->route('tas2580_wiki_article', array('article'	=> $article));
