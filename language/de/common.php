@@ -60,4 +60,7 @@ $lang = array_merge($lang, array(
 	'ARTICLE_HAS_NEW'				=> 'Zu dem Artikel ist eine neuere Version vorhanden.',
 	'SET_ACTIVE'					=> 'Setze aktiv',
 	'IS_ACTIVE'					=> 'Aktive Version',
+	'DELETE_ARTICLE'				=> 'Artikel löschen',
+	'CONFIRM_DELETE_ARTICLE'		=> 'Bist du sicher das du den Artikel <strong>und alle seine Versionen</strong> unwiederruflich löschen möchtest?',
+	'DELETE_ARTICLE_SUCCESS'		=> 'Der Artikel wurde erfolgreich gelöscht!',
 ));

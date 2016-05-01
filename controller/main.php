@@ -113,6 +113,10 @@ class main
 		{
 			return $this->edit->active($id);
 		}
+		else if ($action === 'detele_article')
+		{
+			return $this->edit->detele_article($article);
+		}
 
 		return $this->view->view_article($article, $id);
 	}

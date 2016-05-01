@@ -54,27 +54,31 @@ class listener implements EventSubscriberInterface
 	{
 		$permissions = $event['permissions'];
 		$permissions += array(
-			'u_wiki_view'		=> array(
+			'u_wiki_view'			=> array(
 				'lang'		=> 'ACL_U_WIKI_VIEW',
 				'cat'		=> 'wiki'
 			),
-			'u_wiki_edit'		=> array(
+			'u_wiki_edit'			=> array(
 				'lang'		=> 'ACL_U_WIKI_EDIT',
 				'cat'		=> 'wiki'
 			),
-			'u_wiki_versions'	=> array(
+			'u_wiki_versions'		=> array(
 				'lang'		=> 'ACL_U_WIKI_VERSIONS',
 				'cat'		=> 'wiki'
 			),
-			'u_wiki_delete'	=> array(
+			'u_wiki_delete'			=> array(
 				'lang'		=> 'ACL_U_WIKI_DELETE',
 				'cat'		=> 'wiki'
 			),
-			'u_wiki_edit_topic'	=> array(
+			'u_wiki_delete_article'	=> array(
+				'lang'		=> 'ACL_U_WIKI_DELETE_ARTICLE',
+				'cat'		=> 'wiki'
+			),
+			'u_wiki_edit_topic'		=> array(
 				'lang'		=> 'ACL_U_WIKI_EDIT_TOPIC',
 				'cat'		=> 'wiki'
 			),
-			'u_wiki_set_active'	=> array(
+			'u_wiki_set_active'		=> array(
 				'lang'		=> 'ACL_U_WIKI_SET_ACTIVE',
 				'cat'		=> 'wiki'
 			),

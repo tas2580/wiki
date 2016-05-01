@@ -23,7 +23,7 @@ class update_0_2_0 extends \phpbb\db\migration\migration
 	{
 		return array(
 			array('permission.add', array('u_wiki_set_active', true, 'm_')),
-
+			array('permission.add', array('u_wiki_delete_article', true, 'm_')),
 		);
 	}
 

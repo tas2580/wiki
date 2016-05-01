@@ -60,7 +60,7 @@ class edit
 	/**
 	 * Delete a version of an article
 	 *
-	 * @param	string	$id	Id of the version to delete
+	 * @param	int		$id	Id of the version to delete
 	 * @return	object
 	 */
 	public function delete($id)
@@ -86,6 +86,37 @@ class edit
 			confirm_box(false, $this->user->lang['CONFIRM_DELETE_VERSION'], $s_hidden_fields);
 		}
 	}
+
+	/**
+	 * Delete an complete article
+	 *
+	 * @param	string	$article	URL of the article to delete
+	 * @return	object
+	 */
+	public function detele_article($article)
+	{
+		if (!$this->auth->acl_get('u_wiki_delete_article'))
+		{
+			trigger_error('NOT_AUTHORISED');
+		}
+
+		if (confirm_box(true))
+		{
+			$sql = 'DELETE FROM ' . $this->table_article . "
+				WHERE article_url = '" . $this->db->sql_escape($article) . "'";
+			$this->db->sql_query($sql);
+			trigger_error($this->user->lang['DELETE_ARTICLE_SUCCESS'] . '<br /><br /><a href="' . $this->helper->route('tas2580_wiki_index', array())  . '">' . $this->user->lang['BACK_TO_WIKI'] . '</a>');
+		}
+		else
+		{
+			$s_hidden_fields = build_hidden_fields(array(
+				'id'    => $id,
+			));
+			confirm_box(false, $this->user->lang['CONFIRM_DELETE_ARTICLE'], $s_hidden_fields);
+		}
+	}
+
+
 
 	/**
 	 * Set a version of an article as active
