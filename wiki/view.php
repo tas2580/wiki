@@ -93,7 +93,7 @@ class view
 		$this->db->sql_freeresult($result);
 
 		// Do we have a newer version?
-		if(($id === 0) && $this->auth->acl_get('u_wiki_set_active'))
+		if (($id === 0) && $this->auth->acl_get('u_wiki_set_active'))
 		{
 			$sql = 'SELECT article_id
 				FROM ' . $this->table_article . "
@@ -104,7 +104,7 @@ class view
 			$result = $this->db->sql_query_limit($sql, 1);
 			$row = $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
-			if(!empty($row['article_id']))
+			if (!empty($row['article_id']))
 			{
 				$this->template->assign_vars(array(
 					'S_NEW_VERSION'		=> true,
@@ -112,7 +112,7 @@ class view
 				));
 			}
 		}
-		if(($id <> 0) && ($this->data['article_approved'] <> 1) && $this->auth->acl_get('u_wiki_set_active'))
+		if (($id <> 0) && ($this->data['article_approved'] <> 1) && $this->auth->acl_get('u_wiki_set_active'))
 		{
 			$this->template->assign_vars(array(
 				'U_SET_ACTIVE'		=> $this->helper->route('tas2580_wiki_index', array('action' => 'active', 'id' => $id)),
@@ -135,9 +135,9 @@ class view
 		else
 		{
 			$sources = explode("\n", $this->data['article_sources']);
-			foreach($sources as $source)
+			foreach ($sources as $source)
 			{
-				if(!empty($source))
+				if (!empty($source))
 				{
 					$this->template->assign_block_vars('article_sources', array(
 						'SOURCE'		=> $source,

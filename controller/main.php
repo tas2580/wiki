@@ -101,6 +101,8 @@ class main
 		}
 		else if ($action === 'compare')
 		{
+			require($this->phpbb_root_path . 'includes/diff/diff.php');
+			require($this->phpbb_root_path . 'includes/diff/engine.php');
 			$from = $this->request->variable('from', 0);
 			$to = $this->request->variable('to', 0);
 			return $this->diff->compare_versions($article, $from, $to);

@@ -7,6 +7,7 @@
 *
 */
 namespace tas2580\wiki\notification;
+
 class articke_edit extends \phpbb\notification\type\base
 {
 	// Overwrite base in some cases:
@@ -77,7 +78,7 @@ class articke_edit extends \phpbb\notification\type\base
 	 *
 	 * @return array
 	 */
-	 public function find_users_for_notification($notification_data, $options = array())
+	public function find_users_for_notification($notification_data, $options = array())
 	{
 		$options = array_merge(array(
 			'ignore_users'      => array(),
@@ -96,10 +97,10 @@ class articke_edit extends \phpbb\notification\type\base
 	}
 
 	/**
-   * Get email template variables
-   *
-   * @return array
-   */
+	* Get email template variables
+	*
+	* @return array
+	*/
 	public function get_email_template_variables()
 	{
 		return array(

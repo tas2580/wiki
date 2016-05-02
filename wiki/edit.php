@@ -187,9 +187,9 @@ class edit
 
 			$message_length = utf8_strlen($message);
 
-			foreach($sources_array as $source)
+			foreach ($sources_array as $source)
 			{
-				if(!empty($source) && !filter_var($source, FILTER_VALIDATE_URL))
+				if (!empty($source) && !filter_var($source, FILTER_VALIDATE_URL))
 				{
 					$error[] = $this->user->lang['INVALID_SOURCE_URL'];
 				}
@@ -239,9 +239,9 @@ class edit
 			generate_text_for_storage($preview_text, $uid, $bitfield, $options, true, true, true);
 			$preview_text = generate_text_for_display($preview_text, $uid, $bitfield, $options);
 
-			foreach($sources_array as $source)
+			foreach ($sources_array as $source)
 			{
-				if(!empty($source))
+				if (!empty($source))
 				{
 					$this->template->assign_block_vars('article_sources', array(
 						'SOURCE'		=> $source,
@@ -295,7 +295,7 @@ class edit
 			$this->db->sql_query($sql);
 			$article_id = $this->db->sql_nextid();
 
-			if($this->auth->acl_get('u_wiki_set_active') && ($set_active <> 0))
+			if ($this->auth->acl_get('u_wiki_set_active') && ($set_active <> 0))
 			{
 				$this->set_active_version($article_id);
 			}

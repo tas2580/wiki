@@ -33,5 +33,4 @@ if (empty($lang) || !is_array($lang))
 //
 $lang = array_merge($lang, array(
 	'WIKI_ARTICLE_UPDATE'					=> 'Jemand hat einen Artikel im Wiki erstellt der freigegeben werden muss.',
-	
 ));

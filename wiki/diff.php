@@ -44,7 +44,6 @@ class diff
 		$this->table_article = $article_table;
 	}
 
-
 	public function compare_versions($article, $from, $to)
 	{
 		if ($from == 0 || $to == 0)
