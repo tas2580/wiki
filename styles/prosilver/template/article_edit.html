@@ -49,6 +49,16 @@
 			<!-- IF S_SHOW_SMILEY_LINK -->
 				<br /><a href="{U_MORE_SMILIES}" onclick="popup(this.href, 750, 350, '_phpbbsmilies'); return false;">{L_MORE_SMILIES}</a>
 			<!-- ENDIF -->
+				<div class="bbcode-status">
+					<!-- IF .smiley --><hr /><!-- ENDIF -->
+					{BBCODE_STATUS}<br />
+					<!-- IF S_BBCODE_ALLOWED -->
+						{IMG_STATUS}<br />
+						{FLASH_STATUS}<br />
+						{URL_STATUS}<br />
+					<!-- ENDIF -->
+					{SMILIES_STATUS}
+				</div>
 			</div>
 
 			<div id="message-box">
@@ -71,7 +81,7 @@
 			<!-- IF S_AUTH_ACTIVATE -->
 			<dl style="clear: left;">
 				<dt><label for="set_active">{L_SET_ACTIVE}{L_COLON}</label></dt>
-				<dd><input type="checkbox" name="set_active" id="set_active" tabindex="6" value="1" checked="checked"></dd>
+				<dd><input type="checkbox" name="set_active" id="set_active" tabindex="6" value="1"<!-- IF S_ACTIVE --> checked="checked"<!-- ENDIF -->></dd>
 			</dl>
 			<!-- ENDIF -->
 		</fieldset>

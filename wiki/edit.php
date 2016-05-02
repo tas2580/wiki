@@ -157,6 +157,13 @@ class edit
 	 */
 	public function edit_article($article)
 	{
+		// @TODO
+		$bbcode_status = true;
+		$url_status = true;
+		$img_status = true;
+		$flash_status = true;
+		$smilies_status = true;
+
 		// If no auth to edit display error message
 		if (!$this->auth->acl_get('u_wiki_edit'))
 		{
@@ -175,6 +182,7 @@ class edit
 			$edit_reason = $this->request->variable('edit_reason', '', true);
 			$topic_id = $this->request->variable('topic_id', '', true);
 			$sources = $this->request->variable('sources', '', true);
+			$set_active = $this->request->variable('set_active', 0);
 			$sources_array = explode("\n", $sources);
 
 			$message_length = utf8_strlen($message);
@@ -233,26 +241,41 @@ class edit
 
 			foreach($sources_array as $source)
 			{
-				$this->template->assign_block_vars('article_sources', array(
-					'SOURCE'		=> $source,
-				));
+				if(!empty($source))
+				{
+					$this->template->assign_block_vars('article_sources', array(
+						'SOURCE'		=> $source,
+					));
+				}
 			}
 
 			$this->template->assign_vars(array(
 				'S_PREVIEW'				=> true,
-				'S_BBCODE_ALLOWED'		=> 1,
+				'S_BBCODE_ALLOWED'		=> $bbcode_status,
+				'S_LINKS_ALLOWED'			=> $url_status,
+				'S_BBCODE_IMG'			=> $img_status,
+				'S_BBCODE_FLASH'			=> $flash_status,
+				'S_BBCODE_QUOTE'			=> 1,
+				'BBCODE_STATUS'			=> ($bbcode_status) ? sprintf($this->user->lang['BBCODE_IS_ON'], '<a href="' . append_sid("{$this->phpbb_root_path}faq.{$this->php_ext}", 'mode=bbcode') . '">', '</a>') : sprintf($this->user->lang['BBCODE_IS_OFF'], '<a href="' . append_sid("{$this->phpbb_root_path}faq.{$this->php_ext}", 'mode=bbcode') . '">', '</a>'),
+				'IMG_STATUS'				=> ($img_status) ? $this->user->lang['IMAGES_ARE_ON'] : $this->user->lang['IMAGES_ARE_OFF'],
+				'FLASH_STATUS'			=> ($flash_status) ? $this->user->lang['FLASH_IS_ON'] : $this->user->lang['FLASH_IS_OFF'],
+				'SMILIES_STATUS'			=> ($smilies_status) ? $this->user->lang['SMILIES_ARE_ON'] : $this->user->lang['SMILIES_ARE_OFF'],
+				'URL_STATUS'				=> ($bbcode_status && $url_status) ? $this->user->lang['URL_IS_ON'] : $this->user->lang['URL_IS_OFF'],
 				'TITLE'					=> $title,
 				'PREVIEW_MESSAGE'			=> $preview_text,
 				'MESSAGE'				=> $message,
 				'EDIT_REASON'				=> $edit_reason,
 				'TOPIC_ID'					=> $topic_id,
 				'SOURCES'				=> $sources,
+				'S_AUTH_ACTIVATE'			=> $this->auth->acl_get('u_wiki_set_active'),
+				'S_AUTH_EDIT_TOPIC'		=> $this->auth->acl_get('u_wiki_edit_topic'),
+				'S_ACTIVE'					=> $this->request->variable('set_active', 0),
 			));
 		}
 		// Submit the article to database
 		else if ($submit)
 		{
-			$set_active = $this->auth->acl_get('u_wiki_set_active') ? $this->request->variable('set_active', 0) : 0;
+			$set_active = $this->auth->acl_get('u_wiki_set_active') ? $set_active : 0;
 			generate_text_for_storage($message, $uid, $bitfield, $options, true, true, true);
 			$sql_data = array(
 				'article_title'			=> $title,
@@ -308,10 +331,20 @@ class edit
 				'TITLE'					=> $this->data['article_title'],
 				'MESSAGE'				=> $message['text'],
 				'SOURCES'				=> $this->data['article_sources'],
-				'S_BBCODE_ALLOWED'		=> 1,
+				'S_BBCODE_ALLOWED'		=> $bbcode_status,
+				'S_LINKS_ALLOWED'			=> $url_status,
+				'S_BBCODE_IMG'			=> $img_status,
+				'S_BBCODE_FLASH'			=> $flash_status,
+				'S_BBCODE_QUOTE'			=> 1,
+				'BBCODE_STATUS'			=> ($bbcode_status) ? sprintf($this->user->lang['BBCODE_IS_ON'], '<a href="' . append_sid("{$this->phpbb_root_path}faq.{$this->php_ext}", 'mode=bbcode') . '">', '</a>') : sprintf($this->user->lang['BBCODE_IS_OFF'], '<a href="' . append_sid("{$this->phpbb_root_path}faq.{$this->php_ext}", 'mode=bbcode') . '">', '</a>'),
+				'IMG_STATUS'				=> ($img_status) ? $this->user->lang['IMAGES_ARE_ON'] : $this->user->lang['IMAGES_ARE_OFF'],
+				'FLASH_STATUS'			=> ($flash_status) ? $this->user->lang['FLASH_IS_ON'] : $this->user->lang['FLASH_IS_OFF'],
+				'SMILIES_STATUS'			=> ($smilies_status) ? $this->user->lang['SMILIES_ARE_ON'] : $this->user->lang['SMILIES_ARE_OFF'],
+				'URL_STATUS'				=> ($bbcode_status && $url_status) ? $this->user->lang['URL_IS_ON'] : $this->user->lang['URL_IS_OFF'],
 				'TOPIC_ID'					=> $this->data['article_topic_id'],
 				'S_AUTH_ACTIVATE'			=> $this->auth->acl_get('u_wiki_set_active'),
 				'S_AUTH_EDIT_TOPIC'		=> $this->auth->acl_get('u_wiki_edit_topic'),
+				'S_ACTIVE'					=> 1,
 			));
 
 			if (!empty($article))
