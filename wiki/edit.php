@@ -311,6 +311,7 @@ class edit
 				'S_BBCODE_ALLOWED'		=> 1,
 				'TOPIC_ID'					=> $this->data['article_topic_id'],
 				'S_AUTH_ACTIVATE'			=> $this->auth->acl_get('u_wiki_set_active'),
+				'S_AUTH_EDIT_TOPIC'		=> $this->auth->acl_get('u_wiki_edit_topic'),
 			));
 
 			if (!empty($article))
