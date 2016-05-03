@@ -13,26 +13,31 @@ class diff
 
 	/** @var \phpbb\auth\auth */
 	protected $auth;
-	/** @var \phpbb\db\driver\driver */
+
+	/** @var \phpbb\db\driver\driver_interface */
 	protected $db;
+
 	/** @var \phpbb\controller\helper */
 	protected $helper;
+
 	/** @var \phpbb\template\template */
 	protected $template;
+
 	/** @var \phpbb\user */
 	protected $user;
+
 	/** @var string $article_table */
 	protected $article_table;
 
 	/**
 	* Constructor
 	*
-	* @param \phpbb\auth\auth			$auth				Auth object
-	* @param  \phpbb\db\driver\driver		$db					Database object
-	* @param \phpbb\controller\helper		$helper				Controller helper object
-	* @param \phpbb\template\template	$template				Template object
-	* @param \phpbb\user				$user				User object
-	* @param string					$article_table
+	* @param \phpbb\auth\auth					$auth				Auth object
+	* @param \phpbb\db\driver\driver_interface		$db					Database object
+	* @param \phpbb\controller\helper				$helper				Controller helper object
+	* @param \phpbb\template\template			$template				Template object
+	* @param \phpbb\user						$user				User object
+	* @param string							$article_table
 	*/
 	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, $article_table)
 	{
@@ -41,7 +46,7 @@ class diff
 		$this->helper = $helper;
 		$this->template = $template;
 		$this->user = $user;
-		$this->table_article = $article_table;
+		$this->article_table = $article_table;
 	}
 
 	public function compare_versions($article, $from, $to)
@@ -51,13 +56,13 @@ class diff
 			trigger_error('NO_VERSIONS_SELECTED');
 		}
 		$sql = 'SELECT article_text, bbcode_uid, bbcode_bitfield, article_sources
-			FROM ' . $this->table_article . '
+			FROM ' . $this->article_table . '
 			WHERE article_id = ' . (int) $from;
 		$result = $this->db->sql_query($sql);
 		$from_row = $this->db->sql_fetchrow($result);
 
 		$sql = 'SELECT article_text, bbcode_uid, bbcode_bitfield, article_sources
-			FROM ' . $this->table_article . '
+			FROM ' . $this->article_table . '
 			WHERE article_id = ' . (int) $to;
 		$result = $this->db->sql_query($sql);
 		$to_row = $this->db->sql_fetchrow($result);
@@ -85,7 +90,7 @@ class diff
 		}
 
 		$sql = 'SELECT *
-			FROM ' . $this->table_article . '
+			FROM ' . $this->article_table . '
 			WHERE article_url = "' . $this->db->sql_escape($article) . '"
 			ORDER BY article_last_edit DESC';
 		$result = $this->db->sql_query_limit($sql, 1);
@@ -107,7 +112,7 @@ class diff
 
 		$sql_array = array(
 			'SELECT'		=> 'a.article_id, a.article_title, a.article_last_edit,  a.article_approved, u.user_id, u.username, u.user_colour',
-			'FROM'		=> array($this->table_article => 'a'),
+			'FROM'		=> array($this->article_table => 'a'),
 			'LEFT_JOIN'	=> array(
 				array(
 					'FROM'	=> array(USERS_TABLE => 'u'),

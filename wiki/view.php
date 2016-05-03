@@ -13,20 +13,28 @@ class view
 
 	/** @var \phpbb\auth\auth */
 	protected $auth;
-	/** @var \phpbb\db\driver\driver */
+
+	/** @var \phpbb\db\driver\driver_interface */
 	protected $db;
+
 	/** @var \phpbb\controller\helper */
 	protected $helper;
+
 	/** @var \phpbb\template\template */
 	protected $template;
+
 	/** @var \phpbb\user */
 	protected $user;
+
 	/** @var \tas2580\wiki\wiki\edit */
 	protected $edit;
+
 	/** @var string phpbb_root_path */
 	protected $phpbb_root_path;
+
 	/** @var string php_ext */
 	protected $php_ext;
+
 	/** @var string article_table */
 	protected $article_table;
 
@@ -34,15 +42,15 @@ class view
 	/**
 	* Constructor
 	*
-	* @param \phpbb\auth\auth			$auth			Auth object
-	* @param  \phpbb\db\driver\driver		$db				Database object
-	* @param \phpbb\controller\helper		$helper			Controller helper object
-	* @param \phpbb\template\template	$template			Template object
-	* @param \phpbb\user				$user			User object
-	* @param \tas2580\wiki\wiki\edit		$edit				Wiki edit object
-	* @param string					$phpbb_root_path
-	* @param string					$php_ext
-	* @param string					$article_table
+	* @param \phpbb\auth\auth					$auth			Auth object
+	* @param \phpbb\db\driver\driver_interface		$db				Database object
+	* @param \phpbb\controller\helper				$helper			Controller helper object
+	* @param \phpbb\template\template			$template			Template object
+	* @param \phpbb\user						$user			User object
+	* @param \tas2580\wiki\wiki\edit				$edit				Wiki edit object
+	* @param string							$article_table
+	* @param string							$phpbb_root_path
+	* @param string							$php_ext
 	*/
 	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, \tas2580\wiki\wiki\edit $edit, $article_table, $phpbb_root_path, $php_ext)
 	{
@@ -54,7 +62,7 @@ class view
 		$this->edit = $edit;
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->php_ext = $php_ext;
-		$this->table_article = $article_table;
+		$this->article_table = $article_table;
 	}
 
 	/**
@@ -69,7 +77,7 @@ class view
 		$where = ($id === 0) ? "article_url = '" . $this->db->sql_escape($article) . "' AND article_approved = 1" : 'article_id = ' . (int) $id;
 		$sql_array = array(
 			'SELECT'		=> 'a.*, u.user_id, u.username, u.user_colour',
-			'FROM'		=> array($this->table_article => 'a'),
+			'FROM'		=> array($this->article_table => 'a'),
 			'LEFT_JOIN'	=> array(
 				array(
 					'FROM'	=> array(USERS_TABLE => 'u'),
@@ -96,7 +104,7 @@ class view
 		if (($id === 0) && $this->auth->acl_get('u_wiki_set_active'))
 		{
 			$sql = 'SELECT article_id
-				FROM ' . $this->table_article . "
+				FROM ' . $this->article_table . "
 				WHERE article_url = '" . $this->db->sql_escape($this->data['article_url']) . "'
 					AND article_id <> " . (int) $this->data['article_id'] . '
 					AND article_last_edit > ' . (int) $this->data['article_last_edit'] . '

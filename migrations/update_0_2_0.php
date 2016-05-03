@@ -11,7 +11,7 @@ namespace tas2580\wiki\migrations;
 
 class update_0_2_0 extends \phpbb\db\migration\migration
 {
-	static public function depends_on()
+	public static function depends_on()
 	{
 		return array(
 			'\tas2580\wiki\migrations\initial_module',

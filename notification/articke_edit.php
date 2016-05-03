@@ -53,7 +53,7 @@ class articke_edit extends \phpbb\notification\type\base
 	/**
 	* Get the id of the parent
 	*
-	* @param array $my_notification_data The data from the topic
+	* @param array $notification_data The data from the topic
 	*/
 	public static function get_item_parent_id($notification_data)
 	{
@@ -63,7 +63,7 @@ class articke_edit extends \phpbb\notification\type\base
 	/**
 	* Get the id of the item
 	*
-	* @param array $my_notification_data The data from the post
+	* @param array $notification_data The data from the post
 	*/
 	public static function get_item_id($notification_data)
 	{
@@ -73,7 +73,7 @@ class articke_edit extends \phpbb\notification\type\base
 	/**
 	 * Find the users who want to receive notifications
 	 *
-	 * @param array $my_notification_data The data from the post
+	 * @param array $notification_data The data from the post
 	 * @param array $options Options for finding users for notification
 	 *
 	 * @return array
@@ -91,7 +91,7 @@ class articke_edit extends \phpbb\notification\type\base
 		return $this->check_user_notification_options($users, $options);
 	}
 
-	function users_to_query()
+	public function users_to_query()
 	{
 		return array();
 	}

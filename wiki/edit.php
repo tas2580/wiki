@@ -13,37 +13,52 @@ class edit
 
 	/** @var \phpbb\auth\auth */
 	protected $auth;
+
 	/** @var \phpbb\config\config */
 	protected $config;
-	/** @var \phpbb\db\driver\driver */
+
+	/** @var \phpbb\db\driver\driver_interface */
 	protected $db;
+
 	/** @var \phpbb\controller\helper */
 	protected $helper;
+
 	/** @var \phpbb\notification\manager */
 	protected $notification_manager;
+
+	/** @var \phpbb\request\request */
+	protected $request;
+
 	/** @var \phpbb\template\template */
 	protected $template;
+
 	/** @var \phpbb\user */
 	protected $user;
+
 	/** @var string phpbb_root_path */
 	protected $phpbb_root_path;
+
 	/** @var string php_ext */
 	protected $php_ext;
+
 	/** @var string article_table */
 	protected $article_table;
 
 	/**
 	* Constructor
 	*
-	* @param \phpbb\auth\auth			$auth			Auth object
-	* @param \phpbb\config\config		$config
-	* @param  \phpbb\db\driver\driver		$db				Database object
-	* @param \phpbb\controller\helper		$helper			Controller helper object
-	* @param \phpbb\template\template	$template			Template object
-	* @param \phpbb\user				$user
-	* @param string					$phpbb_root_path
-	* @param string					$php_ext
-	* @param string					$article_table
+	* @param \phpbb\auth\auth					$auth				Auth object
+	* @param \phpbb\config\config				$config
+	* @param \phpbb\db\driver\driver_interface		$db					Database object
+	* @param \phpbb\controller\helper				$helper				Controller helper object
+	* @param \phpbb\notification\manager			$notification_manager
+	* @param \phpbb\request\request				$request				Request object
+	* @param \phpbb\template\template			$template				Template object
+	* @param \phpbb\user						$user
+	* @param string							$article_table
+	* @param string							$phpbb_root_path
+	* @param string							$php_ext
+
 	*/
 	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\notification\manager $notification_manager, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, $article_table, $phpbb_root_path, $php_ext)
 	{
@@ -55,9 +70,10 @@ class edit
 		$this->request = $request;
 		$this->template = $template;
 		$this->user = $user;
+		$this->article_table = $article_table;
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->php_ext = $php_ext;
-		$this->table_article = $article_table;
+
 	}
 
 	/**
@@ -75,7 +91,7 @@ class edit
 
 		if (confirm_box(true))
 		{
-			$sql = 'DELETE FROM ' . $this->table_article . '
+			$sql = 'DELETE FROM ' . $this->article_table . '
 				WHERE article_id = ' . (int) $id;
 			$this->db->sql_query($sql);
 			//return $helper->message('DELETE_VERSION_SUCCESS', array());
@@ -105,7 +121,7 @@ class edit
 
 		if (confirm_box(true))
 		{
-			$sql = 'DELETE FROM ' . $this->table_article . "
+			$sql = 'DELETE FROM ' . $this->article_table . "
 				WHERE article_url = '" . $this->db->sql_escape($article) . "'";
 			$this->db->sql_query($sql);
 			trigger_error($this->user->lang['DELETE_ARTICLE_SUCCESS'] . '<br /><br /><a href="' . $this->helper->route('tas2580_wiki_index', array())  . '">' . $this->user->lang['BACK_TO_WIKI'] . '</a>');
@@ -118,8 +134,6 @@ class edit
 			confirm_box(false, $this->user->lang['CONFIRM_DELETE_ARTICLE'], $s_hidden_fields);
 		}
 	}
-
-
 
 	/**
 	 * Set a version of an article as active
@@ -290,7 +304,7 @@ class edit
 				'article_topic_id'			=> (int) $topic_id,
 				'article_sources'		=> $sources,
 			);
-			$sql = 'INSERT INTO ' . $this->table_article . '
+			$sql = 'INSERT INTO ' . $this->article_table . '
 				' . $this->db->sql_build_array('INSERT', $sql_data);
 			$this->db->sql_query($sql);
 			$article_id = $this->db->sql_nextid();
@@ -317,7 +331,7 @@ class edit
 		else
 		{
 			$sql = 'SELECT *
-				FROM ' . $this->table_article . '
+				FROM ' . $this->article_table . '
 					WHERE article_url = "' . $this->db->sql_escape($article) . '"
 				ORDER BY article_last_edit DESC';
 			$result = $this->db->sql_query_limit($sql, 1);
@@ -372,21 +386,21 @@ class edit
 
 		// Get the URL of the article
 		$sql = 'SELECT article_url
-			FROM ' . $this->table_article . '
+			FROM ' . $this->article_table . '
 				WHERE article_id = ' . (int) $id;
 		$result = $this->db->sql_query_limit($sql, 1);
 		$row = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
 
 		// Set all versions to not approved
-		$sql = 'UPDATE ' . $this->table_article . "
+		$sql = 'UPDATE ' . $this->article_table . "
 			SET article_approved = 0
 			WHERE article_url = '" . $this->db->sql_escape($row['article_url']) . "'
 				AND article_id <> " . (int) $id;
 		$this->db->sql_query($sql);
 
 		// Set version to approved
-		$sql = 'UPDATE ' . $this->table_article . '
+		$sql = 'UPDATE ' . $this->article_table . '
 			SET article_approved = 1
 			WHERE article_id = ' . (int) $id;
 		$this->db->sql_query($sql);

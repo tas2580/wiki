@@ -10,29 +10,47 @@ namespace tas2580\wiki\controller;
 
 class main
 {
+	/** @var \phpbb\auth\auth */
+	protected $auth;
+
 	/** @var \phpbb\controller\helper */
 	protected $helper;
+
 	/** @var \phpbb\request\request */
 	protected $request;
+
 	/** @var \phpbb\template\template */
 	protected $template;
+
 	/** @var \phpbb\user */
 	protected $user;
-	/** @var \tas2580\wiki\wiki */
-	protected $wiki;
+
+	/** @var \tas2580\wiki\wiki\edit */
+	protected $edit;
+
+	/** @var \tas2580\wiki\wiki\diff */
+	protected $diff;
+
+	/** @var \tas2580\wiki\wiki\view */
+	protected $view;
+
 	/** @var string phpbb_root_path */
 	protected $phpbb_root_path;
+
 	/** @var string php_ext */
 	protected $php_ext;
 
 	/**
 	* Constructor
 	*
+	* @param \phpbb\auth\auth			$auth				Auth object
 	* @param \phpbb\controller\helper		$helper				Controller helper object
 	* @param \phpbb\request\request		$request				Request object
 	* @param \phpbb\template\template	$template				Template object
 	* @param \phpbb\user				$user				User object
-	* @param \tas2580\wiki\wiki			$wiki					Wiki object
+	* @param \tas2580\wiki\wiki\edit		$edit					Edit Wiki object
+	* @param \tas2580\wiki\wiki\diff		$diff					Diff Wiki object
+	* @param \tas2580\wiki\wiki\view		$view				View Wiki object
 	* @param string					$phpbb_root_path
 	* @param string					$php_ext
 	*/

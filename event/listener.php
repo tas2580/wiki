@@ -36,9 +36,11 @@ class listener implements EventSubscriberInterface
 	/**
 	* Constructor
 	*
-	* @param \phpbb\controller\helper		$helper		Controller helper object
-	* @param \phpbb\template			$template		Template object
-	* @param \phpbb\user				$user		User object
+	* @param \phpbb\auth\auth			$auth				Auth object
+	* @param \phpbb\controller\helper		$helper				Controller helper object
+	* @param \phpbb\notification\manager	$notification_manager	Notification Manager
+	* @param \phpbb\template			$template				Template object
+	* @param \phpbb\user				$user				User object
 	*/
 	public function __construct(\phpbb\auth\auth $auth, \phpbb\controller\helper $helper, \phpbb\notification\manager $notification_manager, \phpbb\template\template $template, \phpbb\user $user)
 	{
