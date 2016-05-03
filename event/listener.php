@@ -18,15 +18,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 */
 class listener implements EventSubscriberInterface
 {
-	static public function getSubscribedEvents()
-	{
-		return array(
-			'core.page_header'						=> 'page_header',
-			'core.permissions'						=> 'permissions',
-			'core.user_setup'						=> 'user_setup',
-		);
-	}
-
 	/** @var \phpbb\auth\auth */
 	protected $auth;
 
@@ -58,6 +49,22 @@ class listener implements EventSubscriberInterface
 		$this->user = $user;
 	}
 
+	public static  function getSubscribedEvents()
+	{
+		return array(
+			'core.page_header'						=> 'page_header',
+			'core.permissions'						=> 'permissions',
+			'core.user_setup'						=> 'user_setup',
+		);
+	}
+
+	/**
+	 * Add permissions
+	 *
+	 * @param	object	$event	The event object
+	 * @return	null
+	 * @access	public
+	 */
 	public function permissions($event)
 	{
 		$permissions = $event['permissions'];
@@ -96,6 +103,13 @@ class listener implements EventSubscriberInterface
 		$event['categories'] = array_merge($event['categories'], $categories);
 	}
 
+	/**
+	 * Add notification
+	 *
+	 * @param	object	$event	The event object
+	 * @return	null
+	 * @access	public
+	 */
 	public function notification_add($event)
 	{
 		if (!$this->config['email_enable'])
@@ -114,6 +128,13 @@ class listener implements EventSubscriberInterface
 		}
 	}
 
+	/**
+	 * Add link to header
+	 *
+	 * @param	object	$event	The event object
+	 * @return	null
+	 * @access	public
+	 */
 	public function page_header($event)
 	{
 		if ($this->auth->acl_get('u_wiki_view'))
@@ -125,6 +146,13 @@ class listener implements EventSubscriberInterface
 		}
 	}
 
+	/**
+	 * Add language file
+	 *
+	 * @param	object	$event	The event object
+	 * @return	null
+	 * @access	public
+	 */
 	public function user_setup($event)
 	{
 		$lang_ary = $event['lang_set_ext'];
