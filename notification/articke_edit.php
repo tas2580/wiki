@@ -26,18 +26,18 @@ class articke_edit extends \phpbb\notification\type\base
 	/**
 	* Notification Type Boardrules Constructor
 	*
-	* @param \phpbb\user_loader $user_loader
-	* @param \phpbb\db\driver\driver_interface $db
-	* @param \phpbb\cache\driver\driver_interface $cache
-	* @param \phpbb\user $user
-	* @param \phpbb\auth\auth $auth
-	* @param \phpbb\config\config $config
-	* @param \phpbb\controller\helper $helper
-	* @param string $phpbb_root_path
-	* @param string $php_ext
-	* @param string $notification_types_table
-	* @param string $notifications_table
-	* @param string $user_notifications_table
+	* @param \phpbb\user_loader						$user_loader
+	* @param \phpbb\db\driver\driver_interface		$db
+	* @param \phpbb\cache\driver\driver_interface	$cache
+	* @param \phpbb\user							$user
+	* @param \phpbb\auth\auth						$auth
+	* @param \phpbb\config\config					$config
+	* @param \phpbb\controller\helper				$helper
+	* @param string									$phpbb_root_path
+	* @param string									$php_ext
+	* @param string									$notification_types_table
+	* @param string									$notifications_table
+	* @param string									$user_notifications_table
 	*/
 	public function __construct(\phpbb\user_loader $user_loader, \phpbb\db\driver\driver_interface $db, \phpbb\cache\driver\driver_interface $cache, $user, \phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\controller\helper $helper, $phpbb_root_path, $php_ext, $notification_types_table, $notifications_table, $user_notifications_table)
 	{
@@ -104,8 +104,8 @@ class articke_edit extends \phpbb\notification\type\base
 	public function get_email_template_variables()
 	{
 		return array(
-			'NOTIFICATION_SUBJECT'   => htmlspecialchars_decode($this->get_title()),
-			'USERNAME'			=> htmlspecialchars_decode($this->user->data['username']),
+			'NOTIFICATION_SUBJECT'	=> htmlspecialchars_decode($this->get_title()),
+			'USERNAME'				=> htmlspecialchars_decode($this->user->data['username']),
 			'U_LINK'				=> generate_board_url() . $this->helper->route('tas2580_wiki_index', array('id' =>$this->get_data('article_id'))),
 		);
 	}

@@ -43,16 +43,16 @@ class main
 	/**
 	* Constructor
 	*
-	* @param \phpbb\auth\auth			$auth				Auth object
-	* @param \phpbb\controller\helper		$helper				Controller helper object
-	* @param \phpbb\request\request		$request				Request object
-	* @param \phpbb\template\template	$template				Template object
-	* @param \phpbb\user				$user				User object
+	* @param \phpbb\auth\auth				$auth					Auth object
+	* @param \phpbb\controller\helper		$helper					Controller helper object
+	* @param \phpbb\request\request			$request				Request object
+	* @param \phpbb\template\template		$template				Template object
+	* @param \phpbb\user					$user					User object
 	* @param \tas2580\wiki\wiki\edit		$edit					Edit Wiki object
 	* @param \tas2580\wiki\wiki\diff		$diff					Diff Wiki object
-	* @param \tas2580\wiki\wiki\view		$view				View Wiki object
-	* @param string					$phpbb_root_path
-	* @param string					$php_ext
+	* @param \tas2580\wiki\wiki\view		$view					View Wiki object
+	* @param string							$phpbb_root_path
+	* @param string							$php_ext
 	*/
 	public function __construct(\phpbb\auth\auth $auth, \phpbb\controller\helper $helper, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \tas2580\wiki\wiki\edit $edit, \tas2580\wiki\wiki\diff $diff, \tas2580\wiki\wiki\view $view, $phpbb_root_path, $php_ext)
 	{

@@ -17,17 +17,17 @@ class initial_module extends \phpbb\db\migration\migration
 			'add_tables'	=> array(
 				$this->table_prefix . 'wiki_article'	=> array(
 					'COLUMNS'	=> array(
-						'article_id'				=> array('UINT', null, 'auto_increment'),
+						'article_id'			=> array('UINT', null, 'auto_increment'),
 						'article_title'			=> array('VCHAR:255', ''),
-						'article_url'				=> array('VCHAR:255', ''),
+						'article_url'			=> array('VCHAR:255', ''),
 						'article_text'			=> array('MTEXT_UNI', ''),
 						'bbcode_uid'			=> array('VCHAR:10', ''),
 						'bbcode_bitfield'		=> array('VCHAR:32', ''),
 						'article_approved'		=> array('BOOL', 0),
-						'article_user_id'			=> array('UINT', 0),
+						'article_user_id'		=> array('UINT', 0),
 						'article_last_edit'		=> array('TIMESTAMP', 0),
-						'article_edit_reason'		=> array('VCHAR:255', ''),
-						'article_topic_id'			=> array('UINT', 0),
+						'article_edit_reason'	=> array('VCHAR:255', ''),
+						'article_topic_id'		=> array('UINT', 0),
 					),
 					'PRIMARY_KEY'	=> 'article_id',
 				),

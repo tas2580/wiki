@@ -36,11 +36,11 @@ class listener implements EventSubscriberInterface
 	/**
 	* Constructor
 	*
-	* @param \phpbb\auth\auth			$auth				Auth object
-	* @param \phpbb\controller\helper		$helper				Controller helper object
+	* @param \phpbb\auth\auth				$auth					Auth object
+	* @param \phpbb\controller\helper		$helper					Controller helper object
 	* @param \phpbb\notification\manager	$notification_manager	Notification Manager
-	* @param \phpbb\template			$template				Template object
-	* @param \phpbb\user				$user				User object
+	* @param \phpbb\template				$template				Template object
+	* @param \phpbb\user					$user					User object
 	*/
 	public function __construct(\phpbb\auth\auth $auth, \phpbb\controller\helper $helper, \phpbb\notification\manager $notification_manager, \phpbb\template\template $template, \phpbb\user $user)
 	{
@@ -54,9 +54,9 @@ class listener implements EventSubscriberInterface
 	public static  function getSubscribedEvents()
 	{
 		return array(
-			'core.page_header'						=> 'page_header',
-			'core.permissions'						=> 'permissions',
-			'core.user_setup'						=> 'user_setup',
+			'core.page_header'			=> 'page_header',
+			'core.permissions'			=> 'permissions',
+			'core.user_setup'			=> 'user_setup',
 		);
 	}
 
@@ -120,7 +120,7 @@ class listener implements EventSubscriberInterface
 		}
 		$notifications_data = array(
 			array(
-				'item_type'	=> 'tas2580.wiki.notification.type.articke_edit',
+				'item_type'		=> 'tas2580.wiki.notification.type.articke_edit',
 				'method'		=> 'notification.method.email',
 			),
 		);

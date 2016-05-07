@@ -42,15 +42,15 @@ class view
 	/**
 	* Constructor
 	*
-	* @param \phpbb\auth\auth					$auth			Auth object
-	* @param \phpbb\db\driver\driver_interface		$db				Database object
-	* @param \phpbb\controller\helper				$helper			Controller helper object
-	* @param \phpbb\template\template			$template			Template object
-	* @param \phpbb\user						$user			User object
+	* @param \phpbb\auth\auth						$auth				Auth object
+	* @param \phpbb\db\driver\driver_interface		$db					Database object
+	* @param \phpbb\controller\helper				$helper				Controller helper object
+	* @param \phpbb\template\template				$template			Template object
+	* @param \phpbb\user							$user				User object
 	* @param \tas2580\wiki\wiki\edit				$edit				Wiki edit object
-	* @param string							$article_table
-	* @param string							$phpbb_root_path
-	* @param string							$php_ext
+	* @param string									$article_table
+	* @param string									$phpbb_root_path
+	* @param string									$php_ext
 	*/
 	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, \tas2580\wiki\wiki\edit $edit, $article_table, $phpbb_root_path, $php_ext)
 	{
@@ -131,7 +131,7 @@ class view
 		{
 			$this->template->assign_block_vars('navlinks', array(
 				'FORUM_NAME'		=> $this->data['article_title'],
-				'U_VIEW_FORUM'	=> $this->helper->route('tas2580_wiki_article', array('article'	=> $article)),
+				'U_VIEW_FORUM'		=> $this->helper->route('tas2580_wiki_article', array('article'	=> $article)),
 			));
 		}
 
@@ -154,17 +154,17 @@ class view
 			}
 
 			$this->template->assign_vars(array(
-				'S_BBCODE_ALLOWED'	=> 1,
+				'S_BBCODE_ALLOWED'		=> 1,
 				'ARTICLE_TITLE'			=> $this->data['article_title'],
 				'ARTICLE_TEXT'			=> generate_text_for_display($this->data['article_text'], $this->data['bbcode_uid'], $this->data['bbcode_bitfield'], 3, true),
-				'LAST_EDIT'			=> $this->user->format_date($this->data['article_last_edit']),
-				'ARTICLE_USER'		=> get_username_string('full', $this->data['user_id'], $this->data['username'], $this->data['user_colour']),
+				'LAST_EDIT'				=> $this->user->format_date($this->data['article_last_edit']),
+				'ARTICLE_USER'			=> get_username_string('full', $this->data['user_id'], $this->data['username'], $this->data['user_colour']),
 				'S_EDIT'				=> $this->auth->acl_get('u_wiki_edit'),
 				'U_EDIT'				=> $this->helper->route('tas2580_wiki_index', array('article' => $article, 'action'	=> 'edit')),
 				'S_VERSIONS'			=> $this->auth->acl_get('u_wiki_versions'),
 				'U_VERSIONS'			=> $this->helper->route('tas2580_wiki_index', array('article' => $article, 'action'	=> 'versions')),
-				'S_DELETE'			=> $this->auth->acl_get('u_wiki_delete_article'),
-				'U_DELETE'			=> $this->helper->route('tas2580_wiki_index', array('article' => $article, 'action'	=> 'detele_article')),
+				'S_DELETE'				=> $this->auth->acl_get('u_wiki_delete_article'),
+				'U_DELETE'				=> $this->helper->route('tas2580_wiki_index', array('article' => $article, 'action'	=> 'detele_article')),
 				'ARTICLE_VERSION'		=> $id,
 				'EDIT_REASON'			=> ($id <> 0) ? $this->data['article_edit_reason'] : '',
 				'U_TOPIC'				=> ($this->data['article_topic_id'] <> 0) ? append_sid($this->phpbb_root_path . 'viewtopic.' . $this->php_ext, 't=' . $this->data['article_topic_id']) : '',

@@ -47,17 +47,17 @@ class edit
 	/**
 	* Constructor
 	*
-	* @param \phpbb\auth\auth					$auth				Auth object
-	* @param \phpbb\config\config				$config
-	* @param \phpbb\db\driver\driver_interface		$db					Database object
-	* @param \phpbb\controller\helper				$helper				Controller helper object
+	* @param \phpbb\auth\auth						$auth					Auth object
+	* @param \phpbb\config\config					$config
+	* @param \phpbb\db\driver\driver_interface		$db						Database object
+	* @param \phpbb\controller\helper				$helper					Controller helper object
 	* @param \phpbb\notification\manager			$notification_manager
-	* @param \phpbb\request\request				$request				Request object
-	* @param \phpbb\template\template			$template				Template object
-	* @param \phpbb\user						$user
-	* @param string							$article_table
-	* @param string							$phpbb_root_path
-	* @param string							$php_ext
+	* @param \phpbb\request\request					$request				Request object
+	* @param \phpbb\template\template				$template				Template object
+	* @param \phpbb\user							$user
+	* @param string									$article_table
+	* @param string									$phpbb_root_path
+	* @param string									$php_ext
 
 	*/
 	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\notification\manager $notification_manager, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, $article_table, $phpbb_root_path, $php_ext)
@@ -266,24 +266,24 @@ class edit
 			$this->template->assign_vars(array(
 				'S_PREVIEW'				=> true,
 				'S_BBCODE_ALLOWED'		=> $bbcode_status,
-				'S_LINKS_ALLOWED'			=> $url_status,
+				'S_LINKS_ALLOWED'		=> $url_status,
 				'S_BBCODE_IMG'			=> $img_status,
-				'S_BBCODE_FLASH'			=> $flash_status,
-				'S_BBCODE_QUOTE'			=> 1,
+				'S_BBCODE_FLASH'		=> $flash_status,
+				'S_BBCODE_QUOTE'		=> 1,
 				'BBCODE_STATUS'			=> ($bbcode_status) ? sprintf($this->user->lang['BBCODE_IS_ON'], '<a href="' . append_sid("{$this->phpbb_root_path}faq.{$this->php_ext}", 'mode=bbcode') . '">', '</a>') : sprintf($this->user->lang['BBCODE_IS_OFF'], '<a href="' . append_sid("{$this->phpbb_root_path}faq.{$this->php_ext}", 'mode=bbcode') . '">', '</a>'),
-				'IMG_STATUS'				=> ($img_status) ? $this->user->lang['IMAGES_ARE_ON'] : $this->user->lang['IMAGES_ARE_OFF'],
+				'IMG_STATUS'			=> ($img_status) ? $this->user->lang['IMAGES_ARE_ON'] : $this->user->lang['IMAGES_ARE_OFF'],
 				'FLASH_STATUS'			=> ($flash_status) ? $this->user->lang['FLASH_IS_ON'] : $this->user->lang['FLASH_IS_OFF'],
-				'SMILIES_STATUS'			=> ($smilies_status) ? $this->user->lang['SMILIES_ARE_ON'] : $this->user->lang['SMILIES_ARE_OFF'],
-				'URL_STATUS'				=> ($bbcode_status && $url_status) ? $this->user->lang['URL_IS_ON'] : $this->user->lang['URL_IS_OFF'],
+				'SMILIES_STATUS'		=> ($smilies_status) ? $this->user->lang['SMILIES_ARE_ON'] : $this->user->lang['SMILIES_ARE_OFF'],
+				'URL_STATUS'			=> ($bbcode_status && $url_status) ? $this->user->lang['URL_IS_ON'] : $this->user->lang['URL_IS_OFF'],
 				'TITLE'					=> $title,
-				'PREVIEW_MESSAGE'			=> $preview_text,
+				'PREVIEW_MESSAGE'		=> $preview_text,
 				'MESSAGE'				=> $message,
-				'EDIT_REASON'				=> $edit_reason,
-				'TOPIC_ID'					=> $topic_id,
+				'EDIT_REASON'			=> $edit_reason,
+				'TOPIC_ID'				=> $topic_id,
 				'SOURCES'				=> $sources,
-				'S_AUTH_ACTIVATE'			=> $this->auth->acl_get('u_wiki_set_active'),
+				'S_AUTH_ACTIVATE'		=> $this->auth->acl_get('u_wiki_set_active'),
 				'S_AUTH_EDIT_TOPIC'		=> $this->auth->acl_get('u_wiki_edit_topic'),
-				'S_ACTIVE'					=> $this->request->variable('set_active', 0),
+				'S_ACTIVE'				=> $this->request->variable('set_active', 0),
 			));
 		}
 		// Submit the article to database
@@ -293,15 +293,15 @@ class edit
 			generate_text_for_storage($message, $uid, $bitfield, $options, true, true, true);
 			$sql_data = array(
 				'article_title'			=> $title,
-				'article_url'				=> $article,
+				'article_url'			=> $article,
 				'article_text'			=> $message,
 				'bbcode_uid'			=> $uid,
 				'bbcode_bitfield'		=> $bitfield,
 				'article_approved'		=> $set_active,
-				'article_user_id'			=> $this->user->data['user_id'],
+				'article_user_id'		=> $this->user->data['user_id'],
 				'article_last_edit'		=> time(),
-				'article_edit_reason'		=> $edit_reason,
-				'article_topic_id'			=> (int) $topic_id,
+				'article_edit_reason'	=> $edit_reason,
+				'article_topic_id'		=> (int) $topic_id,
 				'article_sources'		=> $sources,
 			);
 			$sql = 'INSERT INTO ' . $this->article_table . '
@@ -317,9 +317,9 @@ class edit
 			{
 				$notify_data = array(
 					'article_id'		=> $article_id,
-					'article_title'	=> $title,
+					'article_title'		=> $title,
 					'article_url'		=> $article,
-					'user_id'		=> $this->user->data['user_id'],
+					'user_id'			=> $this->user->data['user_id'],
 				);
 				$this->notification_manager->add_notifications('tas2580.wiki.notification.type.articke_edit', $notify_data);
 			}
@@ -346,26 +346,26 @@ class edit
 				'MESSAGE'				=> $message['text'],
 				'SOURCES'				=> $this->data['article_sources'],
 				'S_BBCODE_ALLOWED'		=> $bbcode_status,
-				'S_LINKS_ALLOWED'			=> $url_status,
+				'S_LINKS_ALLOWED'		=> $url_status,
 				'S_BBCODE_IMG'			=> $img_status,
-				'S_BBCODE_FLASH'			=> $flash_status,
-				'S_BBCODE_QUOTE'			=> 1,
+				'S_BBCODE_FLASH'		=> $flash_status,
+				'S_BBCODE_QUOTE'		=> 1,
 				'BBCODE_STATUS'			=> ($bbcode_status) ? sprintf($this->user->lang['BBCODE_IS_ON'], '<a href="' . append_sid("{$this->phpbb_root_path}faq.{$this->php_ext}", 'mode=bbcode') . '">', '</a>') : sprintf($this->user->lang['BBCODE_IS_OFF'], '<a href="' . append_sid("{$this->phpbb_root_path}faq.{$this->php_ext}", 'mode=bbcode') . '">', '</a>'),
-				'IMG_STATUS'				=> ($img_status) ? $this->user->lang['IMAGES_ARE_ON'] : $this->user->lang['IMAGES_ARE_OFF'],
+				'IMG_STATUS'			=> ($img_status) ? $this->user->lang['IMAGES_ARE_ON'] : $this->user->lang['IMAGES_ARE_OFF'],
 				'FLASH_STATUS'			=> ($flash_status) ? $this->user->lang['FLASH_IS_ON'] : $this->user->lang['FLASH_IS_OFF'],
-				'SMILIES_STATUS'			=> ($smilies_status) ? $this->user->lang['SMILIES_ARE_ON'] : $this->user->lang['SMILIES_ARE_OFF'],
-				'URL_STATUS'				=> ($bbcode_status && $url_status) ? $this->user->lang['URL_IS_ON'] : $this->user->lang['URL_IS_OFF'],
-				'TOPIC_ID'					=> $this->data['article_topic_id'],
-				'S_AUTH_ACTIVATE'			=> $this->auth->acl_get('u_wiki_set_active'),
+				'SMILIES_STATUS'		=> ($smilies_status) ? $this->user->lang['SMILIES_ARE_ON'] : $this->user->lang['SMILIES_ARE_OFF'],
+				'URL_STATUS'			=> ($bbcode_status && $url_status) ? $this->user->lang['URL_IS_ON'] : $this->user->lang['URL_IS_OFF'],
+				'TOPIC_ID'				=> $this->data['article_topic_id'],
+				'S_AUTH_ACTIVATE'		=> $this->auth->acl_get('u_wiki_set_active'),
 				'S_AUTH_EDIT_TOPIC'		=> $this->auth->acl_get('u_wiki_edit_topic'),
-				'S_ACTIVE'					=> 1,
+				'S_ACTIVE'				=> 1,
 			));
 
 			if (!empty($article))
 			{
 				$this->template->assign_block_vars('navlinks', array(
 					'FORUM_NAME'		=> empty($this->data['article_title']) ? $this->user->lang('EDIT_WIKI') : $this->data['article_title'],
-					'U_VIEW_FORUM'	=> $this->helper->route('tas2580_wiki_article', array('article'	=> $article)),
+					'U_VIEW_FORUM'		=> $this->helper->route('tas2580_wiki_article', array('article'	=> $article)),
 				));
 			}
 		}

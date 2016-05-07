@@ -32,12 +32,12 @@ class diff
 	/**
 	* Constructor
 	*
-	* @param \phpbb\auth\auth					$auth				Auth object
+	* @param \phpbb\auth\auth						$auth				Auth object
 	* @param \phpbb\db\driver\driver_interface		$db					Database object
 	* @param \phpbb\controller\helper				$helper				Controller helper object
-	* @param \phpbb\template\template			$template				Template object
-	* @param \phpbb\user						$user				User object
-	* @param string							$article_table
+	* @param \phpbb\template\template				$template			Template object
+	* @param \phpbb\user							$user				User object
+	* @param string									$article_table
 	*/
 	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, $article_table)
 	{
@@ -75,7 +75,7 @@ class diff
 		$this->template->assign_vars(array(
 			'HEADLINE'			=> sprintf($this->user->lang['VERSION_COMPARE_HEADLINE'], $from, $to, $u_from, $u_to),
 			'DIFF'				=> $this->diffline($to_article, $from_article),
-			'DIFF_SOURCE'			=> $this->diffline($to_row['article_sources'], $from_row['article_sources']),
+			'DIFF_SOURCE'		=> $this->diffline($to_row['article_sources'], $from_row['article_sources']),
 		));
 
 		return $this->helper->render('article_compare.html', $this->user->lang['VERSIONS_OF_ARTICLE']);
@@ -97,8 +97,8 @@ class diff
 		$this->data = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
 		$this->template->assign_vars(array(
-			'ARTICLE_TITLE'			=> $this->data['article_title'],
-			'S_SET_ACTIVE'			=> $this->auth->acl_get('u_wiki_set_active'),
+			'ARTICLE_TITLE'		=> $this->data['article_title'],
+			'S_SET_ACTIVE'		=> $this->auth->acl_get('u_wiki_set_active'),
 			'U_ACTION'			=> $this->helper->route('tas2580_wiki_index', array('article' => $article, 'action' => 'compare')),
 		));
 
@@ -116,7 +116,7 @@ class diff
 			'LEFT_JOIN'	=> array(
 				array(
 					'FROM'	=> array(USERS_TABLE => 'u'),
-					'ON'		=> 'u.user_id = a.article_user_id'
+					'ON'	=> 'u.user_id = a.article_user_id'
 				)
 			),
 			'WHERE'		=> 'article_url = "' . $this->db->sql_escape($article) . '"',
@@ -125,10 +125,10 @@ class diff
 
 		$sql = $this->db->sql_build_query('SELECT', array(
 			'SELECT'		=> $sql_array['SELECT'],
-			'FROM'		=> $sql_array['FROM'],
-			'LEFT_JOIN'	=> $sql_array['LEFT_JOIN'],
-			'WHERE'		=> $sql_array['WHERE'],
-			'ORDER_BY'	=> $sql_array['ORDER_BY'],
+			'FROM'			=> $sql_array['FROM'],
+			'LEFT_JOIN'		=> $sql_array['LEFT_JOIN'],
+			'WHERE'			=> $sql_array['WHERE'],
+			'ORDER_BY'		=> $sql_array['ORDER_BY'],
 		));
 		$result = $this->db->sql_query($sql);
 		while ($this->data = $this->db->sql_fetchrow($result))
@@ -137,10 +137,10 @@ class diff
 				'ID'				=> $this->data['article_id'],
 				'ARTICLE_TITLE'		=> $this->data['article_title'],
 				'S_ACTIVE'			=> ($this->data['article_approved'] == 1) ? true : false,
-				'USER'			=> get_username_string('full', $this->data['user_id'], $this->data['username'], $this->data['user_colour']),
-				'EDIT_TIME'		=> $this->user->format_date($this->data['article_last_edit']),
-				'U_VERSION'		=> $this->helper->route('tas2580_wiki_index', array('id' => $this->data['article_id'])),
-				'U_DELETE'		=> $this->helper->route('tas2580_wiki_index', array('action' => 'delete', 'id' => $this->data['article_id'])),
+				'USER'				=> get_username_string('full', $this->data['user_id'], $this->data['username'], $this->data['user_colour']),
+				'EDIT_TIME'			=> $this->user->format_date($this->data['article_last_edit']),
+				'U_VERSION'			=> $this->helper->route('tas2580_wiki_index', array('id' => $this->data['article_id'])),
+				'U_DELETE'			=> $this->helper->route('tas2580_wiki_index', array('action' => 'delete', 'id' => $this->data['article_id'])),
 				'U_SET_ACTIVE'		=> $this->helper->route('tas2580_wiki_index', array('action' => 'active', 'id' => $this->data['article_id'])),
 			));
 		}
