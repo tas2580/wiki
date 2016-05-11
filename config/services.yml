@@ -11,7 +11,7 @@ services:
             - @template
             - @user
             - @tas2580.wiki.edit
-            - @tas2580.wiki.diff
+            - @tas2580.wiki.compare
             - @tas2580.wiki.view
             - %core.root_path%
             - %core.php_ext%
@@ -39,8 +39,8 @@ services:
             - %tables.wiki.article%
             - %core.root_path%
             - %core.php_ext%
-    tas2580.wiki.diff:
-        class: tas2580\wiki\wiki\diff
+    tas2580.wiki.compare:
+        class: tas2580\wiki\wiki\compare
         arguments:
             - @auth
             - @dbal.conn
@@ -48,6 +48,8 @@ services:
             - @template
             - @user
             - %tables.wiki.article%
+            - %core.root_path%
+            - %core.php_ext%
     tas2580.wiki.view:
         class: tas2580\wiki\wiki\view
         arguments:

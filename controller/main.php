@@ -28,8 +28,8 @@ class main
 	/** @var \tas2580\wiki\wiki\edit */
 	protected $edit;
 
-	/** @var \tas2580\wiki\wiki\diff */
-	protected $diff;
+	/** @var \tas2580\wiki\wiki\compare */
+	protected $compare;
 
 	/** @var \tas2580\wiki\wiki\view */
 	protected $view;
@@ -49,12 +49,12 @@ class main
 	* @param \phpbb\template\template		$template				Template object
 	* @param \phpbb\user					$user					User object
 	* @param \tas2580\wiki\wiki\edit		$edit					Edit Wiki object
-	* @param \tas2580\wiki\wiki\diff		$diff					Diff Wiki object
+	* @param \tas2580\wiki\wiki\compare		$compare					Diff Wiki object
 	* @param \tas2580\wiki\wiki\view		$view					View Wiki object
 	* @param string							$phpbb_root_path
 	* @param string							$php_ext
 	*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\controller\helper $helper, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \tas2580\wiki\wiki\edit $edit, \tas2580\wiki\wiki\diff $diff, \tas2580\wiki\wiki\view $view, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\controller\helper $helper, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \tas2580\wiki\wiki\edit $edit, \tas2580\wiki\wiki\compare $compare, \tas2580\wiki\wiki\view $view, $phpbb_root_path, $php_ext)
 	{
 		$this->auth = $auth;
 		$this->helper = $helper;
@@ -62,7 +62,7 @@ class main
 		$this->template = $template;
 		$this->user = $user;
 		$this->edit = $edit;
-		$this->diff = $diff;
+		$this->compare = $compare;
 		$this->view = $view;
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->php_ext = $php_ext;
@@ -115,15 +115,13 @@ class main
 		}
 		else if ($action === 'versions')
 		{
-			return $this->diff->view_versions($article);
+			return $this->compare->view_versions($article);
 		}
 		else if ($action === 'compare')
 		{
-			require($this->phpbb_root_path . 'includes/diff/diff.php');
-			require($this->phpbb_root_path . 'includes/diff/engine.php');
 			$from = $this->request->variable('from', 0);
 			$to = $this->request->variable('to', 0);
-			return $this->diff->compare_versions($article, $from, $to);
+			return $this->compare->compare_versions($article, $from, $to);
 		}
 		else if ($action === 'delete')
 		{

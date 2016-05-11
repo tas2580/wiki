@@ -8,7 +8,7 @@
 */
 namespace tas2580\wiki\wiki;
 
-class diff
+class compare
 {
 
 	/** @var \phpbb\auth\auth */
@@ -29,6 +29,12 @@ class diff
 	/** @var string $article_table */
 	protected $article_table;
 
+	/** @var string phpbb_root_path */
+	protected $phpbb_root_path;
+
+	/** @var string php_ext */
+	protected $php_ext;
+
 	/**
 	* Constructor
 	*
@@ -39,7 +45,7 @@ class diff
 	* @param \phpbb\user							$user				User object
 	* @param string									$article_table
 	*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, $article_table)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, $article_table, $phpbb_root_path, $php_ext)
 	{
 		$this->auth = $auth;
 		$this->db = $db;
@@ -47,6 +53,8 @@ class diff
 		$this->template = $template;
 		$this->user = $user;
 		$this->article_table = $article_table;
+		$this->phpbb_root_path = $phpbb_root_path;
+		$this->php_ext = $php_ext;
 	}
 
 	public function compare_versions($article, $from, $to)
@@ -55,6 +63,11 @@ class diff
 		{
 			trigger_error('NO_VERSIONS_SELECTED');
 		}
+
+		require($this->phpbb_root_path . 'includes/diff/diff.' . $this->php_ext);
+		require($this->phpbb_root_path . 'includes/diff/engine.' . $this->php_ext);
+		require($this->phpbb_root_path . 'includes/diff/renderer.' . $this->php_ext);
+
 		$sql = 'SELECT article_text, bbcode_uid, bbcode_bitfield, article_sources
 			FROM ' . $this->article_table . '
 			WHERE article_id = ' . (int) $from;
@@ -67,15 +80,23 @@ class diff
 		$result = $this->db->sql_query($sql);
 		$to_row = $this->db->sql_fetchrow($result);
 
-		$from_article = generate_text_for_display($from_row['article_text'], $from_row['bbcode_uid'], $from_row['bbcode_bitfield'], 3, true);
-		$to_article = generate_text_for_display($to_row['article_text'], $to_row['bbcode_uid'], $to_row['bbcode_bitfield'], 3, true);
+		$from_article = generate_text_for_edit($from_row['article_text'], $from_row['bbcode_uid'], $from_row['bbcode_bitfield'], 3, true);
+		$to_article = generate_text_for_edit($to_row['article_text'], $to_row['bbcode_uid'], $to_row['bbcode_bitfield'], 3, true);
 		$u_from = $this->helper->route('tas2580_wiki_index', array('id' => $from));
 		$u_to = $this->helper->route('tas2580_wiki_index', array('id' => $to));
 
+		$article_diff = new \diff($from_article['text'], $to_article['text']);
+		$article_diff_empty = $article_diff->is_empty();
+
+		$sources_diff = new \diff($from_row['article_sources'], $to_row['article_sources']);
+		$sources_diff_empty = $sources_diff->is_empty();
+
+		$renderer = new \diff_renderer_inline();
+
 		$this->template->assign_vars(array(
 			'HEADLINE'			=> sprintf($this->user->lang['VERSION_COMPARE_HEADLINE'], $from, $to, $u_from, $u_to),
-			'DIFF'				=> $this->diffline($to_article, $from_article),
-			'DIFF_SOURCE'		=> $this->diffline($to_row['article_sources'], $from_row['article_sources']),
+			'DIFF'				=> ($article_diff_empty) ? '' : $renderer->get_diff_content($article_diff),
+			'DIFF_SOURCE'		=> ($sources_diff_empty) ? '' : $renderer->get_diff_content($sources_diff),
 		));
 
 		return $this->helper->render('article_compare.html', $this->user->lang['VERSIONS_OF_ARTICLE']);
@@ -147,126 +168,5 @@ class diff
 		$this->db->sql_freeresult($result);
 
 		return $this->helper->render('article_versions.html', $this->user->lang['VERSIONS_WIKI']);
-	}
-
-
-	private function diffline($line1, $line2)
-	{
-		$diff = $this->compute_diff(str_split($line1), str_split($line2));
-		$diffval = $diff['values'];
-		$diff_mask = $diff['mask'];
-
-		$n = count($diffval);
-		$pmc = 0;
-		$result = '';
-		for ($i = 0; $i < $n; $i++)
-		{
-			$mc = $diff_mask[$i];
-			if ($mc != $pmc)
-			{
-				switch ($pmc)
-				{
-					case -1:
-						$result .= '</del>';
-						break;
-					case 1:
-						$result .= '</ins>';
-						break;
-				}
-				switch ($mc)
-				{
-					case -1:
-						$result .= '<del>';
-						break;
-					case 1:
-						$result .= '<ins>';
-						break;
-				}
-			}
-			$result .= $diffval[$i];
-
-			$pmc = $mc;
-		}
-		switch ($pmc)
-		{
-			case -1:
-				$result .= '</del>';
-				break;
-			case 1:
-				$result .= '</ins>';
-				break;
-		}
-
-		return $result;
-	}
-
-
-	private function compute_diff($from, $to)
-	{
-		$diff_values = $diff_mask = $dm = array();
-		$n1 = count($from);
-		$n2 = count($to);
-
-		for ($j = -1; $j < $n2; $j++)
-		{
-			$dm[-1][$j] = 0;
-		}
-		for ($i = -1; $i < $n1; $i++)
-		{
-			$dm[$i][-1] = 0;
-		}
-		for ($i = 0; $i < $n1; $i++)
-		{
-			for ($j = 0; $j < $n2; $j++)
-			{
-				if ($from[$i] == $to[$j])
-				{
-					$ad = $dm[$i - 1][$j - 1];
-					$dm[$i][$j] = $ad + 1;
-				}
-				else
-				{
-					$a1 = $dm[$i - 1][$j];
-					$a2 = $dm[$i][$j - 1];
-					$dm[$i][$j] = max($a1, $a2);
-				}
-			}
-		}
-
-		$i = $n1 - 1;
-		$j = $n2 - 1;
-		while (($i > -1) || ($j > -1))
-		{
-			if ($j > -1)
-			{
-				if ($dm[$i][$j - 1] == $dm[$i][$j])
-				{
-					$diff_values[] = $to[$j];
-					$diff_mask[] = 1;
-					$j--;
-					continue;
-				}
-			}
-			if ($i > -1)
-			{
-				if ($dm[$i - 1][$j] == $dm[$i][$j])
-				{
-					$diff_values[] = $from[$i];
-					$diff_mask[] = -1;
-					$i--;
-					continue;
-				}
-			}
-			$diff_values[] = $from[$i];
-			$diff_mask[] = 0;
-			$i--;
-			$j--;
-
-		}
-
-		$diff_values = array_reverse($diff_values);
-		$diff_mask = array_reverse($diff_mask);
-
-		return array('values' => $diff_values, 'mask' => $diff_mask);
 	}
 }

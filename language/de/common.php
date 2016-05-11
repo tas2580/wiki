@@ -64,4 +64,6 @@ $lang = array_merge($lang, array(
 	'DELETE_ARTICLE'				=> 'Artikel löschen',
 	'CONFIRM_DELETE_ARTICLE'		=> 'Bist du sicher das du den Artikel <strong>und alle seine Versionen</strong> unwiederruflich löschen möchtest?',
 	'DELETE_ARTICLE_SUCCESS'		=> 'Der Artikel wurde erfolgreich gelöscht!',
+	'NO_ARTICLE_DIFF'				=> 'Es gibt keine Veränderungen an dem Artikel.',
+	'NO_SOURCE_DIFF'				=> 'Die Quellen wurden nicht geändert.',
 ));
