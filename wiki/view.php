@@ -8,7 +8,7 @@
 */
 namespace tas2580\wiki\wiki;
 
-class view
+class view extends \tas2580\wiki\wiki\functions
 {
 
 	/** @var \phpbb\auth\auth */
@@ -66,20 +66,6 @@ class view
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->php_ext = $php_ext;
 		$this->article_table = $article_table;
-
-		if (!is_object($this->message_parser))
-		{
-			if (!class_exists('\bbcode'))
-			{
-				require($this->phpbb_root_path . 'includes/bbcode.' . $this->php_ext);
-			}
-			if (!class_exists('\parse_message'))
-			{
-				require($this->phpbb_root_path . 'includes/message_parser.' . $this->php_ext);
-			}
-			$this->message_parser = new \parse_message;
-		}
-
 	}
 
 	/**
@@ -91,20 +77,22 @@ class view
 	 */
 	public function view_article($article, $id = 0)
 	{
+		// Setup message parser
+		$this->message_parser = $this->setup_parser();
+
 		$where = ($id === 0) ? "article_url = '" . $this->db->sql_escape($article) . "' AND article_approved = 1" : 'article_id = ' . (int) $id;
 		$sql_array = array(
 			'SELECT'		=> 'a.*, u.user_id, u.username, u.user_colour',
-			'FROM'		=> array($this->article_table => 'a'),
-			'LEFT_JOIN'	=> array(
+			'FROM'			=> array($this->article_table => 'a'),
+			'LEFT_JOIN'		=> array(
 				array(
-					'FROM'	=> array(USERS_TABLE => 'u'),
+					'FROM'		=> array(USERS_TABLE => 'u'),
 					'ON'		=> 'u.user_id = a.article_user_id'
 				)
 			),
-			'WHERE'		=> $where,
-			'ORDER_BY'	=> 'a.article_last_edit DESC',
+			'WHERE'			=> $where,
+			'ORDER_BY'		=> 'a.article_last_edit DESC',
 		);
-
 		$sql = $this->db->sql_build_query('SELECT', $sql_array);
 		$result = $this->db->sql_query_limit($sql, 1);
 		$this->data = $this->db->sql_fetchrow($result);
@@ -170,7 +158,6 @@ class view
 			$this->message_parser->format_display($allow_bbcode, $allow_magic_url, $allow_smilies);
 
 			$this->template->assign_vars(array(
-				'S_BBCODE_ALLOWED'		=> 1,
 				'ARTICLE_TITLE'			=> $this->data['article_title'],
 				'ARTICLE_TEXT'			=> $this->message_parser->message,
 				'LAST_EDIT'				=> $this->user->format_date($this->data['article_last_edit']),

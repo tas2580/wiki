@@ -8,7 +8,7 @@
 */
 namespace tas2580\wiki\wiki;
 
-class edit
+class edit extends \tas2580\wiki\wiki\functions
 {
 
 	/** @var \phpbb\auth\auth */
@@ -37,7 +37,7 @@ class edit
 
 	/** @var \phpbb\user */
 	protected $user;
-	
+
 	/** @var string article_table */
 	protected $article_table;
 
@@ -47,6 +47,11 @@ class edit
 	/** @var string php_ext */
 	protected $php_ext;
 
+	/** @var array data */
+	protected $data;
+
+	/** @var array option */
+	protected $option;
 
 
 	/**
@@ -190,18 +195,7 @@ class edit
 		$this->user->add_lang('posting');
 
 		// Setup message parser
-		if (!is_object($this->message_parser))
-		{
-			if (!class_exists('\bbcode'))
-			{
-				require($this->phpbb_root_path . 'includes/bbcode.' . $this->php_ext);
-			}
-			if (!class_exists('\parse_message'))
-			{
-				require($this->phpbb_root_path . 'includes/message_parser.' . $this->php_ext);
-			}
-			$this->message_parser = new \parse_message;
-		}
+		$this->message_parser = $this->setup_parser();
 
 		$preview = $this->request->is_set_post('preview');
 		$submit = $this->request->is_set_post('submit');
@@ -257,7 +251,7 @@ class edit
 			$this->template->assign_vars(array(
 				'ERROR'			=> implode('<br />', $error),
 			));
-			$this->display_form(false);
+			$this->display_edit_form(false);
 		}
 		else if ($preview) // Display the preview
 		{
@@ -274,7 +268,7 @@ class edit
 				}
 			}
 
-			$this->display_form(true);
+			$this->display_edit_form(true);
 		}
 		else if ($submit) // Submit the article to database
 		{
@@ -330,7 +324,7 @@ class edit
 			$this->message_parser->message = $this->data['article_text'];
 			$this->message_parser->decode_message($this->data['bbcode_uid']);
 
-			$this->display_form(false);
+			$this->display_edit_form(false);
 
 			if (!empty($article))
 			{
@@ -341,75 +335,5 @@ class edit
 			}
 		}
 		return $this->helper->render('article_edit.html', $this->user->lang['EDIT_WIKI']);
-	}
-
-	/**
-	 * Display the edit form
-	 *
-	 * @param bool $preview
-	 */
-	private function display_form($preview = false)
-	{
-		generate_smilies('inline', 0);
-		display_custom_bbcodes();
-		add_form_key('article');
-
-		$this->template->assign_vars(array(
-			'S_PREVIEW'				=> $preview,
-			'TITLE'					=> $this->data['article_title'],
-			'MESSAGE'				=> ($preview) ? $this->data['text'] : $this->message_parser->message,
-			'PREVIEW_MESSAGE'		=> $this->message_parser->message,
-			'SOURCES'				=> $this->data['article_sources'],
-			'S_BBCODE_ALLOWED'		=> $this->option['bbcode'],
-			'S_LINKS_ALLOWED'		=> $this->option['url'],
-			'S_BBCODE_IMG'			=> $this->option['img'],
-			'S_BBCODE_FLASH'		=> $this->option['flash'],
-			'S_BBCODE_QUOTE'		=> $this->option['quote'],
-			'BBCODE_STATUS'			=> ($this->option['bbcode']) ? sprintf($this->user->lang['BBCODE_IS_ON'], '<a href="' . append_sid("{$this->phpbb_root_path}faq.{$this->php_ext}", 'mode=bbcode') . '">', '</a>') : sprintf($this->user->lang['BBCODE_IS_OFF'], '<a href="' . append_sid("{$this->phpbb_root_path}faq.{$this->php_ext}", 'mode=bbcode') . '">', '</a>'),
-			'IMG_STATUS'			=> ($this->option['img']) ? $this->user->lang['IMAGES_ARE_ON'] : $this->user->lang['IMAGES_ARE_OFF'],
-			'FLASH_STATUS'			=> ($this->option['flash']) ? $this->user->lang['FLASH_IS_ON'] : $this->user->lang['FLASH_IS_OFF'],
-			'SMILIES_STATUS'		=> ($this->option['smilies']) ? $this->user->lang['SMILIES_ARE_ON'] : $this->user->lang['SMILIES_ARE_OFF'],
-			'URL_STATUS'			=> ($this->option['bbcode'] && $this->option['url']) ? $this->user->lang['URL_IS_ON'] : $this->user->lang['URL_IS_OFF'],
-			'EDIT_REASON'			=> $this->data['article_edit_reason'],
-			'TOPIC_ID'				=> $this->data['article_topic_id'],
-			'S_AUTH_ACTIVATE'		=> $this->auth->acl_get('u_wiki_set_active'),
-			'S_AUTH_EDIT_TOPIC'		=> $this->auth->acl_get('u_wiki_edit_topic'),
-			'S_ACTIVE'				=> ($preview) ? $this->data['set_active'] : 1,
-		));
-	}
-
-	/**
-	 *
-	 * @param	int		$id		Version ID
-	 * @return	string			URL of the article
-	 */
-	private function set_active_version($id)
-	{
-		if (!$this->auth->acl_get('u_wiki_set_active'))
-		{
-			trigger_error('NOT_AUTHORISED');
-		}
-
-		// Get the URL of the article
-		$sql = 'SELECT article_url
-			FROM ' . $this->article_table . '
-				WHERE article_id = ' . (int) $id;
-		$result = $this->db->sql_query_limit($sql, 1);
-		$row = $this->db->sql_fetchrow($result);
-		$this->db->sql_freeresult($result);
-
-		// Set all versions to not approved
-		$sql = 'UPDATE ' . $this->article_table . "
-			SET article_approved = 0
-			WHERE article_url = '" . $this->db->sql_escape($row['article_url']) . "'
-				AND article_id <> " . (int) $id;
-		$this->db->sql_query($sql);
-
-		// Set version to approved
-		$sql = 'UPDATE ' . $this->article_table . '
-			SET article_approved = 1
-			WHERE article_id = ' . (int) $id;
-		$this->db->sql_query($sql);
-		return $row['article_url'];
 	}
 }
