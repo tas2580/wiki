@@ -66,4 +66,8 @@ $lang = array_merge($lang, array(
 	'DELETE_ARTICLE_SUCCESS'		=> 'Der Artikel wurde erfolgreich gelöscht!',
 	'NO_ARTICLE_DIFF'				=> 'Es gibt keine Veränderungen an dem Artikel.',
 	'NO_SOURCE_DIFF'				=> 'Die Quellen wurden nicht geändert.',
+	'TOTAL_ITEMS'		=>  array(
+			1 => '1 Eintrag',
+			2 => '%s Einträge',
+		),
 ));

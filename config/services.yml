@@ -43,8 +43,11 @@ services:
         class: tas2580\wiki\wiki\compare
         arguments:
             - @auth
+            - @config
             - @dbal.conn
             - @controller.helper
+            - @pagination
+            - @request
             - @template
             - @user
             - %tables.wiki.article%

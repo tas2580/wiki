@@ -14,11 +14,20 @@ class compare
 	/** @var \phpbb\auth\auth */
 	protected $auth;
 
+	/** @var \phpbb\config\config */
+	protected $config;
+
 	/** @var \phpbb\db\driver\driver_interface */
 	protected $db;
 
 	/** @var \phpbb\controller\helper */
 	protected $helper;
+
+	/** @var \phpbb\pagination */
+	protected $pagination;
+
+	/** @var \phpbb\request\request */
+	protected $request;
 
 	/** @var \phpbb\template\template */
 	protected $template;
@@ -41,15 +50,19 @@ class compare
 	* @param \phpbb\auth\auth						$auth				Auth object
 	* @param \phpbb\db\driver\driver_interface		$db					Database object
 	* @param \phpbb\controller\helper				$helper				Controller helper object
+	* @param \phpbb\pagination						$pagination			Pagination object
 	* @param \phpbb\template\template				$template			Template object
 	* @param \phpbb\user							$user				User object
 	* @param string									$article_table
 	*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, $article_table, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\pagination $pagination, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, $article_table, $phpbb_root_path, $php_ext)
 	{
 		$this->auth = $auth;
+		$this->config = $config;
 		$this->db = $db;
 		$this->helper = $helper;
+		$this->pagination = $pagination;
+		$this->request = $request;
 		$this->template = $template;
 		$this->user = $user;
 		$this->article_table = $article_table;
@@ -131,6 +144,8 @@ class compare
 			));
 		}
 
+		$start = $this->request->variable('start', 0);
+
 		$sql_array = array(
 			'SELECT'		=> 'a.article_id, a.article_title, a.article_last_edit,  a.article_approved, u.user_id, u.username, u.user_colour',
 			'FROM'		=> array($this->article_table => 'a'),
@@ -144,14 +159,14 @@ class compare
 			'ORDER_BY'	=> 'a.article_last_edit DESC',
 		);
 
-		$sql = $this->db->sql_build_query('SELECT', array(
-			'SELECT'		=> $sql_array['SELECT'],
-			'FROM'			=> $sql_array['FROM'],
-			'LEFT_JOIN'		=> $sql_array['LEFT_JOIN'],
-			'WHERE'			=> $sql_array['WHERE'],
-			'ORDER_BY'		=> $sql_array['ORDER_BY'],
-		));
-		$result = $this->db->sql_query($sql);
+		$sql = $this->db->sql_build_query('SELECT', $sql_array);
+		$result = $this->db->sql_query_limit($sql, $this->config['topics_per_page'], $start);
+		$result2 = $this->db->sql_query($sql);
+		$row2 = $this->db->sql_fetchrowset($result2);
+		$total_count = (int) sizeof($row2);
+		$this->db->sql_freeresult($result2);
+		unset($row2);
+
 		while ($this->data = $this->db->sql_fetchrow($result))
 		{
 			$this->template->assign_block_vars('version_list', array(
@@ -166,6 +181,14 @@ class compare
 			));
 		}
 		$this->db->sql_freeresult($result);
+
+		$pagination_url = $this->helper->route('tas2580_wiki_index', array('article' => $article, 'action'	=> 'versions'));
+		$start = $this->pagination->validate_start($start, $this->config['topics_per_page'], $total_count);
+		$this->pagination->generate_template_pagination($pagination_url, 'pagination', 'start', $total_count, $this->config['topics_per_page'], $start);
+
+		$this->template->assign_vars(array(
+			'TOTAL_ITEMS'			=> $this->user->lang('TOTAL_ITEMS', (int) $total_count),
+		));
 
 		return $this->helper->render('article_versions.html', $this->user->lang['VERSIONS_WIKI']);
 	}
