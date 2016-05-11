@@ -1,65 +1,69 @@
 <!-- INCLUDE overall_header.html -->
-<h2>{ARTICLE_TITLE}<!-- IF ARTICLE_VERSION --> - {L_VERSION} {ARTICLE_VERSION}<!-- ENDIF --></h2>
-<div class="panel bg1">
-	<div class="inner wiki">
-		<div class="content">
-		<!-- IF S_NEW_VERSION -->
-			<p class="post-notice unapproved">
-				{L_ARTICLE_HAS_NEW} <a href="{U_NEW_VERSION}">{L_SET_ACTIVE}</a>
-			</p>
-		<!-- ENDIF -->
+<div itemscope itemtype="https://schema.org/Article">
+	<h2 itemprop="headline name">{ARTICLE_TITLE}<!-- IF ARTICLE_VERSION --> - {L_VERSION} {ARTICLE_VERSION}<!-- ENDIF --></h2>
+	<div class="panel bg1">
+		<div class="inner wiki">
+			<div class="content" itemprop="articleBody mainEntityOfPage">
+			<!-- IF S_NEW_VERSION -->
+				<p class="post-notice unapproved">
+					{L_ARTICLE_HAS_NEW} <a href="{U_NEW_VERSION}">{L_SET_ACTIVE}</a>
+				</p>
+			<!-- ENDIF -->
 
-		<!-- IF S_EDIT or S_VERSIONS or U_TOPIC -->
-		<ul class="post-buttons">
-			<!-- IF S_EDIT -->
-			<li>
-				<a href="{U_EDIT}" title="{L_EDIT_WIKI}" class="button icon-button edit-icon"><span>{L_EDIT_WIKI}</span></a>
-			</li>
+			<!-- IF S_EDIT or S_VERSIONS or U_TOPIC -->
+			<ul class="post-buttons">
+				<!-- IF S_EDIT -->
+				<li>
+					<a href="{U_EDIT}" title="{L_EDIT_WIKI}" class="button icon-button edit-icon"><span>{L_EDIT_WIKI}</span></a>
+				</li>
+				<!-- ENDIF -->
+				<!-- IF S_DELETE -->
+				<li>
+					<a href="{U_DELETE}" title="{L_DELETE_ARTICLE}" class="button icon-button delete-icon"><span>{L_DELETE_ARTICLE}</span></a>
+				</li>
+				<!-- ENDIF -->
+				<!-- IF S_VERSIONS -->
+				<li>
+					<a href="{U_VERSIONS}" title="{L_VERSIONS_WIKI}" class="button icon-button version-icon"><span>{L_VERSIONS_WIKI}</span></a>
+				</li>
+				<!-- ENDIF -->
+				<!-- IF U_TOPIC -->
+				<li>
+					<a href="{U_TOPIC}" title="{L_VIEW_DISCUSION}" class="button icon-button topic-icon"><span>{L_VIEW_DISCUSION}</span></a>
+				</li>
+				<!-- ENDIF -->
+			</ul>
 			<!-- ENDIF -->
-			<!-- IF S_DELETE -->
-			<li>
-				<a href="{U_DELETE}" title="{L_DELETE_ARTICLE}" class="button icon-button delete-icon"><span>{L_DELETE_ARTICLE}</span></a>
-			</li>
-			<!-- ENDIF -->
-			<!-- IF S_VERSIONS -->
-			<li>
-				<a href="{U_VERSIONS}" title="{L_VERSIONS_WIKI}" class="button icon-button version-icon"><span>{L_VERSIONS_WIKI}</span></a>
-			</li>
-			<!-- ENDIF -->
-			<!-- IF U_TOPIC -->
-			<li>
-				<a href="{U_TOPIC}" title="{L_VIEW_DISCUSION}" class="button icon-button topic-icon"><span>{L_VIEW_DISCUSION}</span></a>
-			</li>
-			<!-- ENDIF -->
-		</ul>
-		<!-- ENDIF -->
-		{ARTICLE_TEXT}
+			{ARTICLE_TEXT}
+			</div>
 		</div>
 	</div>
-</div>
 
-<!-- IF U_SET_ACTIVE -->
-	<a href="{U_SET_ACTIVE}">{L_SET_ACTIVE}</a>
-<!-- ENDIF -->
-<!-- IF .article_sources -->
-	<h3>{L_SOURCES}</h3>
-	<div class="content">
-		<ul>
-			<!-- BEGIN article_sources -->
-			<li><a href="{article_sources.SOURCE}">{article_sources.SOURCE}</a></li>
-			<!-- END article_sources -->
-		</ul>
+	<!-- IF U_SET_ACTIVE -->
+		<a href="{U_SET_ACTIVE}">{L_SET_ACTIVE}</a>
+	<!-- ENDIF -->
+	<!-- IF .article_sources -->
+		<h3>{L_SOURCES}</h3>
+		<div class="content">
+			<ul>
+				<!-- BEGIN article_sources -->
+				<li><a href="{article_sources.SOURCE}">{article_sources.SOURCE}</a></li>
+				<!-- END article_sources -->
+			</ul>
+		</div>
+	<!-- ENDIF -->
+
+	<!-- IF EDIT_REASON -->
+	<div class="panel bg2">
+		<div class="inner wiki">
+			<strong>{L_REASON_EDIT}{L_COLON}</strong><br />
+			{EDIT_REASON}
+		</div>
 	</div>
-<!-- ENDIF -->
+	<!-- ENDIF -->
 
-<!-- IF EDIT_REASON -->
-<div class="panel bg2">
-	<div class="inner wiki">
-		<strong>{L_REASON_EDIT}{L_COLON}</strong><br />
-		{EDIT_REASON}
-	</div>
+	<p>{L_LAST_EDIT}{L_COLON} {LAST_EDIT} {L_FROM} <span itemprop="author">{ARTICLE_USER}</span></p>
+	<meta itemprop="dateModified datePublished" content="{LAST_EDIT_ISO}">
+	<meta itemprop="publisher" content="{SITENAME}">
 </div>
-<!-- ENDIF -->
-
-<p>{L_LAST_EDIT}{L_COLON} {LAST_EDIT} {L_FROM} {ARTICLE_USER}</p>
 <!-- INCLUDE overall_footer.html -->
