@@ -10,6 +10,32 @@ namespace tas2580\wiki\wiki;
 
 class functions
 {
+	/** @var \phpbb\auth\auth */
+	protected $auth;
+
+	/** @var \phpbb\db\driver\driver_interface */
+	protected $db;
+
+	/** @var \parse_message */
+	protected $message_parser;
+
+	/** @var \phpbb\template\template */
+	protected $template;
+
+	/** @var \phpbb\user */
+	protected $user;
+
+	/** @var array data */
+	protected $data;
+
+	/** @var array option */
+	protected $option;
+
+	/** @var string phpbb_root_path */
+	protected $phpbb_root_path;
+
+	/** @var string php_ext */
+	protected $php_ext;
 
 	/**
 	 * Setup message parser
