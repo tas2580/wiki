@@ -20,6 +20,9 @@ class view
 	/** @var \phpbb\controller\helper */
 	protected $helper;
 
+	/** @var \parse_message */
+	protected $message_parser;
+
 	/** @var \phpbb\template\template */
 	protected $template;
 
@@ -63,6 +66,20 @@ class view
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->php_ext = $php_ext;
 		$this->article_table = $article_table;
+
+		if (!is_object($this->message_parser))
+		{
+			if (!class_exists('\bbcode'))
+			{
+				require($this->phpbb_root_path . 'includes/bbcode.' . $this->php_ext);
+			}
+			if (!class_exists('\parse_message'))
+			{
+				require($this->phpbb_root_path . 'includes/message_parser.' . $this->php_ext);
+			}
+			$this->message_parser = new \parse_message;
+		}
+
 	}
 
 	/**
@@ -88,14 +105,7 @@ class view
 			'ORDER_BY'	=> 'a.article_last_edit DESC',
 		);
 
-		$sql = $this->db->sql_build_query('SELECT', array(
-			'SELECT'		=> $sql_array['SELECT'],
-			'FROM'		=> $sql_array['FROM'],
-			'LEFT_JOIN'	=> $sql_array['LEFT_JOIN'],
-			'WHERE'		=> $sql_array['WHERE'],
-			'ORDER_BY'	=> $sql_array['ORDER_BY'],
-		));
-
+		$sql = $this->db->sql_build_query('SELECT', $sql_array);
 		$result = $this->db->sql_query_limit($sql, 1);
 		$this->data = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
@@ -153,11 +163,18 @@ class view
 				}
 			}
 
+			$this->message_parser->message = $this->data['article_text'];
+			$this->message_parser->bbcode_bitfield = $this->data['bbcode_bitfield'];
+			$this->message_parser->bbcode_uid = $this->data['bbcode_uid'];
+			$allow_bbcode = $allow_magic_url = $allow_smilies = true;
+			$this->message_parser->format_display($allow_bbcode, $allow_magic_url, $allow_smilies);
+
 			$this->template->assign_vars(array(
 				'S_BBCODE_ALLOWED'		=> 1,
 				'ARTICLE_TITLE'			=> $this->data['article_title'],
-				'ARTICLE_TEXT'			=> generate_text_for_display($this->data['article_text'], $this->data['bbcode_uid'], $this->data['bbcode_bitfield'], 3, true),
+				'ARTICLE_TEXT'			=> $this->message_parser->message,
 				'LAST_EDIT'				=> $this->user->format_date($this->data['article_last_edit']),
+				'LAST_EDIT_ISO'			=> date('Y-m-d', $this->data['article_last_edit']),
 				'ARTICLE_USER'			=> get_username_string('full', $this->data['user_id'], $this->data['username'], $this->data['user_colour']),
 				'S_EDIT'				=> $this->auth->acl_get('u_wiki_edit'),
 				'U_EDIT'				=> $this->helper->route('tas2580_wiki_index', array('article' => $article, 'action'	=> 'edit')),
