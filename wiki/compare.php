@@ -133,6 +133,7 @@ class compare
 		$this->template->assign_vars(array(
 			'ARTICLE_TITLE'		=> $this->data['article_title'],
 			'S_SET_ACTIVE'		=> $this->auth->acl_get('u_wiki_set_active'),
+			'S_DELETE'			=> $this->auth->acl_get('u_wiki_delete'),
 			'U_ACTION'			=> $this->helper->route('tas2580_wiki_index', array('article' => $article, 'action' => 'compare')),
 		));
 
@@ -147,7 +148,7 @@ class compare
 		$start = $this->request->variable('start', 0);
 
 		$sql_array = array(
-			'SELECT'		=> 'a.article_id, a.article_title, a.article_last_edit,  a.article_approved, u.user_id, u.username, u.user_colour',
+			'SELECT'		=> 'a.article_id, a.article_title, a.article_last_edit, a.article_approved, a.article_edit_reason, u.user_id, u.username, u.user_colour',
 			'FROM'		=> array($this->article_table => 'a'),
 			'LEFT_JOIN'	=> array(
 				array(
@@ -172,6 +173,7 @@ class compare
 			$this->template->assign_block_vars('version_list', array(
 				'ID'				=> $this->data['article_id'],
 				'ARTICLE_TITLE'		=> $this->data['article_title'],
+				'EDIT_REASON'		=> $this->data['article_edit_reason'],
 				'S_ACTIVE'			=> ($this->data['article_approved'] == 1) ? true : false,
 				'USER'				=> get_username_string('full', $this->data['user_id'], $this->data['username'], $this->data['user_colour']),
 				'EDIT_TIME'			=> $this->user->format_date($this->data['article_last_edit']),

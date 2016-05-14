@@ -1,11 +1,8 @@
 .icon-wiki	{ background-image: url("./images/icon_wiki.gif"); }
 div.wiki	{font-size:1.2em;}
-.ins			{background-color:#66FF66;}
-.del			{background-color:#FF6666;}
-
-pre {
-	white-space: nowrap;
-}
+.ins{background-color:#66FF66;}
+.del{background-color:#FF6666;}
+div.diff pre {white-space: normal;}
 th.thin{width:20px;}
 th.middle{width:200px;}
 th.big{width:300px;}

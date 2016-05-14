@@ -12,7 +12,9 @@
 					<th class="big">{L_ARTICLE}</th>
 					<th class="middle">{L_TIME}</th>
 					<th class="middle">{L_USER}</th>
+					<!-- IF S_DELETE or S_SET_ACTIVE -->
 					<th>{L_ACTION}</th>
+					<!-- ENDIF -->
 				</tr>
 			</thead>
 			<tbody>
@@ -23,16 +25,20 @@
 					<td><a href="{version_list.U_VERSION}"><strong>{version_list.ARTICLE_TITLE}</strong></a></td>
 					<td>{version_list.EDIT_TIME}</td>
 					<td>{version_list.USER}</td>
+					<!-- IF S_DELETE or S_SET_ACTIVE -->
 					<td>
+						<!-- IF S_DELETE -->
 						<a href="{version_list.U_DELETE}">[ {L_DELETE} ]</a>
-						<!-- IF S_SET_ACTIVE -->
-						<!-- IF version_list.S_ACTIVE -->
-							 - <strong>{L_IS_ACTIVE}</strong>
-						<!-- ELSE -->
-							 - <a href="{version_list.U_SET_ACTIVE}">[ {L_SET_ACTIVE} ]</a>
 						<!-- ENDIF -->
+						<!-- IF S_SET_ACTIVE -->
+							<!-- IF version_list.S_ACTIVE -->
+								 - <strong>{L_IS_ACTIVE}</strong>
+							<!-- ELSE -->
+								 - <a href="{version_list.U_SET_ACTIVE}">[ {L_SET_ACTIVE} ]</a>
+							<!-- ENDIF -->
 						<!-- ENDIF -->
 					</td>
+					<!-- ENDIF -->
 				</tr>
 				<!-- END version_list -->
 				<tr class="bg1">
