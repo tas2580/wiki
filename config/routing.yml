@@ -4,6 +4,6 @@ tas2580_wiki_index:
 
 tas2580_wiki_article:
     pattern: /wiki/{article}
-    defaults: { _controller: tas2580.wiki.main:article }
+    defaults: { _controller: tas2580.wiki.main:article, article: "" }
 
 

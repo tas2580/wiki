@@ -11,19 +11,18 @@ services:
                 - @request
                 - @template
                 - @user
-                - %tables.wiki.article%
                 - @tas2580.wiki.edit
                 - @tas2580.wiki.compare
                 - @tas2580.wiki.view
                 - %core.root_path%
                 - %core.php_ext%
+                - %tables.wiki.article%
 
     tas2580.wiki.main:
         class: tas2580\wiki\controller\main
         arguments:
             - @auth
             - @controller.helper
-            - @dbal.conn
             - @request
             - @template
             - @user
@@ -32,7 +31,6 @@ services:
             - @tas2580.wiki.view
             - %core.root_path%
             - %core.php_ext%
-            - %tables.wiki.article%
     tas2580.wiki.listener:
         class: tas2580\wiki\event\listener
         arguments:

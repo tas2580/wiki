@@ -9,7 +9,6 @@
 				<dl class="icon">
 					<dt><div class="list-inner">{L_ARTICLES}</div></dt>
 					<dd class="views">{L_VIEWS}</dd>
-					<dd class="lastpost">{L_DATE}</dd>
 				</dl>
 			</li>
 		</ul>
@@ -19,11 +18,9 @@
 				<dl>
 					<dt><div class="list-inner">
 					<a href="{all_wiki_article.U_ARTICLE}" class="forumtitle">{all_wiki_article.ARTICLE_NAME}</a>
-					<!-- IF all_wiki_article.ARTICLE_DESCRIPTION --><br />{all_wiki_article.ARTICLE_DESCRIPTION}<!-- ENDIF -->
+					<br />{all_wiki_article.ARTICLE_DESCRIPTION}
 				</div>
 					</dt>
-					<dd class="views">{latest_article.ARTICLE_VIEWS}</dd>
-					<dd class="lastpost">{latest_article.ARTICLE_DATE}</dd>
 				</dl>
 			</li>
 			<!-- END all_wiki_article -->

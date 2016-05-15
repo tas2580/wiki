@@ -28,9 +28,6 @@ class overview
 	/** @var \phpbb\user */
 	protected $user;
 
-	/** @var string article_table */
-	protected $article_table;
-
 	/** @var \tas2580\wiki\wiki\edit */
 	protected $edit;
 
@@ -46,6 +43,9 @@ class overview
 	/** @var string php_ext */
 	protected $php_ext;
 
+	/** @var string article_table */
+	protected $article_table;
+
 	/**
 	 * Constructor
 	 *
@@ -55,14 +55,14 @@ class overview
 	 * @param \phpbb\request\request			$request			Request object
 	 * @param \phpbb\template\template		$template				Template object
 	 * @param \phpbb\user					$user					User object
-	 * @param string												article_table
 	 * @param \tas2580\wiki\wiki\edit		$edit					Edit Wiki object
 	 * @param \tas2580\wiki\wiki\compare		$compare					Diff Wiki object
 	 * @param \tas2580\wiki\wiki\view		$view					View Wiki object
 	 * @param string							$phpbb_root_path
 	 * @param string							$php_ext
+	 * @param string												article_table
 	 */
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\controller\helper $helper, \phpbb\db\driver\driver_interface $db, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, $article_table, \tas2580\wiki\wiki\edit $edit, \tas2580\wiki\wiki\compare $compare, \tas2580\wiki\wiki\view $view, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\controller\helper $helper, \phpbb\db\driver\driver_interface $db, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \tas2580\wiki\wiki\edit $edit, \tas2580\wiki\wiki\compare $compare, \tas2580\wiki\wiki\view $view, $phpbb_root_path, $php_ext, $article_table)
 	{
 		$this->auth = $auth;
 		$this->helper = $helper;
@@ -70,12 +70,12 @@ class overview
 		$this->request = $request;
 		$this->template = $template;
 		$this->user = $user;
-		$this->article_table = $article_table;
 		$this->edit = $edit;
 		$this->compare = $compare;
 		$this->view = $view;
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->php_ext = $php_ext;
+		$this->article_table = $article_table;
 	}
 
 	public function base() {
@@ -85,7 +85,7 @@ class overview
 
 		// get all article
 
-		$sql = 'SELECT article_title, article_url, article_description, article_views, article_id
+		$sql = 'SELECT article_title, article_url, article_description, article_views
 				FROM ' . $this->article_table . '
 				WHERE article_approved=1
 				ORDER BY article_id DESC';
@@ -94,7 +94,7 @@ class overview
 		while ($all_wiki_article = $this->db->sql_fetchrow($result))
 		{
 			$this->template->assign_block_vars('all_wiki_article', array(
-					'U_ARTICLE'             => append_sid("{$this->phpbb_root_path}" . $this->helper->route('tas2580_wiki_article') . ", 'article=' " . $all_wiki_article['article_id'] . ''),
+					'U_ARTICLE'             => $this->helper->route('tas2580_wiki_article', array('article' => $all_wiki_article['article_url'])),
 					'ARTICLE_NAME'          => $all_wiki_article['article_title'],
 					'ARTICLE_DESCRIPTION'   => $all_wiki_article['article_description'],
 					'ARTICLE_VIEWS'         => $all_wiki_article['article_views'],
