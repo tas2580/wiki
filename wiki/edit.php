@@ -209,6 +209,7 @@ class edit extends \tas2580\wiki\wiki\functions
 			$this->data['article_topic_id']		= $this->request->variable('topic_id', '', true);
 			$this->data['article_sources']		= $this->request->variable('sources', '', true);
 			$this->data['set_active']			= $this->request->variable('set_active', 0);
+			$this->data['set_sticky']			= $this->request->variable('set_sticky', 0);
 
 			// Validate sources URL
 			$sources_array = explode("\n", $this->data['article_sources']);
@@ -273,6 +274,7 @@ class edit extends \tas2580\wiki\wiki\functions
 		else if ($submit) // Submit the article to database
 		{
 			$this->data['set_active'] = $this->auth->acl_get('u_wiki_set_active') ? $this->data['set_active'] : 0;
+			$this->data['set_sticky'] = $this->auth->acl_get('u_wiki_set_sticky') ? $this->data['set_sticky'] : 0;
 			$this->message_parser->parse($this->option['bbcode'], $this->option['url'], $this->option['smilies'], $this->option['img'], $this->option['flash'], $this->option['quote']);
 			$sql_data = array(
 				'article_title'			=> $this->data['article_title'],
@@ -286,6 +288,7 @@ class edit extends \tas2580\wiki\wiki\functions
 				'article_edit_reason'	=> $this->data['article_edit_reason'],
 				'article_topic_id'		=> $this->data['article_topic_id'],
 				'article_sources'		=> $this->data['article_sources'],
+				'article_sticky'		=> $this->data['set_sticky'],
 			);
 			$sql = 'INSERT INTO ' . $this->article_table . '
 				' . $this->db->sql_build_array('INSERT', $sql_data);
@@ -334,6 +337,7 @@ class edit extends \tas2580\wiki\wiki\functions
 				));
 			}
 		}
+
 		return $this->helper->render('article_edit.html', $this->user->lang['EDIT_WIKI']);
 	}
 }
