@@ -123,10 +123,12 @@ class functions
 			'EDIT_REASON'			=> $this->data['article_edit_reason'],
 			'TOPIC_ID'				=> (int) $this->data['article_topic_id'],
 			'S_AUTH_ACTIVATE'		=> $this->auth->acl_get('u_wiki_set_active'),
-			'S_AUTH_STICKY'			=> $this->auth->acl_get('u_wiki_set_sticky'),
 			'S_AUTH_EDIT_TOPIC'		=> $this->auth->acl_get('u_wiki_edit_topic'),
+			'S_AUTH_REDIRECT'		=> $this->auth->acl_get('u_wiki_set_redirect'),
+			'S_AUTH_STICKY'			=> $this->auth->acl_get('u_wiki_set_sticky'),
 			'S_ACTIVE'				=> ($preview) ? $this->data['set_active'] : 1,
 			'S_STICKY'				=> ($preview) ? $this->data['set_sticky'] : 0,
+			''
 		));
 	}
 
