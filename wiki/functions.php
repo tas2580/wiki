@@ -121,10 +121,12 @@ class functions
 			'SMILIES_STATUS'		=> ($this->option['smilies']) ? $this->user->lang['SMILIES_ARE_ON'] : $this->user->lang['SMILIES_ARE_OFF'],
 			'URL_STATUS'			=> ($this->option['bbcode'] && $this->option['url']) ? $this->user->lang['URL_IS_ON'] : $this->user->lang['URL_IS_OFF'],
 			'EDIT_REASON'			=> $this->data['article_edit_reason'],
-			'TOPIC_ID'				=> $this->data['article_topic_id'],
+			'TOPIC_ID'				=> (int) $this->data['article_topic_id'],
 			'S_AUTH_ACTIVATE'		=> $this->auth->acl_get('u_wiki_set_active'),
+			'S_AUTH_STICKY'			=> $this->auth->acl_get('u_wiki_set_sticky'),
 			'S_AUTH_EDIT_TOPIC'		=> $this->auth->acl_get('u_wiki_edit_topic'),
 			'S_ACTIVE'				=> ($preview) ? $this->data['set_active'] : 1,
+			'S_STICKY'				=> ($preview) ? $this->data['set_sticky'] : 0,
 		));
 	}
 
