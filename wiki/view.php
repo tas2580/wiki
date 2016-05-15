@@ -157,11 +157,12 @@ class view extends \tas2580\wiki\wiki\functions
 			$this->message_parser->format_display($allow_bbcode, $allow_magic_url, $allow_smilies);
 
 
-			$redirect_note = $this->user->lang('NO_ARTICLE_REDIRECT' , $this->helper->route('tas2580_wiki_article', array('article' => $this->data['article_redirect'])), $this->data['article_redirect']);
+			if (!empty($this->data['article_redirect'])) {
+				$redirect_note = $this->user->lang('NO_ARTICLE_REDIRECT', $this->helper->route('tas2580_wiki_article', array('article' => $this->data['article_redirect'])), $this->data['article_redirect']);
 
-			if ($this->auth->acl_get('u_wiki_set_redirect'))
-			{
-				$redirect_note = $redirect_note . $this->message_parser->message;
+				if ($this->auth->acl_get('u_wiki_set_redirect')){
+					$redirect_note = $redirect_note . $this->message_parser->message;
+				}
 			}
 
 			$this->template->assign_vars(array(
