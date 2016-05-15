@@ -32,8 +32,8 @@ class update_0_3_0 extends \phpbb\db\migration\migration
 		return array(
 			'add_columns' => array(
 				$this->table_prefix . 'wiki_article' => array(
-					'article_sticky'		=> array('BOOL', null),
-					'article_views'			=> array('UINT', null),
+					'article_sticky'		=> array('BOOL', 0),
+					'article_views'			=> array('UINT', 0),
 					'article_redirect'		=> array('VCHAR:255', ''),
 				),
 			),

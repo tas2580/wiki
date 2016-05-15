@@ -165,6 +165,15 @@ class view extends \tas2580\wiki\wiki\functions
 				}
 			}
 
+			// article views
+			if (isset($this->user->data['session_page']) && !$this->user->data['is_bot'] && (strpos($this->user->data['session_page'], $this->data['article_url']) === false || isset($this->user->data['session_created']))) {
+				$article_id = $this->data['article_id'];
+				$sql = 'UPDATE ' . $this->article_table . "
+						SET article_views = article_views + 1
+						WHERE article_id = $article_id";
+				$this->db->sql_query($sql);
+			}
+
 			$this->template->assign_vars(array(
 				'ARTICLE_TITLE'			=> $this->data['article_title'],
 				'ARTICLE_TEXT'			=> ($this->data['article_redirect'])? $redirect_note : $this->message_parser->message,
