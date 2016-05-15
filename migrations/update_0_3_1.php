@@ -34,6 +34,7 @@ class update_0_3_1 extends \phpbb\db\migration\migration
 			'add_columns' => array(
 				$this->table_prefix . 'wiki_article' => array(
 					'article_description'		=> array('VCHAR:255', ''),
+					'article_toc'				=> array('MTEXT_UNI', ''),
 				),
 			),
 		);

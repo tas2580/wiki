@@ -33,6 +33,7 @@ if (empty($lang) || !is_array($lang))
 //
 $lang = array_merge($lang, array(
 	'NO_ARTICLE'					=> 'The selected article does not exist.',
+	'NO_ARTICLE_REDIRECT'			=> '<strong>Artikel wurde ersetzt!</strong><br><br> Der gewünschte Artikel existiert nicht mehr. <br> Der Artikel wurde mit einem neuen Artikel ersetzt: <a href="%1$s">%1$s</a>.<br><br>',
 	'LAST_EDIT'					=> 'Last modified',
 	'EDIT_WIKI'					=> 'Edit article',
 	'VERSIONS_WIKI'				=> 'View versions',

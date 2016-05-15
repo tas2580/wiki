@@ -333,6 +333,13 @@ class edit extends \tas2580\wiki\wiki\functions
 			$this->message_parser->message = $this->data['article_text'];
 			$this->message_parser->decode_message($this->data['bbcode_uid']);
 
+			// Give the content of column "article_redirect" back to the Editor-field: redirect-URL.
+			$article_redirect_data = $this->data['article_redirect'];
+
+			$this->template->assign_vars(array(
+				'REDIRECT_VALUE' 	=> $article_redirect_data,
+			));
+
 			$this->display_edit_form(false);
 
 			if (!empty($article))
