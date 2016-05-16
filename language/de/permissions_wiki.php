@@ -40,5 +40,7 @@ $lang = array_merge($lang, array(
 	'ACL_U_WIKI_DELETE_ARTICLE'		=> 'Kann einen kompletten Artikel löschen',
 	'ACL_U_WIKI_EDIT_TOPIC'			=> 'Kann das Diskussionsthema zu einem Artikel ändern',
 	'ACL_U_WIKI_SET_ACTIVE'			=> 'Kann die aktive Version eines Artikels ändern',
+	'ACL_U_WIKI_SET_STICKY'			=> 'Kann einen Artikel als wichtig markieren',
+	'ACL_U_WIKI_SET_REDIRECT'		=> 'Kann eine Weiterleitung in einem Artikel einrichten',
 	'ACL_CAT_WIKI'					=> 'Wiki',
 ));

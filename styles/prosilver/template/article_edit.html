@@ -64,24 +64,40 @@
 			<div id="message-box" class="message-box">
 				<textarea name="message" id="message" rows="15" cols="76" tabindex="2" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onfocus="initInsertions();" class="inputbox" required>{MESSAGE}</textarea>
 			</div>
-			<dl style="clear: left;">
+			<dl>
 				<dt><label for="sources">{L_SOURCES}{L_COLON}</label><br>{L_SOURCES_EXPLAIN}</dt>
 				<dd><textarea name="sources" id="sources" rows="5" cols="76" tabindex="3"  class="inputbox">{SOURCES}</textarea></dd>
 			</dl>
-			<dl style="clear: left;">
+			<dl>
+				<dt><label for="article_description">{L_ARTICLE_DESCRIPTION}{L_COLON}</label></dt>
+				<dd><input type="text" name="article_description" id="article_description" tabindex="4" size="100" value="{ARTICLE_DESCRIPTION}" class="inputbox autowidth"></dd>
+			</dl>
+			<dl>
 				<dt><label for="edit_reason">{L_REASON_EDIT}{L_COLON}</label></dt>
 				<dd><input type="text" name="edit_reason" id="edit_reason" size="100" tabindex="4" value="{EDIT_REASON}" class="inputbox autowidth"></dd>
 			</dl>
 			<!-- IF S_AUTH_EDIT_TOPIC -->
-			<dl style="clear: left;">
+			<dl>
 				<dt><label for="topic_id">{L_TOPIC_ID}{L_COLON}</label></dt>
 				<dd><input type="number" name="topic_id" id="topic_id" size="3" min="0" tabindex="5" value="{TOPIC_ID}" class="inputbox autowidth"></dd>
 			</dl>
 			<!-- ENDIF -->
+			<!-- IF S_AUTH_REDIRECT -->
+			<dl>
+				<dt><label for="set_sticky">{L_SET_REDIRECT}{L_COLON}</label></dt>
+				<dd><input type="text" name="set_redirect" id="set_redirect" tabindex="4" size="100" value="{REDIRECT_VALUE}" class="inputbox autowidth"></dd>
+			</dl>
+			<!-- ENDIF -->
 			<!-- IF S_AUTH_ACTIVATE -->
-			<dl style="clear: left;">
+			<dl>
 				<dt><label for="set_active">{L_SET_ACTIVE}{L_COLON}</label></dt>
 				<dd><input type="checkbox" name="set_active" id="set_active" tabindex="6" value="1"<!-- IF S_ACTIVE --> checked="checked"<!-- ENDIF -->></dd>
+			</dl>
+			<!-- ENDIF -->
+			<!-- IF S_AUTH_STICKY  -->
+			<dl>
+				<dt><label for="set_sticky">{L_SET_STICKY}{L_COLON}</label></dt>
+				<dd><input type="checkbox" name="set_sticky" id="set_sticky" tabindex="6" value="1"<!-- IF S_STICKY --> checked="checked"<!-- ENDIF -->></dd>
 			</dl>
 			<!-- ENDIF -->
 		</fieldset>
