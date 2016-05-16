@@ -94,11 +94,11 @@ class overview
 		while ($all_wiki_article = $this->db->sql_fetchrow($result))
 		{
 			$this->template->assign_block_vars('all_wiki_article', array(
-					'U_ARTICLE'             => $this->helper->route('tas2580_wiki_article', array('article' => $all_wiki_article['article_url'])),
-					'ARTICLE_NAME'          => $all_wiki_article['article_title'],
-					'ARTICLE_DESCRIPTION'   => $all_wiki_article['article_description'],
-					'ARTICLE_VIEWS'         => $all_wiki_article['article_views'],
-					'ARTICLE_LASTEDIT'      => $this->user->format_date($all_wiki_article['article_last_edit']),
+					'U_ARTICLE'				=> $this->helper->route('tas2580_wiki_article', array('article' => $all_wiki_article['article_url'])),
+					'ARTICLE_NAME'			=> $all_wiki_article['article_title'],
+					'ARTICLE_DESCRIPTION'	=> $all_wiki_article['article_description'],
+					'ARTICLE_VIEWS'			=> $all_wiki_article['article_views'],
+					'ARTICLE_LASTEDIT'		=> $this->user->format_date($all_wiki_article['article_last_edit']),
 				)
 			);
 		}
