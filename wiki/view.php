@@ -10,7 +10,6 @@ namespace tas2580\wiki\wiki;
 
 class view extends \tas2580\wiki\wiki\functions
 {
-
 	/** @var \phpbb\auth\auth */
 	protected $auth;
 
@@ -41,7 +40,6 @@ class view extends \tas2580\wiki\wiki\functions
 	/** @var string article_table */
 	protected $article_table;
 
-
 	/**
 	* Constructor
 	*
@@ -55,6 +53,7 @@ class view extends \tas2580\wiki\wiki\functions
 	* @param string									$phpbb_root_path
 	* @param string									$php_ext
 	*/
+
 	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, \tas2580\wiki\wiki\edit $edit, $article_table, $phpbb_root_path, $php_ext)
 	{
 		$this->auth = $auth;
@@ -157,9 +156,18 @@ class view extends \tas2580\wiki\wiki\functions
 			$allow_bbcode = $allow_magic_url = $allow_smilies = true;
 			$this->message_parser->format_display($allow_bbcode, $allow_magic_url, $allow_smilies);
 
+
+			if (!empty($this->data['article_redirect'])) {
+				$redirect_note = $this->user->lang('NO_ARTICLE_REDIRECT', $this->helper->route('tas2580_wiki_article', array('article' => $this->data['article_redirect'])), $this->data['article_redirect']);
+
+				if ($this->auth->acl_get('u_wiki_set_redirect')){
+					$redirect_note = $redirect_note . $this->message_parser->message;
+				}
+			}
+
 			$this->template->assign_vars(array(
 				'ARTICLE_TITLE'			=> $this->data['article_title'],
-				'ARTICLE_TEXT'			=> $this->message_parser->message,
+				'ARTICLE_TEXT'			=> ($this->data['article_redirect'])? $redirect_note : $this->message_parser->message,
 				'LAST_EDIT'				=> $this->user->format_date($this->data['article_last_edit']),
 				'LAST_EDIT_ISO'			=> date('Y-m-d', $this->data['article_last_edit']),
 				'ARTICLE_USER'			=> get_username_string('full', $this->data['user_id'], $this->data['username'], $this->data['user_colour']),
