@@ -49,7 +49,7 @@ class main
 	* @param \phpbb\template\template		$template				Template object
 	* @param \phpbb\user					$user					User object
 	* @param \tas2580\wiki\wiki\edit		$edit					Edit Wiki object
-	* @param \tas2580\wiki\wiki\compare		$compare					Diff Wiki object
+	* @param \tas2580\wiki\wiki\compare		$compare				Diff Wiki object
 	* @param \tas2580\wiki\wiki\view		$view					View Wiki object
 	* @param string							$phpbb_root_path
 	* @param string							$php_ext
