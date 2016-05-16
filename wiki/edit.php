@@ -211,6 +211,7 @@ class edit extends \tas2580\wiki\wiki\functions
 			$this->data['set_active']			= $this->request->variable('set_active', 0);
 			$this->data['set_sticky']			= $this->request->variable('set_sticky', 0);
 			$this->data['set_redirect']			= $this->request->variable('set_redirect', '', true);
+			$this->data['article_description']	= $this->request->variable('article_description', '', true);
 
 			// Validate sources URL
 			$sources_array = explode("\n", $this->data['article_sources']);
@@ -295,6 +296,7 @@ class edit extends \tas2580\wiki\wiki\functions
 				'article_sources'		=> $this->data['article_sources'],
 				'article_sticky'		=> $this->data['set_sticky'],
 				'article_redirect'		=> $this->data['set_redirect'],
+				'article_description'	=> $this->data['article_description'],
 			);
 			$sql = 'INSERT INTO ' . $this->article_table . '
 				' . $this->db->sql_build_array('INSERT', $sql_data);
@@ -335,9 +337,11 @@ class edit extends \tas2580\wiki\wiki\functions
 
 			// Give the content of column "article_redirect" back to the Editor-field: redirect-URL.
 			$article_redirect_data = $this->data['article_redirect'];
+			$article_description_data = $this->data['article_description'];
 
 			$this->template->assign_vars(array(
 				'REDIRECT_VALUE' 	=> $article_redirect_data,
+				'DESCRIPTION_VALUE'=> $article_description_data,
 			));
 
 			$this->display_edit_form(false);

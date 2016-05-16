@@ -1,0 +1,35 @@
+<!-- INCLUDE overall_header.html -->
+<h2>{L_OVERVIEW}</h2>
+
+<div class="forumbg">
+	<div class="inner">
+<!-- IF .all_wiki_article -->
+		<ul class="topiclist">
+			<li class="header">
+				<dl class="icon">
+					<dt><div class="list-inner">{L_ARTICLES}</div></dt>
+					<dd class="views">{L_VIEWS}</dd>
+					<dd class="lastpost">{L_DATE}</dd>
+				</dl>
+			</li>
+		</ul>
+		<ul class="topiclist forums">
+			<!-- BEGIN all_wiki_article -->
+			<li class="row">
+				<dl>
+					<dt><div class="list-inner">
+					<a href="{all_wiki_article.U_ARTICLE}" class="forumtitle">{all_wiki_article.ARTICLE_NAME}</a>
+					<br />{all_wiki_article.ARTICLE_DESCRIPTION}
+					</div>
+					</dt>
+					<dd class="views">{all_wiki_article.ARTICLE_VIEWS}</dd>
+					<dd class="lastpost">{all_wiki_article.ARTICLE_LASTEDIT}</dd>
+				</dl>
+			</li>
+			<!-- END all_wiki_article -->
+		</ul>
+<!-- ENDIF -->
+	</div>
+</div>
+
+<!-- INCLUDE overall_footer.html -->

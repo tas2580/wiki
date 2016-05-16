@@ -165,6 +165,15 @@ class view extends \tas2580\wiki\wiki\functions
 				}
 			}
 
+			// article views
+			if (isset($this->user->data['session_page']) && !$this->user->data['is_bot'] && (strpos($this->user->data['session_page'], $this->data['article_url']) === false || isset($this->user->data['session_created']))) {
+				$article_id = $this->data['article_id'];
+				$sql = 'UPDATE ' . $this->article_table . "
+						SET article_views = article_views + 1
+						WHERE article_id = $article_id";
+				$this->db->sql_query($sql);
+			}
+
 			$this->template->assign_vars(array(
 				'ARTICLE_TITLE'			=> $this->data['article_title'],
 				'ARTICLE_TEXT'			=> ($this->data['article_redirect'])? $redirect_note : $this->message_parser->message,
@@ -172,11 +181,11 @@ class view extends \tas2580\wiki\wiki\functions
 				'LAST_EDIT_ISO'			=> date('Y-m-d', $this->data['article_last_edit']),
 				'ARTICLE_USER'			=> get_username_string('full', $this->data['user_id'], $this->data['username'], $this->data['user_colour']),
 				'S_EDIT'				=> $this->auth->acl_get('u_wiki_edit'),
-				'U_EDIT'				=> $this->helper->route('tas2580_wiki_index', array('article' => $article, 'action'	=> 'edit')),
+				'U_EDIT'				=> $this->helper->route('tas2580_wiki_article', array('article' => $article, 'action'	=> 'edit')),
 				'S_VERSIONS'			=> $this->auth->acl_get('u_wiki_versions'),
-				'U_VERSIONS'			=> $this->helper->route('tas2580_wiki_index', array('article' => $article, 'action'	=> 'versions')),
+				'U_VERSIONS'			=> $this->helper->route('tas2580_wiki_article', array('article' => $article, 'action'	=> 'versions')),
 				'S_DELETE'				=> $this->auth->acl_get('u_wiki_delete_article'),
-				'U_DELETE'				=> $this->helper->route('tas2580_wiki_index', array('article' => $article, 'action'	=> 'detele_article')),
+				'U_DELETE'				=> $this->helper->route('tas2580_wiki_article', array('article' => $article, 'action'	=> 'detele_article')),
 				'ARTICLE_VERSION'		=> $id,
 				'EDIT_REASON'			=> ($id <> 0) ? $this->data['article_edit_reason'] : '',
 				'U_TOPIC'				=> ($this->data['article_topic_id'] <> 0) ? append_sid($this->phpbb_root_path . 'viewtopic.' . $this->php_ext, 't=' . $this->data['article_topic_id']) : '',
