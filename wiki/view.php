@@ -157,16 +157,19 @@ class view extends \tas2580\wiki\wiki\functions
 			$this->message_parser->format_display($allow_bbcode, $allow_magic_url, $allow_smilies);
 
 
-			if (!empty($this->data['article_redirect'])) {
+			if (!empty($this->data['article_redirect']))
+			{
 				$redirect_note = $this->user->lang('NO_ARTICLE_REDIRECT', $this->helper->route('tas2580_wiki_article', array('article' => $this->data['article_redirect'])), $this->data['article_redirect']);
 
-				if ($this->auth->acl_get('u_wiki_set_redirect')){
+				if ($this->auth->acl_get('u_wiki_set_redirect'))
+				{
 					$redirect_note = $redirect_note . $this->message_parser->message;
 				}
 			}
 
 			// article views
-			if (isset($this->user->data['session_page']) && !$this->user->data['is_bot'] && (strpos($this->user->data['session_page'], $this->data['article_url']) === false || isset($this->user->data['session_created']))) {
+			if (isset($this->user->data['session_page']) && !$this->user->data['is_bot'] && (strpos($this->user->data['session_page'], 'wiki/' . $this->data['article_url']) === false || isset($this->user->data['session_created'])))
+			{
 				$article_id = $this->data['article_id'];
 				$sql = 'UPDATE ' . $this->article_table . "
 						SET article_views = article_views + 1
@@ -187,6 +190,7 @@ class view extends \tas2580\wiki\wiki\functions
 				'S_DELETE'				=> $this->auth->acl_get('u_wiki_delete_article'),
 				'U_DELETE'				=> $this->helper->route('tas2580_wiki_article', array('article' => $article, 'action'	=> 'detele_article')),
 				'ARTICLE_VERSION'		=> $id,
+				'ARTICLE_VIEWS_TEXT'	=> $this->user->lang('ARTICLE_VIEWS_TEXT', $this->data['article_views']),
 				'EDIT_REASON'			=> ($id <> 0) ? $this->data['article_edit_reason'] : '',
 				'U_TOPIC'				=> ($this->data['article_topic_id'] <> 0) ? append_sid($this->phpbb_root_path . 'viewtopic.' . $this->php_ext, 't=' . $this->data['article_topic_id']) : '',
 			));

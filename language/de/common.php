@@ -71,4 +71,5 @@ $lang = array_merge($lang, array(
 			1 => '1 Eintrag',
 			2 => '%s Einträge',
 		),
+	'ARTICLE_VIEWS_TEXT'			=> 'Der Artikel wurde <strong>%d</strong> mal angeschaut.'
 ));

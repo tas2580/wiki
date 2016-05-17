@@ -96,7 +96,7 @@ class main
 
 		$this->template->assign_block_vars('navlinks', array(
 			'FORUM_NAME'		=> $this->user->lang['WIKI'],
-			'U_VIEW_FORUM'	=> $this->helper->route('tas2580_wiki_index', array()),
+			'U_VIEW_FORUM'		=> $this->helper->route('tas2580_wiki_index', array()),
 		));
 
 		$this->template->assign_vars(array(
@@ -125,7 +125,7 @@ class main
 		}
 		else if ($action === 'delete')
 		{
-			return $this->edit->delete($id);
+			return $this->delete->version($id);
 		}
 		else if ($action === 'active')
 		{
@@ -133,7 +133,7 @@ class main
 		}
 		else if ($action === 'detele_article')
 		{
-			return $this->edit->detele_article($article);
+			return $this->delete->article($article);
 		}
 
 		return $this->view->view_article($article, $id);

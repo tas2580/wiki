@@ -69,6 +69,14 @@ services:
             - %tables.wiki.article%
             - %core.root_path%
             - %core.php_ext%
+    tas2580.wiki.delete:
+        class: tas2580\wiki\wiki\compare
+        arguments:
+            - @auth
+            - @dbal.conn
+            - @controller.helper
+            - @user
+            - %tables.wiki.article%
     tas2580.wiki.view:
         class: tas2580\wiki\wiki\view
         arguments:

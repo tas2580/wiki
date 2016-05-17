@@ -107,7 +107,7 @@ class functions
 		$this->template->assign_vars(array(
 			'S_PREVIEW'				=> $preview,
 			'TITLE'					=> $this->data['article_title'],
-			'MESSAGE'				=> ($preview) ? $this->data['text'] : $this->message_parser->message,
+			'MESSAGE'				=> ($preview) ? $this->data['article_text'] : $this->message_parser->message,
 			'PREVIEW_MESSAGE'		=> $this->message_parser->message,
 			'SOURCES'				=> $this->data['article_sources'],
 			'S_BBCODE_ALLOWED'		=> $this->option['bbcode'],
@@ -126,10 +126,37 @@ class functions
 			'S_AUTH_EDIT_TOPIC'		=> $this->auth->acl_get('u_wiki_edit_topic'),
 			'S_AUTH_REDIRECT'		=> $this->auth->acl_get('u_wiki_set_redirect'),
 			'S_AUTH_STICKY'			=> $this->auth->acl_get('u_wiki_set_sticky'),
-			'S_ACTIVE'				=> ($preview) ? $this->data['set_active'] : 1,
-			'S_STICKY'				=> ($preview) ? $this->data['set_sticky'] : 0,
-			''
+			'S_ACTIVE'				=> ($preview) ? $this->data['article_approved'] : 1,
+			'S_STICKY'				=> $this->data['article_sticky'],
+			'ARTICLE_REDIRECT'		=> $this->data['article_redirect'],
+			'ARTICLE_DESCRIPTION'	=> $this->data['article_description'],
 		));
+	}
+
+	/**
+	 * Get Data for an article from database
+	 *
+	 * @param	string	$article	URL of the article
+	 * @return	array				Data for the article
+	 */
+	protected function get_article_data($article)
+	{
+		$sql = 'SELECT *
+			FROM ' . $this->article_table . "
+				WHERE article_url = '" . $this->db->sql_escape($article) . "'
+					AND article_approved = 1
+			ORDER BY article_last_edit DESC";
+		$result = $this->db->sql_query_limit($sql, 1);
+		$row = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
+
+		if (empty($row['article_id']))
+		{
+
+		}
+		$row['article_edit_reason'] = '';
+
+		return $row;
 	}
 
 }
