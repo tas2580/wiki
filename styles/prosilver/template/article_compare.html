@@ -1,5 +1,15 @@
 <!-- INCLUDE overall_header.html -->
 <h2>{HEADLINE}</h2>
+<!-- IF DIFF_DESCRIPTION -->
+<h3>{L_ARTICLE_DESCRIPTION}</h3>
+<div class="panel bg1">
+	<div class="inner wiki">
+		<div class="content">
+				{DIFF_DESCRIPTION}
+		</div>
+	</div>
+</div>
+<!-- ENDIF -->
 <div class="panel bg1">
 	<div class="inner wiki">
 		<div class="content diff">
@@ -11,16 +21,14 @@
 		</div>
 	</div>
 </div>
+<!-- IF DIFF_SOURCE -->
 <h3>{L_SOURCES}</h3>
 <div class="panel bg1">
 	<div class="inner wiki">
 		<div class="content">
-			<!-- IF DIFF_SOURCE -->
 				{DIFF_SOURCE}
-			<!-- ELSE -->
-				{L_NO_SOURCE_DIFF}
-			<!-- ENDIF -->
 		</div>
 	</div>
 </div>
+<!-- ENDIF -->
 <!-- INCLUDE overall_footer.html -->

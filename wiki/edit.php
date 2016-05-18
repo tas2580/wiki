@@ -112,8 +112,42 @@ class edit extends \tas2580\wiki\wiki\functions
 			));
 			confirm_box(false, $this->user->lang['CONFIRM_ACTIVATE_VERSION'], $s_hidden_fields);
 		}
-		redirect($this->helper->route('tas2580_wiki_index', array('article' => $article)));
+		redirect($this->helper->route('tas2580_wiki_article', array('article' => $article)));
 	}
+
+	/**
+	 * Set a version of an article as active
+	 *
+	 * @param	string	$id	Id of the version to delete
+	 * @return	object
+	 */
+	public function deactivate($article)
+	{
+		if (!$this->auth->acl_get('u_wiki_set_active'))
+		{
+			trigger_error('NOT_AUTHORISED');
+		}
+
+		if (confirm_box(true))
+		{
+			// Set all versions to not approved
+			$sql = 'UPDATE ' . $this->article_table . "
+				SET article_approved = 0
+				WHERE article_url = '" . $this->db->sql_escape($article) . "'";
+			$this->db->sql_query($sql);
+
+			trigger_error($this->user->lang['DEACTIVATE_ARTICLE_SUCCESS'] . '<br /><br /><a href="' . $this->helper->route('tas2580_wiki_index', array()) . '">' . $this->user->lang['BACK_TO_WIKI'] . '</a>');
+		}
+		else
+		{
+			$s_hidden_fields = build_hidden_fields(array(
+				'article'    => $article,
+			));
+			confirm_box(false, $this->user->lang['CONFIRM_DEACTIVATE_ARTICLE'], $s_hidden_fields);
+		}
+		redirect($this->helper->route('tas2580_wiki_article', array('article' => $article)));
+	}
+
 
 	/**
 	 * Edit an article
@@ -131,7 +165,6 @@ class edit extends \tas2580\wiki\wiki\functions
 		{
 			trigger_error('NO_ARTICLE');
 		}
-		$this->user->add_lang('posting');
 
 		// Setup message parser
 		$this->message_parser = $this->setup_parser();
@@ -139,6 +172,14 @@ class edit extends \tas2580\wiki\wiki\functions
 		// Get data for article
 		$this->data = $this->get_article_data($article);
 
+		// Article is a redirect and no auth to edit redirect
+		if (!empty($this->data['article_redirect']) && !$this->auth->acl_get('u_wiki_set_redirect'))
+		{
+			trigger_error('NOT_AUTHORISED');
+		}
+
+		$this->user->add_lang('posting');
+		
 		$preview = $this->request->is_set_post('preview');
 		$submit = $this->request->is_set_post('submit');
 		$error = array();
@@ -150,8 +191,8 @@ class edit extends \tas2580\wiki\wiki\functions
 			$this->data['article_edit_reason']	= $this->request->variable('edit_reason', '', true);
 			$this->data['article_sources']		= $this->request->variable('sources', '', true);
 			$this->data['article_topic_id']		= $this->auth->acl_get('u_wiki_edit_topic') ? $this->request->variable('topic_id', '', true) : $this->data['article_topic_id'];
-			$this->data['article_approved']		= $this->auth->acl_get('u_wiki_set_active') ? $this->request->variable('set_active', 0) : $this->data['set_active'];
-			$this->data['article_sticky']		= $this->auth->acl_get('u_wiki_set_sticky') ? $this->request->variable('set_sticky', 0) : $this->data['set_sticky'];
+			$this->data['article_approved']		= $this->auth->acl_get('u_wiki_set_active') ? $this->request->variable('set_active', 0) : 0;
+			$this->data['article_sticky']		= $this->auth->acl_get('u_wiki_set_sticky') ? $this->request->variable('set_sticky', 0) : $this->data['article_sticky'];
 			$this->data['article_redirect']		= $this->auth->acl_get('u_wiki_set_redirect') ? $this->request->variable('article_redirect', '', true) : $this->data['article_redirect'];
 
 
@@ -217,14 +258,14 @@ class edit extends \tas2580\wiki\wiki\functions
 				'article_text'			=> $this->message_parser->message,
 				'bbcode_uid'			=> $this->message_parser->bbcode_uid,
 				'bbcode_bitfield'		=> $this->message_parser->bbcode_bitfield,
-				'article_approved'		=> $this->data['article_approved'],
-				'article_user_id'		=> $this->user->data['user_id'],
+				'article_approved'		=> (int) $this->data['article_approved'],
+				'article_user_id'		=> (int) $this->user->data['user_id'],
 				'article_last_edit'		=> time(),
 				'article_edit_reason'	=> $this->data['article_edit_reason'],
-				'article_topic_id'		=> $this->data['article_topic_id'],
+				'article_topic_id'		=> (int) $this->data['article_topic_id'],
 				'article_sources'		=> $this->data['article_sources'],
-				'article_sticky'		=> $this->data['article_sticky'],
-				'article_views'			=> $this->data['article_views'],
+				'article_sticky'		=> (int) $this->data['article_sticky'],
+				'article_views'			=> (int) $this->data['article_views'],
 				'article_redirect'		=> $this->data['article_redirect'],
 				'article_description'	=> $this->data['article_description'],
 				'article_toc'			=> '',

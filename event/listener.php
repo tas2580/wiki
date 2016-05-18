@@ -83,20 +83,8 @@ class listener implements EventSubscriberInterface
 				'lang'		=> 'ACL_U_WIKI_VERSIONS',
 				'cat'		=> 'wiki'
 			),
-			'u_wiki_delete'			=> array(
-				'lang'		=> 'ACL_U_WIKI_DELETE',
-				'cat'		=> 'wiki'
-			),
-			'u_wiki_delete_article'	=> array(
-				'lang'		=> 'ACL_U_WIKI_DELETE_ARTICLE',
-				'cat'		=> 'wiki'
-			),
 			'u_wiki_edit_topic'		=> array(
 				'lang'		=> 'ACL_U_WIKI_EDIT_TOPIC',
-				'cat'		=> 'wiki'
-			),
-			'u_wiki_set_active'		=> array(
-				'lang'		=> 'ACL_U_WIKI_SET_ACTIVE',
 				'cat'		=> 'wiki'
 			),
 			'u_wiki_set_sticky'		=> array(
@@ -105,6 +93,22 @@ class listener implements EventSubscriberInterface
 			),
 			'u_wiki_set_redirect'		=> array(
 				'lang'		=> 'ACL_U_WIKI_SET_REDIRECT',
+				'cat'		=> 'wiki'
+			),
+			'u_wiki_set_active'		=> array(
+				'lang'		=> 'ACL_U_WIKI_SET_ACTIVE',
+				'cat'		=> 'wiki'
+			),
+			'm_wiki_delete'			=> array(
+				'lang'		=> 'ACL_M_WIKI_DELETE',
+				'cat'		=> 'wiki'
+			),
+			'm_wiki_delete_article'	=> array(
+				'lang'		=> 'ACL_M_WIKI_DELETE_ARTICLE',
+				'cat'		=> 'wiki'
+			),
+			'm_wiki_view_inactive'	=> array(
+				'lang'		=> 'ACL_M_WIKI_VIEW_INACTIVE',
 				'cat'		=> 'wiki'
 			),
 		);
@@ -167,7 +171,7 @@ class listener implements EventSubscriberInterface
 	{
 		$lang_ary = $event['lang_set_ext'];
 		$lang_ary[] = array(
-			'ext_name'	=> 'tas2580/wiki',
+			'ext_name'		=> 'tas2580/wiki',
 			'lang_set'		=> 'link',
 		);
 		$event['lang_set_ext'] = $lang_ary;

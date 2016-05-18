@@ -152,8 +152,20 @@ class functions
 
 		if (empty($row['article_id']))
 		{
-
+			$row = array(
+				'article_text'			=> '',
+				'bbcode_uid'			=> '',
+				'article_title'			=> '',
+				'article_sources'		=> '',
+				'article_topic_id'		=> 0,
+				'article_sticky'		=> 0,
+				'article_redirect'		=> '',
+				'article_description'	=> '',
+				'article_views'			=> 0,
+			);
 		}
+
+		// empty edit reason on every edit
 		$row['article_edit_reason'] = '';
 
 		return $row;
