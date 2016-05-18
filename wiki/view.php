@@ -174,7 +174,6 @@ class view extends \tas2580\wiki\wiki\functions
 			$allow_bbcode = $allow_magic_url = $allow_smilies = true;
 			$this->message_parser->format_display($allow_bbcode, $allow_magic_url, $allow_smilies);
 
-
 			if (!empty($this->data['article_redirect']))
 			{
 				$redirect_note = $this->user->lang('NO_ARTICLE_REDIRECT', $this->helper->route('tas2580_wiki_article', array('article' => $this->data['article_redirect'])), $this->data['article_redirect']);

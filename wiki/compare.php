@@ -107,7 +107,6 @@ class compare
 		$description_diff = new \diff($from_row['article_description'], $to_row['article_description']);
 		$descriptiondiff_empty = $sources_diff->is_empty();
 
-
 		$renderer = new \diff_renderer_inline();
 
 		$this->template->assign_vars(array(

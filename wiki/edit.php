@@ -179,7 +179,7 @@ class edit extends \tas2580\wiki\wiki\functions
 		}
 
 		$this->user->add_lang('posting');
-		
+
 		$preview = $this->request->is_set_post('preview');
 		$submit = $this->request->is_set_post('submit');
 		$error = array();
@@ -194,7 +194,6 @@ class edit extends \tas2580\wiki\wiki\functions
 			$this->data['article_approved']		= $this->auth->acl_get('u_wiki_set_active') ? $this->request->variable('set_active', 0) : 0;
 			$this->data['article_sticky']		= $this->auth->acl_get('u_wiki_set_sticky') ? $this->request->variable('set_sticky', 0) : $this->data['article_sticky'];
 			$this->data['article_redirect']		= $this->auth->acl_get('u_wiki_set_redirect') ? $this->request->variable('article_redirect', '', true) : $this->data['article_redirect'];
-
 
 			// Validate user input
 			$validate_array = array(

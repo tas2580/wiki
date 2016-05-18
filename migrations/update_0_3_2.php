@@ -31,9 +31,6 @@ class update_0_3_2 extends \phpbb\db\migration\migration
 
 			array('permission.remove', array('u_wiki_delete_article')),
 			array('permission.remove', array('u_wiki_delete')),
-
-
-
 		);
 	}
 

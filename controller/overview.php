@@ -78,7 +78,8 @@ class overview
 		$this->article_table = $article_table;
 	}
 
-	public function base() {
+	public function base()
+	{
 
 		$this->user->add_lang_ext('tas2580/wiki', 'common');
 		$this->user->add_lang_ext('tas2580/wiki', 'overview');
@@ -103,7 +104,6 @@ class overview
 			);
 		}
 		$this->db->sql_freeresult($result);
-
 
 		return $this->helper->render('overview.html', $this->user->lang['OVERVIEW']);
 	}
