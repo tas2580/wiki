@@ -2,62 +2,72 @@
 <h2>{L_VERSIONS_OF_ARTICLE}{L_COLON} {ARTICLE_TITLE}</h2>
 <p>{L_COMPARE_EXPLAIN}</p>
 <form action="{U_ACTION}" method="post">
-<div class="forumbg forumbg-table">
-	<div class="inner">
-		<table class="table1" id="memberlist">
-			<thead>
-				<tr>
-					<th class="thin">{L_FROM}</th>
-					<th class="thin">{L_TO}</th>
-					<th class="big">{L_ARTICLE}</th>
-					<th class="middle">{L_TIME}</th>
-					<th class="middle">{L_USER}</th>
-					<!-- IF S_DELETE or S_SET_ACTIVE -->
-					<th>{L_ACTION}</th>
-					<!-- ENDIF -->
-				</tr>
-			</thead>
-			<tbody>
-				<tr class="bg1">
-					<td colspan ="6">
-						<input type="submit" value="{L_COMPARE}" class="button1" name="submit">
-					</td>
-				</tr>
-				<!-- BEGIN version_list -->
-				<tr class="<!-- IF version_list.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
-					<td><input type="radio" name="from" value="{version_list.ID}"></td>
-					<td><input type="radio" name="to" value="{version_list.ID}"></td>
-					<td><a href="{version_list.U_VERSION}"><strong>{version_list.ARTICLE_TITLE}</strong></a></td>
-					<td>{version_list.EDIT_TIME}</td>
-					<td>{version_list.USER}</td>
-					<!-- IF S_DELETE or S_SET_ACTIVE -->
-					<td>
-						<!-- IF S_DELETE -->
-						<a href="{version_list.U_DELETE}">[ {L_DELETE} ]</a>
+	<p><input type="submit" value="{L_COMPARE}" class="button1" name="submit"></p>
+	<div class="forumbg forumbg-table">
+		<div class="inner">
+			<table class="table1" id="memberlist">
+				<thead>
+					<tr>
+						<th class="thin">{L_FROM}</th>
+						<th class="thin">{L_TO}</th>
+						<th>{L_ARTICLE}</th>
+						<th class="big">{L_REASON_EDIT}</th>
+						<th class="middle">{L_TIME}</th>
+						<th class="middle">{L_USER}</th>
+						<!-- IF S_DELETE or S_SET_ACTIVE -->
+						<th>{L_ACTION}</th>
 						<!-- ENDIF -->
-						<!-- IF S_SET_ACTIVE -->
-							<!-- IF version_list.S_ACTIVE -->
-								 - <strong>{L_IS_ACTIVE}</strong>
-							<!-- ELSE -->
-								 - <a href="{version_list.U_SET_ACTIVE}">[ {L_SET_ACTIVE} ]</a>
+					</tr>
+				</thead>
+				<tbody>
+
+					<!-- BEGIN version_list -->
+					<tr class="<!-- IF version_list.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
+						<td><input type="radio" name="from" class="from" id="from{version_list.NR}" value="{version_list.ID}"></td>
+						<td><input type="radio" name="to" class="to" id="to{version_list.NR}" value="{version_list.ID}"></td>
+						<td><a href="{version_list.U_VERSION}"><strong>{version_list.ARTICLE_TITLE}</strong></a></td>
+						<td>{version_list.EDIT_REASON}</td>
+						<td>{version_list.EDIT_TIME}</td>
+
+						<td>{version_list.USER}</td>
+						<!-- IF S_DELETE or S_SET_ACTIVE -->
+						<td>
+							<!-- IF S_DELETE && not version_list.S_ACTIVE -->
+							<a href="{version_list.U_DELETE}">[ {L_DELETE_VERSION} ]</a>
 							<!-- ENDIF -->
+							<!-- IF S_SET_ACTIVE -->
+								<!-- IF version_list.S_ACTIVE -->
+									<strong>{L_IS_ACTIVE}</strong>
+								<!-- ELSE -->
+									 - <a href="{version_list.U_SET_ACTIVE}">[ {L_SET_ACTIVE} ]</a>
+								<!-- ENDIF -->
+							<!-- ENDIF -->
+						</td>
 						<!-- ENDIF -->
-					</td>
-					<!-- ENDIF -->
-				</tr>
-				<!-- END version_list -->
-				<tr class="bg1">
-					<td colspan ="6">
-						<input type="submit" value="{L_COMPARE}" class="button1" name="submit">
-					</td>
-				</tr>
-			</tbody>
-		</table>
+					</tr>
+					<!-- END version_list -->
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<p><input type="submit" value="{L_COMPARE}" class="button1" name="submit"></p>
+</form>
+<!-- IF S_SET_ACTIVE or S_DELETE_ARTICLE -->
+<div class="dropdown-container dropdown-container-left dropdown-up dropdown-right dropdown-button-control" id="quickmod">
+	<span title="Schnellmoderation" class="dropdown-trigger button icon-button modtools-icon dropdown-select">Schnellmoderation</span>
+	<div class="dropdown hidden">
+		<div class="pointer"><div class="pointer-inner"></div></div>
+		<ul class="dropdown-contents">
+			<!-- IF S_SET_ACTIVE -->
+			<li><a href="{U_SET_INACTIV}">{L_SET_INACTIV}</a></li>
+			<!-- ENDIF -->
+			<!-- IF S_DELETE_ARTICLE -->
+			<li><a href="{U_DELETE_ARTICLE}">{L_DELETE_ARTICLE}</a></li>
+			<!-- ENDIF -->
+		</ul>
 	</div>
 </div>
-
-</form>
-
+<!-- ENDIF -->
 
 <div class="action-bar bottom">
 	<div class="pagination">
@@ -69,4 +79,6 @@
 		<!-- ENDIF -->
 	</div>
 </div>
+<!-- INCLUDEJS @tas2580_wiki/script.js -->
+
 <!-- INCLUDE overall_footer.html -->

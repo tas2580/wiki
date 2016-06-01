@@ -26,6 +26,7 @@ services:
             - @request
             - @template
             - @user
+            - @tas2580.wiki.delete
             - @tas2580.wiki.edit
             - @tas2580.wiki.compare
             - @tas2580.wiki.view
@@ -70,7 +71,7 @@ services:
             - %core.root_path%
             - %core.php_ext%
     tas2580.wiki.delete:
-        class: tas2580\wiki\wiki\compare
+        class: tas2580\wiki\wiki\delete
         arguments:
             - @auth
             - @dbal.conn
@@ -85,6 +86,7 @@ services:
             - @controller.helper
             - @template
             - @user
+            - @tas2580.wiki.compare
             - @tas2580.wiki.edit
             - %tables.wiki.article%
             - %core.root_path%

@@ -25,6 +25,9 @@ class main
 	/** @var \phpbb\user */
 	protected $user;
 
+	/** @var \tas2580\wiki\wiki\delete */
+	protected $delete;
+
 	/** @var \tas2580\wiki\wiki\edit */
 	protected $edit;
 
@@ -54,13 +57,14 @@ class main
 	* @param string							$phpbb_root_path
 	* @param string							$php_ext
 	*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\controller\helper $helper, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \tas2580\wiki\wiki\edit $edit, \tas2580\wiki\wiki\compare $compare, \tas2580\wiki\wiki\view $view, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\controller\helper $helper, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \tas2580\wiki\wiki\delete $delete, \tas2580\wiki\wiki\edit $edit, \tas2580\wiki\wiki\compare $compare, \tas2580\wiki\wiki\view $view, $phpbb_root_path, $php_ext)
 	{
 		$this->auth = $auth;
 		$this->helper = $helper;
 		$this->request = $request;
 		$this->template = $template;
 		$this->user = $user;
+		$this->delete = $delete;
 		$this->edit = $edit;
 		$this->compare = $compare;
 		$this->view = $view;
@@ -109,33 +113,33 @@ class main
 		$action = $this->request->variable('action', '');
 		$id = $this->request->variable('id', 0);
 
-		if ($action === 'edit')
+		switch ($action)
 		{
-			return $this->edit->edit_article($article);
-		}
-		else if ($action === 'versions')
-		{
-			return $this->compare->view_versions($article);
-		}
-		else if ($action === 'compare')
-		{
-			$from = $this->request->variable('from', 0);
-			$to = $this->request->variable('to', 0);
-			return $this->compare->compare_versions($article, $from, $to);
-		}
-		else if ($action === 'delete')
-		{
-			return $this->delete->version($id);
-		}
-		else if ($action === 'active')
-		{
-			return $this->edit->active($id);
-		}
-		else if ($action === 'detele_article')
-		{
-			return $this->delete->article($article);
-		}
+			case 'edit':
+				return $this->edit->edit_article($article);
 
-		return $this->view->view_article($article, $id);
+			case 'versions':
+				return $this->compare->view_versions($article);
+
+			case 'compare':
+				$from = $this->request->variable('from', 0);
+				$to = $this->request->variable('to', 0);
+				return $this->compare->compare_versions($article, $from, $to);
+
+			case 'delete':
+				return $this->delete->version($id);
+
+			case 'detele_article':
+				return $this->delete->article($article);
+
+			case 'active':
+				return $this->edit->active($id);
+
+			case 'deactivate':
+				return $this->edit->deactivate($article);
+
+			default:
+				return $this->view->view_article($article, $id);
+		}
 	}
 }

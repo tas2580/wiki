@@ -28,6 +28,9 @@ class view extends \tas2580\wiki\wiki\functions
 	/** @var \phpbb\user */
 	protected $user;
 
+	/** @var \tas2580\wiki\wiki\compare */
+	protected $compare;
+
 	/** @var \tas2580\wiki\wiki\edit */
 	protected $edit;
 
@@ -54,13 +57,14 @@ class view extends \tas2580\wiki\wiki\functions
 	* @param string									$php_ext
 	*/
 
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, \tas2580\wiki\wiki\edit $edit, $article_table, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, \tas2580\wiki\wiki\compare $compare, \tas2580\wiki\wiki\edit $edit, $article_table, $phpbb_root_path, $php_ext)
 	{
 		$this->auth = $auth;
 		$this->db = $db;
 		$this->helper = $helper;
 		$this->template = $template;
 		$this->user = $user;
+		$this->compare = $compare;
 		$this->edit = $edit;
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->php_ext = $php_ext;
@@ -113,14 +117,14 @@ class view extends \tas2580\wiki\wiki\functions
 			{
 				$this->template->assign_vars(array(
 					'S_NEW_VERSION'		=> true,
-					'U_NEW_VERSION'		=> $this->helper->route('tas2580_wiki_index', array('id' => $row['article_id'])),
+					'U_NEW_VERSION'		=> $this->helper->route('tas2580_wiki_article', array('article'	=> $article, 'id' => $row['article_id'])),
 				));
 			}
 		}
 		if (($id <> 0) && ($this->data['article_approved'] <> 1) && $this->auth->acl_get('u_wiki_set_active'))
 		{
 			$this->template->assign_vars(array(
-				'U_SET_ACTIVE'		=> $this->helper->route('tas2580_wiki_index', array('action' => 'active', 'id' => $id)),
+				'U_SET_ACTIVE'		=> $this->helper->route('tas2580_wiki_article', array('article'	=> $article, 'action' => 'active', 'id' => $id)),
 			));
 		}
 
@@ -135,7 +139,21 @@ class view extends \tas2580\wiki\wiki\functions
 		// If the article do not exist generate it
 		if (!$this->data)
 		{
-			return $this->edit ->edit_article($article);
+			// Do we have a inactive article?
+			if ($this->auth->acl_get('m_wiki_view_inactive'))
+			{
+				$sql = 'SELECT article_id
+					FROM ' . $this->article_table . "
+					WHERE article_url = '" . $this->db->sql_escape($article) . "'";
+				$result = $this->db->sql_query_limit($sql, 1);
+				$row = $this->db->sql_fetchrow($result);
+
+				if (!empty($row['article_id']))
+				{
+					return $this->compare->view_versions($article);
+				}
+			}
+			return $this->edit->edit_article($article);
 		}
 		else
 		{
@@ -155,7 +173,6 @@ class view extends \tas2580\wiki\wiki\functions
 			$this->message_parser->bbcode_uid = $this->data['bbcode_uid'];
 			$allow_bbcode = $allow_magic_url = $allow_smilies = true;
 			$this->message_parser->format_display($allow_bbcode, $allow_magic_url, $allow_smilies);
-
 
 			if (!empty($this->data['article_redirect']))
 			{
@@ -177,18 +194,19 @@ class view extends \tas2580\wiki\wiki\functions
 				$this->db->sql_query($sql);
 			}
 
+			$s_edit_redirect = ((!empty($this->data['article_redirect']) && $this->auth->acl_get('u_wiki_set_redirect')) || empty($this->data['article_redirect'])) ? true : false;
 			$this->template->assign_vars(array(
 				'ARTICLE_TITLE'			=> $this->data['article_title'],
 				'ARTICLE_TEXT'			=> ($this->data['article_redirect'])? $redirect_note : $this->message_parser->message,
 				'LAST_EDIT'				=> $this->user->format_date($this->data['article_last_edit']),
 				'LAST_EDIT_ISO'			=> date('Y-m-d', $this->data['article_last_edit']),
 				'ARTICLE_USER'			=> get_username_string('full', $this->data['user_id'], $this->data['username'], $this->data['user_colour']),
-				'S_EDIT'				=> $this->auth->acl_get('u_wiki_edit'),
+				'S_EDIT'				=> ($this->auth->acl_get('u_wiki_edit') && $s_edit_redirect),
 				'U_EDIT'				=> $this->helper->route('tas2580_wiki_article', array('article' => $article, 'action'	=> 'edit')),
 				'S_VERSIONS'			=> $this->auth->acl_get('u_wiki_versions'),
 				'U_VERSIONS'			=> $this->helper->route('tas2580_wiki_article', array('article' => $article, 'action'	=> 'versions')),
-				'S_DELETE'				=> $this->auth->acl_get('u_wiki_delete_article'),
-				'U_DELETE'				=> $this->helper->route('tas2580_wiki_article', array('article' => $article, 'action'	=> 'detele_article')),
+				'S_DELETE'				=> ($this->auth->acl_get('m_wiki_delete') && !$this->data['article_approved']),
+				'U_DELETE'				=> $this->helper->route('tas2580_wiki_index', array('article' => $article, 'action'	=> 'delete', 'id'	=> $this->data['article_id'])),
 				'ARTICLE_VERSION'		=> $id,
 				'ARTICLE_VIEWS_TEXT'	=> $this->user->lang('ARTICLE_VIEWS_TEXT', $this->data['article_views']),
 				'EDIT_REASON'			=> ($id <> 0) ? $this->data['article_edit_reason'] : '',

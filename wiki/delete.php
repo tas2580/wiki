@@ -63,9 +63,20 @@ class delete extends \tas2580\wiki\wiki\functions
 	 */
 	public function version($id)
 	{
-		if (!$this->auth->acl_get('u_wiki_delete'))
+		if (!$this->auth->acl_get('m_wiki_delete'))
 		{
 			trigger_error('NOT_AUTHORISED');
+		}
+
+		$sql = 'SELECT article_approved, article_url
+			FROM ' . $this->article_table . '
+				WHERE article_id = ' . (int) $id;
+		$result = $this->db->sql_query_limit($sql, 1);
+		$row = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
+		if ($row['article_approved'] <> 0)
+		{
+			trigger_error($this->user->lang['NO_DELETE_ACTIVE_VERSION'] . '<br /><br /><a href="' . $this->helper->route('tas2580_wiki_article', array('article' => $row['article_url']))  . '">' . $this->user->lang['BACK_TO_ARTICLE'] . '</a>');
 		}
 
 		if (confirm_box(true))
@@ -74,7 +85,7 @@ class delete extends \tas2580\wiki\wiki\functions
 				WHERE article_id = ' . (int) $id;
 			$this->db->sql_query($sql);
 			//return $helper->message('DELETE_VERSION_SUCCESS', array());
-			trigger_error($this->user->lang['DELETE_VERSION_SUCCESS'] . '<br /><br /><a href="' . $this->helper->route('tas2580_wiki_index', array())  . '">' . $this->user->lang['BACK_TO_WIKI'] . '</a>');
+			trigger_error($this->user->lang['DELETE_VERSION_SUCCESS'] . '<br /><br /><a href="' . $this->helper->route('tas2580_wiki_article', array('article' => $row['article_url']))  . '">' . $this->user->lang['BACK_TO_ARTICLE'] . '</a>');
 		}
 		else
 		{
@@ -94,7 +105,7 @@ class delete extends \tas2580\wiki\wiki\functions
 	 */
 	public function article($article)
 	{
-		if (!$this->auth->acl_get('u_wiki_delete_article'))
+		if (!$this->auth->acl_get('m_wiki_delete_article'))
 		{
 			trigger_error('NOT_AUTHORISED');
 		}
