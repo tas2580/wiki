@@ -14,16 +14,22 @@ class update_0_3_3 extends \phpbb\db\migration\migration
 	public static function depends_on()
 	{
 		return array(
-			'\tas2580\wiki\migrations\initial_module',
-			'\tas2580\wiki\migrations\update_0_1_2',
-			'\tas2580\wiki\migrations\update_0_2_0',
-			'\tas2580\wiki\migrations\update_0_3_0',
-			'\tas2580\wiki\migrations\update_0_3_1',
 			'\tas2580\wiki\migrations\update_0_3_2',
 		);
 	}
 
 	public function update_schema()
+	{
+		return array(
+			'add_columns' => array(
+				$this->table_prefix . 'wiki_article' => array(
+					'article_time_created'		=> array('TIMESTAMP', 0),
+				),
+			),
+		);
+	}
+
+	public function revert_schmea()
 	{
 		return array(
 			'add_columns' => array(
