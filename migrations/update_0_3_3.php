@@ -29,7 +29,7 @@ class update_0_3_3 extends \phpbb\db\migration\migration
 		);
 	}
 
-	public function revert_schmea()
+	public function revert_schema()
 	{
 		return array(
 			'add_columns' => array(
