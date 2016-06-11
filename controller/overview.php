@@ -107,10 +107,10 @@ class overview
 
 		// get latest article
 
-		$sql = 'SELECT article_title, article_url, article_description, article_views, article_last_edit
+		$sql = 'SELECT article_title, article_url, article_description, article_views, article_time_created
 				FROM ' . $this->article_table . '
 				WHERE article_approved=1
-				ORDER BY article_id DESC';
+				ORDER BY article_time_created DESC';
 		$result = $this->db->sql_query_limit($sql, 5);
 
 		while ($all_wiki_article = $this->db->sql_fetchrow($result))
@@ -120,7 +120,7 @@ class overview
 					'ARTICLE_NAME'			=> $all_wiki_article['article_title'],
 					'ARTICLE_DESCRIPTION'	=> $all_wiki_article['article_description'],
 					'ARTICLE_VIEWS'			=> $all_wiki_article['article_views'],
-					'ARTICLE_LASTEDIT'		=> $this->user->format_date($all_wiki_article['article_last_edit']),
+					'ARTICLE_TIME_CREATED'	=> $this->user->format_date($all_wiki_article['article_time_created']),
 				)
 			);
 		}
