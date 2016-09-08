@@ -194,6 +194,7 @@ class edit extends \tas2580\wiki\wiki\functions
 			$this->data['article_approved']		= $this->auth->acl_get('u_wiki_set_active') ? $this->request->variable('set_active', 0) : 0;
 			$this->data['article_sticky']		= $this->auth->acl_get('u_wiki_set_sticky') ? $this->request->variable('set_sticky', 0) : $this->data['article_sticky'];
 			$this->data['article_redirect']		= $this->auth->acl_get('u_wiki_set_redirect') ? $this->request->variable('article_redirect', '', true) : $this->data['article_redirect'];
+			$this->data['article_time_created'] = empty($this->data['article_time_created']) ? time() : $this->data['article_time_created'];
 
 			// Validate user input
 			$validate_array = array(
@@ -260,6 +261,7 @@ class edit extends \tas2580\wiki\wiki\functions
 				'article_approved'		=> (int) $this->data['article_approved'],
 				'article_user_id'		=> (int) $this->user->data['user_id'],
 				'article_last_edit'		=> time(),
+				'article_time_created'	=> $this->data['article_time_created'],
 				'article_edit_reason'	=> $this->data['article_edit_reason'],
 				'article_topic_id'		=> (int) $this->data['article_topic_id'],
 				'article_sources'		=> $this->data['article_sources'],

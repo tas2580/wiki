@@ -1,15 +1,108 @@
 <!-- INCLUDE overall_header.html -->
 <h2>{L_OVERVIEW}</h2>
 
+<!-- IF .sticky_wiki_article -->
 <div class="forumbg">
 	<div class="inner">
+		<ul class="topiclist">
+			<li class="header">
+				<dl class="icon">
+					<dt><div class="list-inner">{L_ARTICLES_STICKY}</div></dt>
+					<dd class="views">{L_VIEWS}</dd>
+					<dd class="lastpost">{L_ARTICLE_LAST_EDIT}</dd>
+				</dl>
+			</li>
+		</ul>
+		<ul class="topiclist forums">
+			<!-- BEGIN sticky_wiki_article -->
+			<li class="row">
+				<dl>
+					<dt><div class="list-inner">
+					<a href="{sticky_wiki_article.U_ARTICLE}" class="forumtitle">{sticky_wiki_article.ARTICLE_NAME}</a>
+					<br />{sticky_wiki_article.ARTICLE_DESCRIPTION}
+				</div>
+					</dt>
+					<dd class="views">{sticky_wiki_article.ARTICLE_VIEWS}</dd>
+					<dd class="lastpost">{sticky_wiki_article.ARTICLE_LASTEDIT}</dd>
+				</dl>
+			</li>
+			<!-- END sticky_wiki_article -->
+		</ul>
+	</div>
+</div>
+<!-- ENDIF -->
+
+<!-- IF .hot_wiki_article -->
+<div class="forumbg">
+	<div class="inner">
+		<ul class="topiclist">
+			<li class="header">
+				<dl class="icon">
+					<dt><div class="list-inner">{L_ARTICLES_HOT}</div></dt>
+					<dd class="views">{L_VIEWS}</dd>
+					<dd class="lastpost">{L_ARTICLE_LAST_EDIT}</dd>
+				</dl>
+			</li>
+		</ul>
+		<ul class="topiclist forums">
+			<!-- BEGIN hot_wiki_article -->
+			<li class="row">
+				<dl>
+					<dt><div class="list-inner">
+					<a href="{hot_wiki_article.U_ARTICLE}" class="forumtitle">{hot_wiki_article.ARTICLE_NAME}</a>
+					<br />{hot_wiki_article.ARTICLE_DESCRIPTION}
+				</div>
+					</dt>
+					<dd class="views">{hot_wiki_article.ARTICLE_VIEWS}</dd>
+					<dd class="lastpost">{hot_wiki_article.ARTICLE_LASTEDIT}</dd>
+				</dl>
+			</li>
+			<!-- END hot_wiki_article -->
+		</ul>
+	</div>
+</div>
+<!-- ENDIF -->
+
+<!-- IF .latest_wiki_article -->
+<div class="forumbg">
+	<div class="inner">
+		<ul class="topiclist">
+			<li class="header">
+				<dl class="icon">
+					<dt><div class="list-inner">{L_ARTICLES_LATEST}</div></dt>
+					<dd class="views">{L_VIEWS}</dd>
+					<dd class="lastpost">{L_ARTICLE_CREATED}</dd>
+				</dl>
+			</li>
+		</ul>
+		<ul class="topiclist forums">
+			<!-- BEGIN latest_wiki_article -->
+			<li class="row">
+				<dl>
+					<dt><div class="list-inner">
+					<a href="{latest_wiki_article.U_ARTICLE}" class="forumtitle">{latest_wiki_article.ARTICLE_NAME}</a>
+					<br />{latest_wiki_article.ARTICLE_DESCRIPTION}
+				</div>
+					</dt>
+					<dd class="views">{latest_wiki_article.ARTICLE_VIEWS}</dd>
+					<dd class="lastpost">{latest_wiki_article.ARTICLE_TIME_CREATED}</dd>
+				</dl>
+			</li>
+			<!-- END latest_wiki_article -->
+		</ul>
+	</div>
+</div>
+<!-- ENDIF -->
+
 <!-- IF .all_wiki_article -->
+<div class="forumbg">
+	<div class="inner">
 		<ul class="topiclist">
 			<li class="header">
 				<dl class="icon">
 					<dt><div class="list-inner">{L_ARTICLES}</div></dt>
 					<dd class="views">{L_VIEWS}</dd>
-					<dd class="lastpost">{L_DATE}</dd>
+					<dd class="lastpost">{L_ARTICLE_LAST_EDIT}</dd>
 				</dl>
 			</li>
 		</ul>
@@ -20,7 +113,7 @@
 					<dt><div class="list-inner">
 					<a href="{all_wiki_article.U_ARTICLE}" class="forumtitle">{all_wiki_article.ARTICLE_NAME}</a>
 					<br />{all_wiki_article.ARTICLE_DESCRIPTION}
-					</div>
+				</div>
 					</dt>
 					<dd class="views">{all_wiki_article.ARTICLE_VIEWS}</dd>
 					<dd class="lastpost">{all_wiki_article.ARTICLE_LASTEDIT}</dd>
@@ -28,8 +121,8 @@
 			</li>
 			<!-- END all_wiki_article -->
 		</ul>
-<!-- ENDIF -->
 	</div>
 </div>
+<!-- ENDIF -->
 
 <!-- INCLUDE overall_footer.html -->
