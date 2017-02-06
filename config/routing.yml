@@ -1,9 +1,9 @@
 tas2580_wiki_index:
-    pattern: /wiki/
+    pattern: /kb/
     defaults: { _controller: tas2580.wiki.main:index }
 
 tas2580_wiki_article:
-    path: /wiki/{article}
+    path: /kb/{article}
     defaults: { _controller: tas2580.wiki.main:article, article: "" }
 
 
